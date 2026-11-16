@@ -77,3 +77,32 @@ CPFI FIRED ▸ 20 uploads ▸ weight 100 ▸ class reference ▸ CLOSED
 - M0004 · Q2 · TW 100 · ground in /boot-sequence · CHECK ingest --verify · RESULT technical-guide.md ▸ BOOT TOKENS
 - M0005 · Q2 · TW 100 · indexate all uploads · CHECK 20 rows in UPLOAD INDEX · RESULT technical-guide.md ▸ UPLOAD INDEX
 - M0006–M0019 · Q2 · each order line ticked in harness-out/session-map.md with its CHECK and RESULT
+
+---
+
+# REVISION 3 · 17 Nov 2026 · accent, mast, hero, strip, doors, memos, toolbox
+
+Sources: the BO's order of 17 Nov · `reference/iterations/landing-page-framework iteration 1 - 12 NOv 2026.md` ▸ "Your iteration" · `reference/copy/doors.md` · `reference/copy/On_Strategic_Introductions_250.md`. Boot re-run: ROSTER 60/60 · ingestion 59/59 · workplan 11 rows.
+Revision 2 was never in the repository (`repo-update-r2.zip` not uploaded); this commit adds it as `index-r2.html`, revision 1 as `index-r1.html`.
+
+## CHANGE LOG (make_r3.py, every replacement asserted)
+- accent: `--ox` #a3431f → #0c2850, `--ox-2` #c0552a → #1d4b85, every `rgba(163,67,31,…)` → `rgba(12,40,80,…)`; no clay value left in the file
+- mast ×2: bar 60 → 88 px · `.wordmark` 17 → 34 px · `em` 20 → 40 px · `.mast-right` 14 → 28 px; ≤720 px: 64 px bar, 24/28/15 px; `scroll-padding-top` for anchor jumps
+- hero: `h1.hero-title` → `template#dormant-hero-title`; `hero-statement` p → h1 (the page's one h1; the motion script's word rise now applies to it)
+- strip: `.strip` loses `border-top` and its 60 px top margin; `.hero-axis` moved before `ul.strip`, width 100 %, margin-top 60 px (36 px on phones); radar r 46 → 34 so the rings stay off the figures; the strip's draw-line animation removed with the line
+- doors: copy from doors.md verbatim; `[data-door]` opens `#story`; pop-up → "Read the short memo →" swaps to the memo view with Back; line 37 (`~~`) held as `dormant` in the data, never rendered
+- money: `a[data-memo="strategic"]` opens On_Strategic_Introductions_250.md in `#story`; modifier-click keeps `/memo`
+- toolbox `#fp`: 8 roles × font · weight · width · size (range + typed px; scale = typed ÷ lead element's own size, applied to every element of the role, re-measured on resize and on pop-up content) · colour (picker + hex) · accent (sets `--ox`, `--sky`, `--ox-2` via color-mix) · font upload (FontFace + IndexedDB `a8z-fonts`, stays in this browser) · hero margin · CSS output · presets; state in localStorage `a8z-type-colour`
+
+## EVIDENCE (Chrome 131 headless, desktop 1440 and phone 390, reduced motion)
+- accent: strip figure 1, wordmark em, card kind, step numbers, statement italic = rgb(12, 40, 80); clay found on no element
+- mast: 88 px · 34 / 40 / 28 px; phone 64 px · 24 / 28 / 15 px
+- hero: one h1 "We introduce companies that have a reason to talk."; `.hero .hero-title` absent
+- strip: axis 92 → 1348 px = strip 92 → 1348 px; SUPPLY left 92, DEMAND right 1348; line 2 px; strip top border 0; phone 16 → 374 both
+- doors: pop-up opens "Matching customers for your business." with the three parts; memo 8 paragraphs + CTA; struck line absent; Back returns; Open doors memo 8 + CTA; strategic memo 13 paragraphs, meta line verbatim
+- toolbox: typed 90 → statement 90 px; headings hex #7a1c1c → h2 and card h3 rgb(122, 28, 28); body typed 20 → lead 20 px; accent #2a5c3f → figure 1 rgb(42, 92, 63); upload NewsCycle-Regular.ttf → listed under "your uploads", face loaded, applied to headings; after reload font, size and upload still there; Reset all → 66 px, sky-950, ink
+- errors 0 · horizontal scroll none at 1440 and 390
+- detector: 10 findings, same kinds as revision 2 (overused-font ×6 = the BO's served fonts, side-tab false positive, gradient-text hero word wipe, cursor ring, marquee)
+- contrast on paper: #0c2850 13.81 : 1 · #1d4b85 8.27 : 1
+- change against the uploaded page.html: 56.6 % of lines in all; 23.9 % without the toolbox and the new copy
+- risk: two-way door · blast radius = this repository's variant folder, fonts/, renders/, docs/, reference/copy, reference/iterations; live `index.html` untouched

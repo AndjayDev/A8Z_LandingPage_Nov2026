@@ -9,9 +9,9 @@ The Acceler8zone landing page: the live version, the design variants, and the ca
 | Folder | What is inside |
 | - | - |
 | `index.html` | The current live page, unchanged |
-| `variants/` | One folder per design variant. `variant-A-clay-and-ink` is the first (`index.html` = revision 2, `index-r1.html` = revision 1) |
+| `variants/` | One folder per design variant. `variant-A-clay-and-ink` is the first (`index.html` = revision 3, `index-r2.html` and `index-r1.html` = earlier revisions) |
 | `fonts/` | Self-hosted fonts. `news-cycle/` holds News Cycle from News_Cycle.zip, with its licence |
-| `reference/` | The original captures: page, section files, data tables, site maps, screenshots |
+| `reference/` | The original captures: page, section files, data tables, site maps, screenshots. `copy/` holds the texts you served (doors.md, the memo); `iterations/` your filled-in framework files |
 | `renders/` | Before and after screenshots, desktop (1440 px) and phone (390 px) |
 | `docs/` | The landing-page framework, the explainer, the missing-elements table, the GitHub guide and the technical guide |
 
