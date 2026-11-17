@@ -106,3 +106,39 @@ Revision 2 was never in the repository (`repo-update-r2.zip` not uploaded); this
 - contrast on paper: #0c2850 13.81 : 1 · #1d4b85 8.27 : 1
 - change against the uploaded page.html: 56.6 % of lines in all; 23.9 % without the toolbox and the new copy
 - risk: two-way door · blast radius = this repository's variant folder, fonts/, renders/, docs/, reference/copy, reference/iterations; live `index.html` untouched
+
+---
+
+# REVISION 4 · 17 Nov 2026 · carousel, record order, listing links, switches, favicon
+
+Sources: `reference/iterations/landing-page-framework iteration 3 - 17 NOv 2026.md` ("Your iteration") · `reference/data/Business_Case_Studies_-_Business_Studies_Listing.csv` · `assets/brand/` · `assets/people/`. Build: make_r4.py on revision 3, every replacement asserted once. Revision 3 kept as `index-r3.html`.
+
+## CHANGE LOG
+- favicon → `../../assets/brand/favicon150x150.svg`
+- mast: Logo.svg inlined as `svg.wm-logo` (40 px; 22 px ≤720 px) beside `span.wm-text`; its one `fill="white"` → `currentColor` = `--ink`. Switch `html[data-logo=svg|text]`
+- hero: `::before` layer with Background-Star-Field.svg, cover, `z-index:-1` in an isolated `.hero`. Switch `html[data-stars=on|off]`
+- switches: inline script in `<head>` sets both before paint, from `?logo=` / `?stars=`, else localStorage `a8z-visuals`, else on; toolbox fieldset "Visuals" writes `a8z-visuals`
+- strip: `b` align-self center + text-align center; `span` align-self flex-start
+- money: grid 1fr 1fr; `figure.cx`: `button.cx-frame` (1:1) with two `img.cx-img` (clip-path triangle 0 → 200 %, 1.5 s cubic-bezier(.65,0,.35,1)), `.cx-switch` tablist with sliding thumb, `.cx-person` captions (aria-live); arrow keys switch; reduced motion = instant
+- people: section moved into `template#dormant-people`
+- service: new steps; old ones in `template#dormant-service-steps`
+- record: CASES 16 → 17 (Lasting Blueprint Productions from the listing; its three summary sentences = need/got/worth; headline = the live page's orphaned 9th headline row "Four prospective video-production clients"); every listed study gets `study`, `url`, `summary`; `FEATURED` = 8 in the BO's order with his vertical labels (slot 9 open: Vention named twice); the rest carry `.more` and open with `#record-more`; `layout()` numbers visible cards, keeps the CTA after the featured set (after all when expanded), drives the filters; lede back to the original sentence; `.stone.cta` no longer spans the row
+- pop-up: eyebrow shows the card's vertical; "Read the full case study →" (Drive URL) before "Open this case on its own page →"
+- toolbox: roles `statement` (`.hero-statement`) + `statement2` (`.hero-statement i`); new "Style" control (upright / italic) on every role; carousel captions added to headings, body and labels
+
+## EVIDENCE (Chrome 131 headless; desktop 1440, phone 390)
+- defaults: `data-logo=svg`, `data-stars=on`; logo 280 × 40 px, letters rgb(23, 25, 31); text wordmark hidden; star field painted; favicon href resolves; no sideways scroll on either size
+- address `?logo=off&stars=off`: logo none, text wordmark inline, star field none; toolbox switch back on → `svg / on`, saved `{"logo":"on","stars":"on"}`
+- strip: figure centre offset 0 px in all four columns; label left offset 0–1 px
+- record:
+  - first view 01 Tetra Films [Buyer found · Commercial Production] … 08 Hippocratic AI [Revenue added · Healthcare], 09 Next entry
+  - CTA 417 px wide = stone 417 px
+  - "Show all results" → 17 + CTA last, "Show fewer results ↑"
+  - filters, all open: deals 9 · revenue 8; featured only: revenue 6
+  - HelpCare pop-up: "No. 07 · Customers added · Microsoft Affiliate (Our Biggest Deal) w/Healthcare IT" + Drive link
+  - Lasting Blueprint pop-up: the three listing sentences
+- carousel: starts Amelia; switch → clip-path sampled 186 ms 0 % · 651 ms 24.7 % · 1368 ms 190.6 % · 1734 ms 200 %; ends Andjay, one `.is-on`; photo click → Amelia
+- toolbox: line 1 #001657 / Instrument Serif; line 2 Libre Caslon Display, upright, #6b1818 — set independently
+- script errors 0
+- detector: same finding kinds as revision 3 (overused-font on fonts the BO served, side-tab false positive on the play triangle, gradient-text hero word wipe, cursor ring, marquee)
+- risk: two-way door · blast radius = the variant folder, `assets/`, `renders/`, `docs/`, `reference/`; live `index.html` untouched

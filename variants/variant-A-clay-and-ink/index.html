@@ -18,7 +18,7 @@
 <meta name="twitter:description" content="$17 million in business opportunities generated for clients. 16 documented results.">
 <meta name="twitter:image" content="https://www.acceler8zone.com/og/home.png">
 <meta name="theme-color" content="#fbf8f3">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="../../assets/brand/favicon150x150.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Inter+Tight:wght@500;600&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
@@ -30,6 +30,15 @@
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,100..900;1,100..900&amp;family=Architects+Daughter&amp;family=Arsenal:ital,wght@0,400;0,700;1,400;1,700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Geist:wght@100..900&amp;family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&amp;family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&amp;family=Sora:wght@100..800&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;family=Space+Grotesk:wght@300..700&amp;display=swap">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&amp;family=News+Cycle:wght@400;700&amp;display=swap">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&amp;family=News+Cycle:wght@400;700&amp;display=swap"></noscript>
+<script>
+  (() => { // visual switches · ?logo=on|off & ?stars=on|off in the address override the saved choice
+    const q = new URLSearchParams(location.search); let v = {};
+    try { v = JSON.parse(localStorage.getItem("a8z-visuals") || "{}"); } catch (e) {}
+    const logo = q.get("logo") || v.logo || "on", stars = q.get("stars") || v.stars || "on";
+    document.documentElement.dataset.logo = logo === "off" ? "text" : "svg";
+    document.documentElement.dataset.stars = stars === "off" ? "off" : "on";
+  })();
+</script>
 <style>
   :root {
     --paper: #fbf8f3; --paper-2: #ffffff; --band: #f3ece2;
@@ -63,6 +72,13 @@
   .mast-right { text-align: right; font-size: 28px; font-weight: 500; }
   html { scroll-padding-top: 104px; }
 
+  /* Visual switches: Logo.svg in the mast, Background-Star-Field.svg in the hero */
+  .wm-logo { display: none; height: 40px; width: auto; color: var(--ink); }
+  html[data-logo="svg"] .wm-logo { display: block; }
+  html[data-logo="svg"] .wm-text { display: none; }
+  .hero { position: relative; isolation: isolate; }
+  html[data-stars="on"] .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url("../../assets/brand/Background-Star-Field.svg") center / cover no-repeat; }
+
   /* Hero */
   .hero { padding: 96px 0 64px; border-bottom: 1px solid var(--rule); }
   .hero-eyebrow { margin: 0 0 26px; color: var(--ox); }
@@ -74,9 +90,9 @@
   .strip { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
   .strip li { padding: 22px 24px 0 0; display: flex; flex-direction: column; gap: 6px; }
   .strip li + li { border-left: 1px solid var(--rule); padding-left: 24px; }
-  .strip b { font-family: var(--tight); font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .strip b { font-family: var(--tight); font-weight: 600; font-size: 40px; line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; align-self: center; text-align: center; }
   .strip li:first-child b { color: var(--ox); }
-  .strip span { font-size: 13.5px; color: var(--sub); }
+  .strip span { font-size: 13.5px; color: var(--sub); align-self: flex-start; text-align: left; }
 
   /* Hero · three lines (line 1 title · line 2 axis · line 3 statement) */
   .hero h1.hero-title { font-family: var(--l1-font, "Noto Serif Display"), var(--serif); font-weight: var(--l1-weight, 600); font-stretch: var(--l1-width, 66%); font-size: var(--l1-size, clamp(46px, 7.4vw, 108px)); line-height: .98; letter-spacing: -.01em; margin: 0 0 40px; padding-left: var(--hero-indent, 20px); max-width: none; }
@@ -96,11 +112,28 @@
 
   /* Money */
   .money { border-bottom: 1px solid var(--rule); padding: 88px 0 0; }
-  .money-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 72px; align-items: center; padding-bottom: 64px; }
+  .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; padding-bottom: 64px; }
   .money-photo { margin: 0; }
   .money-photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; -o-object-fit: cover; object-fit: cover; -o-object-position: 50% 20%; object-position: 50% 20%; display: block; border: 1px solid var(--rule); background: var(--paper-2); }
   .money-photo figcaption { margin-top: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
   .nophoto > img { display: none !important; }
+  /* Carousel · Amelia and Andjay */
+  .cx { margin: 0; }
+  .cx-frame { position: relative; display: block; width: 100%; aspect-ratio: 1 / 1; padding: 0; border: 1px solid var(--rule); background: var(--paper-2); overflow: hidden; cursor: pointer; }
+  .cx-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; clip-path: polygon(0 0, 0 0, 0 0); }
+  .cx-img.is-on { clip-path: polygon(0 0, 200% 0, 0 200%); z-index: 1; }
+  .cx-img.is-in { z-index: 2; clip-path: polygon(0 0, 200% 0, 0 200%); transition: clip-path 1.5s cubic-bezier(.65,0,.35,1); }
+  .cx-bar { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; margin-top: 18px; }
+  .cx-switch { justify-self: start; position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 3px; border: 1px solid var(--rule); border-radius: 999px; background: var(--paper-2); }
+  .cx-switch button { position: relative; z-index: 1; font: 500 13px/1 var(--sans); color: var(--sub); background: none; border: 0; border-radius: 999px; padding: 9px 16px; cursor: pointer; transition: color .3s; }
+  .cx-switch button[aria-selected="true"] { color: #fff; }
+  .cx-thumb { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); border-radius: 999px; background: var(--ox); transition: transform .45s cubic-bezier(.65,0,.35,1); }
+  .cx-switch[data-k="1"] .cx-thumb { transform: translateX(100%); }
+  .cx-person h3 { margin: 0 0 2px; font-size: 19px; font-weight: 500; letter-spacing: -.01em; }
+  .cx-person .role { margin: 0 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
+  .cx-person .desc { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; max-width: 40ch; }
+  .cx-person.is-on { animation: capIn .6s ease both; }
+  @keyframes capIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
   .nophoto::before { content: "Photo"; display: grid; place-items: center; aspect-ratio: 4 / 5; border: 1px dashed var(--rule); color: var(--mute); font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
   .results { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--rule); }
   .results li { padding: 24px 20px 26px 0; }
@@ -134,7 +167,10 @@
   .stone:hover { background: var(--paper-2); }
   .stone:hover .figure { color: var(--ox); }
   .stone.hidden { display: none; }
-  .stone.cta { background: var(--paper-2); grid-column: 1 / -1; min-height: 0; }
+  .stone.cta { background: var(--paper-2); }
+  .stone.more.hidden { display: none; }
+  .record-more-row { margin: 28px 0 0; }
+  .record-more { font: 500 15px/1.4 var(--sans); color: var(--ink); background-color: transparent; border: 0; padding: 0 0 2px; cursor: pointer; }
   .stone .deal-headline { font-family: var(--serif); font-weight: 400; font-size: clamp(29px, 2.6vw, 40px); line-height: 1.07; letter-spacing: -.015em; margin: 0 0 20px; max-width: 15ch; }
   .stone .deal-context { font-size: 15px; line-height: 1.5; color: var(--sub); margin: 0 0 24px; max-width: 32ch; }
   .stone.cta .figure { font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; font-size: 56px; }
@@ -295,6 +331,7 @@
     .mast .wrap { grid-template-columns: 1fr auto; height: 64px; }
     .wordmark { font-size: 24px; } .wordmark em { font-size: 28px; }
     .mast-right { font-size: 15px; }
+    .wm-logo { height: 22px; }
     html { scroll-padding-top: 76px; }
     .mast-mid { display: none; }
     .hero { padding: 64px 0 44px; }
@@ -315,6 +352,7 @@
     .money { padding-top: 52px; }
     .money-grid { grid-template-columns: 1fr; gap: 28px; padding-bottom: 44px; }
     .money-photo { order: -1; max-width: 320px; }
+    .cx-bar { grid-template-columns: 1fr; gap: 14px; }
     .results { grid-template-columns: 1fr 1fr; }
     .results li { padding: 16px 12px 16px 0; }
     .results li + li { padding-left: 12px; }
@@ -351,6 +389,8 @@
     footer .wrap { flex-direction: column; }
   }
   @media (prefers-reduced-motion: reduce) {
+    .cx-img.is-in, .cx-thumb { transition: none; }
+    .cx-person.is-on { animation: none; }
     html { scroll-behavior: auto; }
     .stone::before, .stone > :not(.fx) { transition: none; }
     .stone::before { transform: scaleX(1); }
@@ -467,7 +507,28 @@
 
 <header class="mast scrolled" style="--progress: 13.598227006490424%;">
   <div class="wrap">
-    <a href="/" class="wordmark" aria-label="acceler8zone home"><em>Acceler8</em>zone</a>
+    <a href="/" class="wordmark" aria-label="acceler8zone home"><span class="wm-text"><em>Acceler8</em>zone</span><svg class="wm-logo" role="img" aria-label="Acceler8zone" focusable="false" viewBox="0 0 385 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="37.6224" y="54.078" width="37.0248" height="38.267" rx="3.1" transform="rotate(-180 37.6224 54.078)" fill="#8F9DA3" stroke="#8F9DA3" stroke-width="0.2" stroke-linejoin="round"/>
+<rect x="53.1164" y="38.7025" width="36.6248" height="37.867" rx="2.9" transform="rotate(-180 53.1164 38.7025)" fill="url(#paint0_radial_2007_51)" stroke="#0CABF3" stroke-width="0.2" stroke-linejoin="round"/>
+<mask id="mask0_2007_51" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="16" y="0" width="38" height="39">
+<rect x="53.9402" y="38.8025" width="37.5487" height="38.067" rx="2" transform="rotate(-180 53.9402 38.8025)" fill="url(#paint1_radial_2007_51)"/>
+</mask>
+<g mask="url(#mask0_2007_51)">
+<rect x="38.2462" y="53.9783" width="37.5487" height="38.067" rx="3" transform="rotate(-180 38.2462 53.9783)" fill="#EDEDED"/>
+</g>
+<path d="M77.0724 46.4941H63.7284L61.5204 52.8781H54.4644L66.5124 19.326H74.3364L86.3844 52.8781H79.2804L77.0724 46.4941ZM75.2484 41.1181L70.4004 27.1021L65.5524 41.1181H75.2484ZM86.7597 39.5821C86.7597 36.8301 87.3197 34.4301 88.4397 32.3821C89.5597 30.3021 91.1117 28.7021 93.0957 27.5821C95.0797 26.4301 97.3517 25.8541 99.9117 25.8541C103.208 25.8541 105.928 26.6861 108.072 28.35C110.248 29.9821 111.704 32.2861 112.44 35.2621H105.192C104.808 34.1101 104.152 33.2141 103.224 32.5741C102.328 31.9021 101.208 31.5661 99.8637 31.5661C97.9437 31.5661 96.4237 32.2701 95.3037 33.6781C94.1837 35.0541 93.6237 37.0221 93.6237 39.5821C93.6237 42.1101 94.1837 44.0781 95.3037 45.4861C96.4237 46.8621 97.9437 47.5501 99.8637 47.5501C102.584 47.5501 104.36 46.3341 105.192 43.9021H112.44C111.704 46.7821 110.248 49.0701 108.072 50.7661C105.896 52.4621 103.176 53.3101 99.9117 53.3101C97.3517 53.3101 95.0797 52.7501 93.0957 51.6301C91.1117 50.4781 89.5597 48.8781 88.4397 46.8301C87.3197 44.7501 86.7597 42.3341 86.7597 39.5821ZM113.235 39.5821C113.235 36.8301 113.795 34.4301 114.915 32.3821C116.035 30.3021 117.587 28.7021 119.571 27.5821C121.555 26.4301 123.827 25.8541 126.387 25.8541C129.683 25.8541 132.403 26.6861 134.547 28.35C136.723 29.9821 138.179 32.2861 138.915 35.2621H131.667C131.283 34.1101 130.627 33.2141 129.699 32.5741C128.803 31.9021 127.683 31.5661 126.339 31.5661C124.419 31.5661 122.899 32.2701 121.779 33.6781C120.659 35.0541 120.099 37.0221 120.099 39.5821C120.099 42.1101 120.659 44.0781 121.779 45.4861C122.899 46.8621 124.419 47.5501 126.339 47.5501C129.059 47.5501 130.835 46.3341 131.667 43.9021H138.915C138.179 46.7821 136.723 49.0701 134.547 50.7661C132.371 52.4621 129.651 53.3101 126.387 53.3101C123.827 53.3101 121.555 52.7501 119.571 51.6301C117.587 50.4781 116.035 48.8781 114.915 46.8301C113.795 44.7501 113.235 42.3341 113.235 39.5821ZM166.158 39.0061C166.158 39.9661 166.094 40.8301 165.966 41.5981H146.526C146.686 43.5181 147.358 45.0221 148.542 46.1101C149.726 47.1981 151.182 47.7421 152.91 47.7421C155.406 47.7421 157.182 46.6701 158.238 44.5261H165.486C164.718 47.0861 163.246 49.1981 161.07 50.8621C158.894 52.4941 156.222 53.3101 153.054 53.3101C150.494 53.3101 148.19 52.7501 146.142 51.6301C144.126 50.4781 142.542 48.8621 141.39 46.7821C140.27 44.7021 139.71 42.3021 139.71 39.5821C139.71 36.8301 140.27 34.4141 141.39 32.3341C142.51 30.2541 144.078 28.6541 146.094 27.5341C148.11 26.4141 150.43 25.8541 153.054 25.8541C155.582 25.8541 157.838 26.3981 159.822 27.486C161.838 28.574 163.39 30.1261 164.478 32.1421C165.598 34.1261 166.158 36.4141 166.158 39.0061ZM159.198 37.0861C159.166 35.3581 158.542 33.9821 157.326 32.9581C156.11 31.9021 154.622 31.3741 152.862 31.3741C151.198 31.3741 149.79 31.8861 148.638 32.9101C147.518 33.9021 146.83 35.2941 146.574 37.0861H159.198ZM175.383 17.3581V52.8781H168.663V17.3581H175.383ZM204.342 39.0061C204.342 39.9661 204.278 40.8301 204.15 41.5981H184.71C184.87 43.5181 185.542 45.0221 186.726 46.1101C187.91 47.1981 189.366 47.7421 191.094 47.7421C193.59 47.7421 195.366 46.6701 196.422 44.5261H203.67C202.902 47.0861 201.43 49.1981 199.254 50.8621C197.078 52.4941 194.406 53.3101 191.238 53.3101C188.678 53.3101 186.374 52.7501 184.326 51.6301C182.31 50.4781 180.726 48.8621 179.574 46.7821C178.454 44.7021 177.894 42.3021 177.894 39.5821C177.894 36.8301 178.454 34.4141 179.574 32.3341C180.694 30.2541 182.262 28.6541 184.278 27.5341C186.294 26.4141 188.614 25.8541 191.238 25.8541C193.766 25.8541 196.022 26.3981 198.006 27.486C200.022 28.574 201.574 30.1261 202.662 32.1421C203.782 34.1261 204.342 36.4141 204.342 39.0061ZM197.382 37.0861C197.35 35.3581 196.726 33.9821 195.51 32.9581C194.294 31.9021 192.806 31.3741 191.046 31.3741C189.382 31.3741 187.974 31.8861 186.822 32.9101C185.702 33.9021 185.014 35.2941 184.758 37.0861H197.382ZM213.567 30.4141C214.431 29.0061 215.551 27.9021 216.927 27.1021C218.335 26.3021 219.935 25.9021 221.727 25.9021V32.9581H219.951C217.839 32.9581 216.239 33.4541 215.151 34.4461C214.095 35.4381 213.567 37.1661 213.567 39.6301V52.8781H206.847V26.2861H213.567V30.4141ZM258.441 47.3581H270.297V52.8781H250.809V47.4541L262.425 31.8061H250.857V26.2861H270.153V31.7101L258.441 47.3581ZM284.908 53.3101C282.348 53.3101 280.044 52.7501 277.996 51.6301C275.948 50.4781 274.332 48.8621 273.148 46.7821C271.996 44.7021 271.42 42.3021 271.42 39.5821C271.42 36.8621 272.012 34.4621 273.196 32.3821C274.412 30.3021 276.06 28.7021 278.14 27.5821C280.22 26.4301 282.54 25.8541 285.1 25.8541C287.66 25.8541 289.98 26.4301 292.06 27.5821C294.14 28.7021 295.772 30.3021 296.956 32.3821C298.172 34.4621 298.78 36.8621 298.78 39.5821C298.78 42.3021 298.156 44.7021 296.908 46.7821C295.692 48.8621 294.028 50.4781 291.916 51.6301C289.836 52.7501 287.5 53.3101 284.908 53.3101ZM284.908 47.4541C286.124 47.4541 287.26 47.1661 288.316 46.5901C289.404 45.9821 290.268 45.0861 290.908 43.9021C291.548 42.7181 291.868 41.2781 291.868 39.5821C291.868 37.0541 291.196 35.1181 289.852 33.7741C288.54 32.3981 286.924 31.7101 285.004 31.7101C283.084 31.7101 281.468 32.3981 280.156 33.7741C278.876 35.1181 278.236 37.0541 278.236 39.5821C278.236 42.1101 278.86 44.0621 280.108 45.4381C281.388 46.7821 282.988 47.4541 284.908 47.4541ZM316.046 25.9021C319.214 25.9021 321.774 26.9101 323.726 28.9261C325.678 30.9101 326.654 33.6941 326.654 37.2781V52.8781H319.934V38.1901C319.934 36.0781 319.406 34.4621 318.35 33.3421C317.294 32.1901 315.854 31.6141 314.03 31.6141C312.174 31.6141 310.702 32.1901 309.614 33.3421C308.558 34.4621 308.03 36.0781 308.03 38.1901V52.8781H301.31V26.2861H308.03V29.5981C308.926 28.4461 310.062 27.5501 311.438 26.9101C312.846 26.2381 314.382 25.9021 316.046 25.9021ZM355.364 39.0061C355.364 39.9661 355.3 40.8301 355.172 41.5981H335.732C335.892 43.5181 336.564 45.0221 337.748 46.1101C338.932 47.1981 340.388 47.7421 342.116 47.7421C344.612 47.7421 346.388 46.6701 347.444 44.5261H354.692C353.924 47.0861 352.452 49.1981 350.276 50.8621C348.1 52.4941 345.428 53.3101 342.26 53.3101C339.7 53.3101 337.396 52.7501 335.348 51.6301C333.332 50.4781 331.748 48.8621 330.596 46.7821C329.476 44.7021 328.916 42.3021 328.916 39.5821C328.916 36.8301 329.476 34.4141 330.596 32.3341C331.716 30.2541 333.284 28.6541 335.3 27.5341C337.316 26.4141 339.636 25.8541 342.26 25.8541C344.788 25.8541 347.044 26.3981 349.028 27.486C351.044 28.574 352.596 30.1261 353.684 32.1421C354.804 34.1261 355.364 36.4141 355.364 39.0061ZM348.404 37.0861C348.372 35.3581 347.748 33.9821 346.532 32.9581C345.316 31.9021 343.828 31.3741 342.068 31.3741C340.404 31.3741 338.996 31.8861 337.844 32.9101C336.724 33.9021 336.036 35.2941 335.78 37.0861H348.404Z" fill="currentColor"/>
+<path d="M228.941 34.3501C225.741 32.6861 224.141 30.1101 224.141 26.622C224.141 24.8941 224.573 23.3261 225.437 21.918C226.333 20.478 227.661 19.342 229.421 18.5101C231.213 17.6461 233.389 17.2141 235.949 17.2141C238.509 17.2141 240.669 17.6461 242.429 18.5101C244.221 19.342 245.549 20.478 246.413 21.918C247.309 23.3261 247.757 24.8941 247.757 26.622C247.757 28.3821 247.325 29.9341 246.461 31.2781C245.597 32.5901 244.445 33.6141 243.005 34.3501C244.765 35.1181 246.141 36.2381 247.133 37.7101C248.125 39.1821 248.621 40.9261 248.621 42.9421C248.621 45.1181 248.061 47.0221 246.941 48.6541C245.853 50.2541 244.349 51.4861 242.429 52.3501C240.509 53.2141 238.349 53.6461 235.949 53.6461C233.549 53.6461 231.389 53.2141 229.469 52.3501C227.581 51.4861 226.077 50.2541 224.957 48.6541C223.869 47.0221 223.325 45.1181 223.325 42.9421C223.325 40.9261 223.821 39.1821 224.813 37.7101C225.805 36.2061 227.181 35.0861 228.941 34.3501ZM241.229 27.5821C241.229 26.0141 240.749 24.798 239.789 23.934C238.861 23.07 237.581 22.638 235.949 22.638C234.349 22.638 233.069 23.07 232.109 23.934C231.181 24.798 230.717 26.0301 230.717 27.6301C230.717 29.0701 231.197 30.2221 232.157 31.0861C233.149 31.9501 234.413 32.3821 235.949 32.3821C237.485 32.3821 238.749 31.9501 239.741 31.0861C240.733 30.1901 241.229 29.0221 241.229 27.5821ZM235.949 37.2781C234.125 37.2781 232.637 37.7421 231.485 38.6701C230.365 39.5981 229.805 40.9261 229.805 42.6541C229.805 44.2541 230.349 45.5661 231.437 46.5901C232.557 47.5821 234.061 48.0781 235.949 48.0781C237.837 48.0781 239.325 47.5661 240.413 46.5421C241.501 45.5181 242.045 44.2221 242.045 42.6541C242.045 40.9581 241.485 39.6461 240.365 38.7181C239.245 37.7581 237.773 37.2781 235.949 37.2781Z" fill="#0CABF3"/>
+<defs>
+<radialGradient id="paint0_radial_2007_51" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(82.87 46.4296) rotate(134.169) scale(40.6101 40.6776)">
+<stop offset="0.183539" stop-color="#D9D9D9"/>
+<stop offset="0.858166" stop-color="#0CABF3"/>
+</radialGradient>
+<radialGradient id="paint1_radial_2007_51" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(84.1768 46.4296) rotate(134.727) scale(40.9996 41.0832)">
+<stop offset="0.341187" stop-color="#D9D9D9"/>
+<stop offset="0.858166" stop-color="#0CABF3"/>
+</radialGradient>
+</defs>
+</svg></a>
     <div class="mast-mid" aria-hidden="true"></div>
     <div class="mast-right"><a class="u mag" href="mailto:andjay@acceler8zone.com">andjay@acceler8zone.com</a></div>
   </div>
@@ -513,9 +574,22 @@
           <p class="lede">Some of the biggest opportunities in business begin with one conversation. The hard part is knowing who needs to meet, when the timing is right, and how to earn their trust.</p>
           <p style="margin:22px 0 0;font-size:15px;font-weight:500;"><a class="u mag" href="/memo" data-memo="strategic" aria-haspopup="dialog">Read Andjay and Amelia’s memo →</a></p>
         </div>
-        <figure class="money-photo">
-          <img src="/people/Andjay.jpg" alt="Andjay" width="1200" height="1500" loading="lazy" onerror="this.parentNode.classList.add('nophoto')">
-          <figcaption>Andjay, co-founder</figcaption>
+        <figure class="cx" aria-roledescription="carousel" aria-label="Amelia and Andjay">
+          <button type="button" class="cx-frame" aria-label="Show the next person">
+            <img class="cx-img is-on" src="../../assets/people/Ame_Office.jpg" alt="Amelia, Founder &amp; CEO of Acceler8zone" width="754" height="755" loading="lazy" style="object-position: 50% 30%" data-k="0">
+            <img class="cx-img" src="../../assets/people/Andjay_Office.jpg" alt="Andjay, Co-Founder &amp; CTO of Acceler8zone" width="1037" height="862" loading="lazy" style="object-position: 46% 30%" data-k="1" aria-hidden="true">
+          </button>
+          <figcaption class="cx-bar">
+            <div class="cx-switch" role="tablist" aria-label="Choose a person">
+              <button type="button" role="tab" aria-selected="true" aria-controls="cx-cap" data-k="0">Amelia</button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="cx-cap" data-k="1">Andjay</button>
+              <span class="cx-thumb" aria-hidden="true"></span>
+            </div>
+            <div class="cx-cap" id="cx-cap" aria-live="polite">
+            <div class="cx-person is-on" data-k="0"><h3>Amelia</h3><p class="role">Founder &amp; CEO</p><p class="desc">Leads technology and operations, including the systems, infrastructure and processes behind our work.</p></div>
+            <div class="cx-person" data-k="1" hidden><h3>Andjay</h3><p class="role">Co-Founder &amp; CTO</p><p class="desc">Leads strategy, growth and business relationships. Writes about strategic introductions, timing, trust and access in business.</p></div>
+            </div>
+          </figcaption>
         </figure>
       </div>
       <ul class="results reveal in" aria-label="Documented financial results">
@@ -546,60 +620,9 @@
           <button type="button" data-filter="sys" aria-pressed="false" class="mag">Revenue added</button>
         </div>
       </div>
-      <p class="lede reveal in">Nine of our sixteen documented results: the customers, contracts and business opportunities we helped clients reach. Open a case for the details.</p>
-      <div class="wall" id="wall">
-  <a class="stone in" href="/results/apex-agriculture" data-kind="deal" data-i="0" data-n="1" style="--i:0" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 01</span><span class="kind deal">Supplier found · Cannabis cultivation</span></div>
-    <h3 class="deal-headline">A testing laboratory for a growing cannabis business</h3><p class="deal-context">A grower with newly issued licences needed a laboratory before selling its harvest.</p>
-    <div class="stone-foot"><span class="client">Apex Agriculture · California</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/dgr-systems" data-kind="deal" data-i="1" data-n="2" style="--i:1" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 02</span><span class="kind deal">Buyer found · School network infrastructure</span></div>
-    <h3 class="deal-headline">A school district purchasing network equipment</h3><p class="deal-context">An active school technology procurement opportunity for DGR Systems.</p>
-    <div class="stone-foot"><span class="client">DGR Systems · Florida</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/advanced-medical-sales" data-kind="deal" data-i="4" data-n="3" style="--i:2" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 03</span><span class="kind deal">Buyer found · Pharmaceutical wholesale</span></div>
-    <h3 class="deal-headline">A healthcare network looking for a medication supplier</h3><p class="deal-context">A multi-clinic network needed a dependable pharmaceutical wholesaler.</p>
-    <div class="stone-foot"><span class="client">Advanced Medical Sales · Texas</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/regent-peak-wealth-advisors" data-kind="deal" data-i="5" data-n="4" style="--i:0" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 04</span><span class="kind deal">Buyers found · Wealth management</span></div>
-    <h3 class="deal-headline">Six prospective wealth-management clients</h3><p class="deal-context">Relevant conversations for an independent advisory firm.</p>
-    <div class="stone-foot"><span class="client">Regent Peak Wealth Advisors · Atlanta</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/vention" data-kind="sys" data-i="8" data-n="5" style="--i:1" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 05</span><span class="kind sys">Revenue added · Manufacturing automation</span></div>
-    <div class="figure">+$85,000</div><p class="measure">revenue in one quarter</p><p class="who">Vention added $85,000 in revenue in one quarter through the outbound sales system acceler8zone ran for it, and spent less on paid search.</p>
-    <div class="stone-foot"><span class="client">Vention · Montreal</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/connect-group" data-kind="sys" data-i="9" data-n="6" style="--i:2" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 06</span><span class="kind sys">Revenue added · AI talent recruitment</span></div>
-    <div class="figure">+$105,000</div><p class="measure">revenue in one quarter</p><p class="who">Connect Group, a recruitment agency placing AI talent, added $105,000 in revenue in one quarter through the outbound system acceler8zone ran for it.</p>
-    <div class="stone-foot"><span class="client">Connect Group</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/crawford-thomas-recruiting" data-kind="sys" data-i="10" data-n="7" style="--i:0" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 07</span><span class="kind sys">Revenue added · Staffing for manufacturers</span></div>
-    <div class="figure">+$100,000</div><p class="measure">revenue in six months, 39 placements in one quarter</p><p class="who">Crawford Thomas Recruiting, a national staffing firm serving manufacturers, added $100,000 in revenue and made 39 placements in one quarter through the outbound system acceler8zone ran for it.</p>
-    <div class="stone-foot"><span class="client">Crawford Thomas Recruiting · United States</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/forplayers" data-kind="sys" data-i="12" data-n="8" style="--i:1" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 08</span><span class="kind sys">Revenue added · Esports</span></div>
-    <div class="figure">€70,000</div><p class="measure">new revenue in three months</p><p class="who">ForPlayers, an esports organisation, added €70,000 in new revenue in three months through sponsor and partner outreach acceler8zone ran for it.</p>
-    <div class="stone-foot"><span class="client">ForPlayers · Europe</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone in" href="/results/hippocratic-ai" data-kind="sys" data-i="14" data-n="9" style="--i:2" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. 09</span><span class="kind sys">Revenue added · Healthcare AI</span></div>
-    <div class="figure">$35,000</div><p class="measure">in two partnerships, 60 days</p><p class="who">Hippocratic AI, a healthcare technology company, signed two partnership deals worth $35,000 in 60 days through the hospital outreach acceler8zone ran for it.</p>
-    <div class="stone-foot"><span class="client">Hippocratic AI</span><span class="read">Read</span></div>
-  </a>
-  <a class="stone cta in" data-kind="cta" href="mailto:andjay@acceler8zone.com?subject=What%20we%20sell" style="--i:2">
-    <div class="stone-top eyebrow"><span>No. 10</span><span class="kind">Yours</span></div>
-    <div class="figure">Next entry.</div>
-    <p class="measure">Tell us what you're looking for.</p>
-    <p class="who">More customers, new contracts, a supplier, a distributor or a business partner. We reply with whether we see a relevant opportunity.</p>
-    <div class="stone-foot"><span class="client">andjay@acceler8zone.com</span><span class="read">Write</span></div>
-  </a></div>
+      <p class="lede reveal in">The customers, contracts and business opportunities we have helped clients reach. Open a case for the details.</p>
+      <div class="wall" id="wall"></div>
+      <p class="record-more-row"><button type="button" id="record-more" class="record-more u" aria-controls="wall" aria-expanded="false">Show all results ↓</button></p>
     </div>
   </section>
 
@@ -609,11 +632,13 @@
         <h2 class="t">How we work</h2>
       </div>
       <ol class="reveal in">
-        <li><div><b>Tell us what you're looking for.</b><small>More customers, new contracts, a supplier, a distributor, or a business partner.</small></div></li>
-        <li><div><b>We find the opportunity.</b><small>We identify companies with a relevant need, speak with the right people, and confirm genuine interest.</small></div></li>
-        <li><div><b>We connect you.</b><small>When there's a relevant opportunity, we bring both sides together to explore the deal.</small></div></li>
+        <li><div><b>They already need you.</b><small>We find the company that already needs what you do. No list of strangers.</small></div></li>
+        <li><div><b>We make the call.</b><small>We qualify them on a call ourselves. Nobody has to be talked round.</small></div></li>
+        <li><div><b>Then we introduce you.</b><small>When there's a relevant opportunity, we bring both sides together to explore the deal.</small></div></li>
       </ol>
     </div>
+    <!-- dormant: the previous three steps -->
+    <template id="dormant-service-steps"><li><div><b>Tell us what you're looking for.</b><small>More customers, new contracts, a supplier, a distributor, or a business partner.</small></div></li><li><div><b>We find the opportunity.</b><small>We identify companies with a relevant need, speak with the right people, and confirm genuine interest.</small></div></li><li><div><b>We connect you.</b><small>When there's a relevant opportunity, we bring both sides together to explore the deal.</small></div></li></template>
   </section>
 
   <section class="doors">
@@ -653,6 +678,8 @@
     </div>
   </section>
 
+  <!-- dormant: the people section; its two captions now sit in the carousel of the money section -->
+  <template id="dormant-people">
   <section class="people" id="people">
     <div class="wrap">
       <div class="people-head reveal in">
@@ -677,6 +704,7 @@
       </div>
     </div>
   </section>
+  </template>
 
   <section class="contact" id="contact">
     <div class="wrap">
@@ -731,7 +759,10 @@ const CASES = [
     "who": "DGR Systems was connected with a Florida school district that was buying access points, switches and installation for its schools.",
     "need": "DGR Systems wanted more school infrastructure projects.",
     "got": "A school district buying 1,510 Wi-Fi 7 access points, network switches and related equipment. We confirmed the purchase was still open, passed DGR the project requirements and equipment schedule, and connected it with the district's representative.",
-    "worth": "A district-wide infrastructure purchase, with the requirements known before the first conversation."
+    "worth": "A district-wide infrastructure purchase, with the requirements known before the first conversation.",
+    "study": "Connecting a Florida Technology Company With a School District",
+    "url": "https://drive.google.com/file/d/1kmxUcaJ8CX-VUu1d5Z3kdkq-BMOmu5IX/view?usp=drivesdk",
+    "summary": "Florida technology company DGR Systems wanted more school infrastructure projects. Acceler8zone found the School District of Manatee County buying 1,510 Wi-Fi 7 access points and switches, confirmed the purchasing process was open, and supplied requirements and equipment schedule. Acceler8zone arranged a direct introduction; DGR Systems paid $10,000 for it."
   },
   {
     "kind": "deal",
@@ -744,7 +775,10 @@ const CASES = [
     "who": "Angie Nola Maids was connected with an Airbnb owner whose cleaner could not keep up with Sunday turnovers and same-day check-ins.",
     "need": "Angie Nola Maids wanted more Airbnb and vacation rental customers in New Orleans.",
     "got": "An owner with several properties, including an eight-bedroom duplex, who needed more cleaning capacity straight away and regular turnovers after that. We confirmed the need with her before connecting the two.",
-    "worth": "A customer with several properties, an immediate need and regular work to follow."
+    "worth": "A customer with several properties, an immediate need and regular work to follow.",
+    "study": "Connecting a Cleaning Company With a New Orleans Airbnb Owner",
+    "url": "https://drive.google.com/file/d/1Q6l1Re31neYvwtp_-EiP1ibIB2YfKVxr/view?usp=drivesdk",
+    "summary": "New Orleans cleaning company Angie Nola Maids wanted more Airbnb and vacation rental customers. Acceler8zone found a multi-property Airbnb owner (including an eight-bedroom duplex) whose cleaner could not cover Sunday and same-day turnovers. Acceler8zone confirmed the need and made a direct introduction; Angie Nola Maids paid $3,000 for it."
   },
   {
     "kind": "deal",
@@ -757,7 +791,10 @@ const CASES = [
     "who": "Tetra Films was connected with a footwear brand launching a new collection at two events, with its marketing director ready to discuss scope and budget.",
     "need": "Tetra Films wanted commercial work with established brands.",
     "got": "A Canadian footwear brand preparing to launch a collection at two events in Ontario. It needed outdoor product footage, trail scenes and short promotional videos, and its marketing lead was ready to discuss the project immediately. We connected Tetra with that person.",
-    "worth": "A brand production project at the point of launch."
+    "worth": "A brand production project at the point of launch.",
+    "study": "Connecting a Commercial Production Studio With a Canadian Footwear Brand",
+    "url": "https://drive.google.com/file/d/1IwXr8bLAGZ0IKi9TNyGul2NFX9T7DC9x/view?usp=drivesdk",
+    "summary": "Canadian commercial production company Tetra Films wanted new projects with established brands. Acceler8zone found Baffin preparing its Terrain collection launch with two Ontario events, and its marketing director ready to discuss scope and budget immediately. Acceler8zone made a direct introduction to Baffin's marketing and brand strategy lead, with a proposed introduction fee of $5,000."
   },
   {
     "kind": "deal",
@@ -770,7 +807,10 @@ const CASES = [
     "who": "Advanced Medical Sales was connected with a Texas healthcare network whose supplier could not fill several medications.",
     "need": "Advanced Medical Sales wanted pharmacies and healthcare organisations that were actively buying medication.",
     "got": "A network of more than 60 clinics and four pharmacies that needed about 400 bottles a month and was ready to speak with a qualified supplier within 24 hours. We checked accreditation and pricing first, then connected the wholesaler with the network's purchasing representative.",
-    "worth": "A large network with an immediate need and repeat orders likely."
+    "worth": "A large network with an immediate need and repeat orders likely.",
+    "study": "Connecting a Pharmaceutical Wholesaler With a Healthcare Network",
+    "url": "https://drive.google.com/file/d/1pzKY4B8Lo7psSJC0J_YP1E91lHK-jqq4/view?usp=drivesdk",
+    "summary": "Pharmaceutical wholesaler Advanced Medical Sales wanted buyers actively purchasing medication. Acceler8zone found a Texas network (60+ clinics, 4 pharmacies) whose supplier was short, needing ~400 bottles per month and ready to talk within 24 hours. Acceler8zone confirmed accreditation and regulatory fit, supplied pricing and availability documents, and made a direct introduction to the purchasing representative."
   },
   {
     "kind": "deal",
@@ -783,7 +823,10 @@ const CASES = [
     "who": "Regent Peak Wealth Advisors was connected with six business owners, executives and families of the kind it already advises.",
     "need": "Regent Peak wanted conversations with the people it was already set up to advise, rather than a wider market.",
     "got": "Six qualified introductions in the first 45 days, each matching the firm's existing client profile.",
-    "worth": "Six conversations with the kind of client the firm is built to serve."
+    "worth": "Six conversations with the kind of client the firm is built to serve.",
+    "study": "Case Study - Regent Peak Wealth Advisors - Acceler8zone",
+    "url": "https://drive.google.com/file/d/1KWrXn89QnDeNCn2Kcct1hYKILXF0hycv/view?usp=drivesdk",
+    "summary": "Atlanta independent advisory firm serving business owners, executives, multi-generational families and trustees. Acceler8zone evaluated the market through the firm's existing ideal client profile, filtering for wealth complexity and fit rather than broad affluence, with trust-based, proportionate messaging. Result: 6 qualified introductions in the first 45 days."
   },
   {
     "kind": "deal",
@@ -796,7 +839,10 @@ const CASES = [
     "who": "Clean-Seas West Virginia was connected with six industrial companies around its plastics conversion plant: feedstock suppliers, offtake buyers, logistics providers and local stakeholders.",
     "need": "The company's plant in Belle, West Virginia converts hard-to-recycle plastics into feedstock, starting at 50 tons a day with plans for 200. It needed industrial partners around that plant.",
     "got": "Six commercial introductions in 120 days across feedstock, offtake, logistics and local stakeholders.",
-    "worth": "Six industrial relationships the plant depends on."
+    "worth": "Six industrial relationships the plant depends on.",
+    "study": "Brutal Route, Real Proof: 6 Introductions for Clean-Seas West Virginia in 120 Days",
+    "url": "https://drive.google.com/file/d/14DLbGXkONoDPP2cSdHl-pAo8uUHinj7m/view?usp=drivesdk",
+    "summary": "Clean-Seas runs a plastic-conversion facility in Belle, West Virginia (50 TPD phase one, 200 TPD phase two, Fortune 50 offtake purchaser). Acceler8zone routed on facility-stage, capacity, feedstock, offtake, geography and stakeholder signals in a slow, conservative industrial market. Result: 6 introductions in 120 days to parties able to supply, buy, transport or support the project."
   },
   {
     "kind": "deal",
@@ -809,7 +855,26 @@ const CASES = [
     "who": "RESPILON was connected with three companies that had a clear commercial use for its nanofiber technology.",
     "need": "RESPILON's nanofiber technology has uses in filtration, protective materials, health, pharma and defence. It wanted a small number of companies with a real reason to buy.",
     "got": "Three qualified commercial introductions in about 43 days, each with a specific use for the technology.",
-    "worth": "Three conversations that can each lead to a pilot, a supply agreement or a partnership."
+    "worth": "Three conversations that can each lead to a pilot, a supply agreement or a partnership.",
+    "study": "Case Study: 3 Routed Commercial Introductions for RESPILON in ~43 Days",
+    "url": "https://drive.google.com/file/d/1hLauldZiCh-5mv5iR2PvHWcuVkPU22H7/view?usp=drivesdk",
+    "summary": "RESPILON is a technical nanofiber company with wide applications (filtration, protective materials, health, pharma, defence, industrial R&D). Acceler8zone built the route on signals (category fit, technical use case, filtration and protection needs, R&D activity) instead of a broad list. Result: 3 qualified commercial introductions in about 43 days."
+  },
+  {
+    "kind": "deal",
+    "label": "Buyers found",
+    "client": "Lasting Blueprint Productions",
+    "where": "Orlando, Florida",
+    "industry": "Video & Commercial Production",
+    "figure": "4",
+    "measure": "qualified introductions in 78 days",
+    "who": "Result: 4 directly routed qualified introductions in 78 days.",
+    "need": "Orlando / Central Florida video production company (MBE and DBE certified) was positioned too broadly as \"video production\".",
+    "got": "Acceler8zone reframed the ICP to organizations with real activity to document: events and conferences, nonprofits, healthcare and professional services, training-heavy firms, public sector.",
+    "worth": "Result: 4 directly routed qualified introductions in 78 days.",
+    "study": "Case Study: How We Routed 4 Qualified Introductions for Lasting Blueprint Productions in 78 Days",
+    "url": "https://drive.google.com/file/d/1uJearH8OZmi4GPyVTpmq-ulbmMuAshvH/view?usp=drivesdk",
+    "summary": "Orlando / Central Florida video production company (MBE and DBE certified) was positioned too broadly as \"video production\". Acceler8zone reframed the ICP to organizations with real activity to document: events and conferences, nonprofits, healthcare and professional services, training-heavy firms, public sector. Result: 4 directly routed qualified introductions in 78 days."
   },
   {
     "kind": "sys",
@@ -822,7 +887,10 @@ const CASES = [
     "who": "Vention added $85,000 in revenue in one quarter through the outbound sales system acceler8zone ran for it, and spent less on paid search.",
     "need": "Vention sells a platform for designing and ordering custom industrial equipment. It struggled to reach decision-makers in manufacturing and relied on expensive paid search.",
     "got": "An outbound sales system aimed at those decision-makers, with messages written around their production problems and replies prioritised for the sales team.",
-    "worth": "$85,000 in additional revenue in one quarter."
+    "worth": "$85,000 in additional revenue in one quarter.",
+    "study": "Case Study: Vention (+$85K) | Scaling Success with Precision",
+    "url": "https://drive.google.com/file/d/1p-xKK3Wo8xRxkP0qNExeQLDiiD0r1hXS/view?usp=drivesdk",
+    "summary": "Manufacturing automation platform struggled to reach decision-makers, with sales burnout and dependence on costly PPC ads. Acceler8zone built pain-point-driven automated outreach (production costs, long lead times, inconsistent quality) with lead prioritization and segmentation. Result in one quarter: +$85K additional revenue, better-qualified leads and lower ad reliance."
   },
   {
     "kind": "sys",
@@ -835,7 +903,10 @@ const CASES = [
     "who": "Connect Group, a recruitment agency placing AI talent, added $105,000 in revenue in one quarter through the outbound system acceler8zone ran for it.",
     "need": "Connect Group's pipeline was inconsistent and its sales team spent too much time on poor leads.",
     "got": "Outreach to companies hiring AI talent, built around their hiring problems, with lead scoring so the team worked on the most urgent accounts.",
-    "worth": "$105,000 in additional revenue in one quarter."
+    "worth": "$105,000 in additional revenue in one quarter.",
+    "study": "Case Study: Connect Group (+$105K) | Scaling AI Talent Placements with Advanced Sales Systems",
+    "url": "https://drive.google.com/file/d/1J_e0_HchExVay7KG3qDM-sh-ziM_RrAR/view?usp=drivesdk",
+    "summary": "AI-talent recruitment agency had inefficient lead generation, inconsistent pipelines and sales team burnout. Acceler8zone mapped client hiring pains and set up automated, tailored outreach to AI-focused companies plus lead scoring and segmentation. Result in one quarter: +$105K additional revenue from more qualified AI placements and a more efficient sales team."
   },
   {
     "kind": "sys",
@@ -848,7 +919,10 @@ const CASES = [
     "who": "Crawford Thomas Recruiting, a national staffing firm serving manufacturers, added $100,000 in revenue and made 39 placements in one quarter through the outbound system acceler8zone ran for it.",
     "need": "Crawford Thomas relied on costly pay-per-click advertising and struggled to turn leads into placements with manufacturing clients.",
     "got": "Outreach written around what manufacturers struggle with: labour shortages, long hiring cycles and retention. The firm's team was helped to prioritise the leads it produced.",
-    "worth": "39 placements in one quarter and $100,000 in added revenue."
+    "worth": "39 placements in one quarter and $100,000 in added revenue.",
+    "study": "Crawford Thomas Recruiting (+$100K)| Transforming Skepticism into Success",
+    "url": "https://drive.google.com/file/d/1QY5rLvat4jOkP0XiLkirc7NlddaF3mwz/view?usp=drivesdk",
+    "summary": "Nationwide staffing firm struggled to communicate value to manufacturing clients, with sales burnout and weak lead-to-placement conversion. Acceler8zone built pain-point-driven automated outreach (labor shortages, slow hiring, retention) with lead prioritization and segmentation. Result in one quarter: +39 candidate placements (+$100K), less reliance on costly PPC, and stronger repeat business."
   },
   {
     "kind": "sys",
@@ -861,7 +935,10 @@ const CASES = [
     "who": "Elate Staffing, a UK recruitment agency, made 20 placements in 55 days through the outbound system acceler8zone set up for it.",
     "need": "Elate was finding and contacting leads by hand, which was slow.",
     "got": "Automated sourcing of HR and hiring managers in its sectors, personalised email campaigns, email authentication so the messages were delivered, and lead tracking with alerts for every reply.",
-    "worth": "20 placements in 55 days, ahead of the initial target, with response times down from days to hours."
+    "worth": "20 placements in 55 days, ahead of the initial target, with response times down from days to hours.",
+    "study": "Case Study: Elate Staffing Solutions Ltd. – Elevating Recruitment Efficiency through Sales Systems",
+    "url": "https://drive.google.com/file/d/1GXOnlCv6WU_OohCF56n07cKEJG2IxLg-/view?usp=drivesdk",
+    "summary": "UK recruitment agency (Industrial, Technical & Engineering, Commercial) relied on manual lead generation and inconsistent lead qualification. Acceler8zone automated lead scraping (LinkedIn, Apollo), job-posting-triggered Instantly campaigns, email authentication (SPF/DKIM/DMARC) and ClickUp lead management. Result: 50% more lead conversions, response time cut from days to hours, and 22 placements in 55 days."
   },
   {
     "kind": "sys",
@@ -874,7 +951,10 @@ const CASES = [
     "who": "ForPlayers, an esports organisation, added €70,000 in new revenue in three months through sponsor and partner outreach acceler8zone ran for it.",
     "need": "ForPlayers could not keep a steady flow of the right sponsors and partners, and too few of them became meetings.",
     "got": "Outreach to brands entering esports, gaming companies and content creators, with follow-up and meeting scheduling handled and the messaging tested as it went.",
-    "worth": "€70,000 in new revenue in three months."
+    "worth": "€70,000 in new revenue in three months.",
+    "study": "Case Study: ForPlayers (+70,000€) | Accelerating Growth in Esports with Targeted Lead Generation",
+    "url": "https://drive.google.com/file/d/1-PsGlORMDLm-FLEMG89ob2AvZIdTaOj1/view?usp=drivesdk",
+    "summary": "Esports organization had inconsistent lead generation, low conversion and inefficient outreach to sponsors and partners. Acceler8zone targeted brands, gaming companies and creators with personalized automated outreach, scheduling tools and A/B-tested copy. Result in three months: 70,000€ new revenue and stronger sponsor and partner relationships."
   },
   {
     "kind": "sys",
@@ -887,7 +967,10 @@ const CASES = [
     "who": "FabuLingua, a language-learning platform for children, signed five new clients in 48 days through the outbound system acceler8zone ran for it, instead of paying for ads.",
     "need": "FabuLingua's inbound leads were slow to arrive and its advertising was expensive.",
     "got": "Outreach to schools, language centres and parents, written to read as personal messages, with follow-up and pipeline tracking automated.",
-    "worth": "Five new clients in 48 days."
+    "worth": "Five new clients in 48 days.",
+    "study": "Case Study: FabuLingua (5 New Clients) | In 48 Days W/Acceler8zone",
+    "url": "https://drive.google.com/file/d/10zTQrXixQVXyuy_DdJ8OtswwfJS7xKvL/view?usp=drivesdk",
+    "summary": "Kids language-learning platform (storytelling, interactive learning) relied on costly ads and slow inbound. Acceler8zone defined the ICP (schools, language centers, parents) and ran personalized multi-step email campaigns with automation and lead nurturing. Result in 48 days: 5 new clients from an $8,288 investment and a scalable outbound system."
   },
   {
     "kind": "sys",
@@ -900,7 +983,10 @@ const CASES = [
     "who": "Hippocratic AI, a healthcare technology company, signed two partnership deals worth $35,000 in 60 days through the hospital outreach acceler8zone ran for it.",
     "need": "Hippocratic AI could not reach hospital decision-makers through inbound marketing alone.",
     "got": "Outreach to hospital administrators, technology leaders and clinical innovators, written as personal messages, with follow-up automated.",
-    "worth": "Two partnerships worth $35,000 in 60 days."
+    "worth": "Two partnerships worth $35,000 in 60 days.",
+    "study": "Case Study: Hippocratic AI (2 New Partners) | In 60 Days W/Acceler8zone",
+    "url": "https://drive.google.com/file/d/14cHy7kOvdjlD8DWX_QaZKFbTcCqocMJ9/view?usp=drivesdk",
+    "summary": "Healthcare AI company found inbound and traditional marketing too slow to reach hospital decision-makers. Acceler8zone defined the ideal customers (hospital admins, tech leaders, innovators) and built personalized 1:1 outbound with automated follow-ups and nurturing. Result in 60 days: 2 new partnership deals worth $35,000 and a repeatable outbound process."
   },
   {
     "kind": "sys",
@@ -913,7 +999,10 @@ const CASES = [
     "who": "HelpCare AI, a healthcare technology company, secured four key healthcare clients through acceler8zone's network and outreach.",
     "need": "HelpCare AI needed its first major healthcare clients to prove its product.",
     "got": "Introductions to selected healthcare organisations, outreach to their decision-makers, and follow-up until the deals closed.",
-    "worth": "Four healthcare clients."
+    "worth": "Four healthcare clients.",
+    "study": "Case Study Acceler8zone x Help HelpCare AI’s —Securing 4 Key Healthcare Dream Clients",
+    "url": "https://drive.google.com/file/d/1dsg38OKYz0bSDTJkv7-UHEIqZrDVjtfF/view?usp=drivesdk",
+    "summary": "AI healthcare solutions company (predictive analytics, real-time monitoring, automation) struggled to reach the right healthcare decision-makers. Acceler8zone used network introductions, personalized outreach campaigns, case-study proof and lead qualification and nurturing. Result: 3-4 high-value healthcare clients secured, stronger market presence and referral potential."
   }
 ];
 
@@ -950,25 +1039,31 @@ const OPPORTUNITY_HEADLINES = {
   "RESPILON": [
     "Three potential customers for nanofiber technology",
     "Companies with commercially relevant applications for RESPILON's materials."
+  ],
+  "Lasting Blueprint Productions": [
+    "Four prospective video-production clients",
+    "Organizations with upcoming events, training and customer stories."
   ]
 };
-// the nine cases shown on the page; every other case stays in CASES for later iterations
-const FEATURED = ["Apex Agriculture", "DGR Systems", "Advanced Medical Sales", "Regent Peak Wealth Advisors", "Vention", "Connect Group", "Crawford Thomas Recruiting", "ForPlayers", "Hippocratic AI"];
-const SHOWN = CASES.map((c, i) => [c, i]).filter(([c]) => FEATURED.includes(c.client));
+// the studies shown first, in the BO's order, with his vertical label; slot 9 open (his list names Vention twice)
+const FEATURED = [{"client": "Tetra Films", "vertical": "Commercial Production"}, {"client": "Connect Group", "vertical": "Recruitment"}, {"client": "Advanced Medical Sales", "vertical": "Pharmaceutical Wholesale"}, {"client": "Crawford Thomas Recruiting", "vertical": "Recruitment"}, {"client": "Vention", "vertical": "Industrial Automation"}, {"client": "Elate Staffing", "vertical": "Recruitment"}, {"client": "HelpCare AI", "vertical": "Microsoft Affiliate (Our Biggest Deal) w/Healthcare IT"}, {"client": "Hippocratic AI", "vertical": "Healthcare"}];
+const FEAT = FEATURED.map(f => [CASES.find(c => c.client === f.client), CASES.findIndex(c => c.client === f.client), f.vertical]);
+const REST = CASES.map((c, i) => [c, i, c.industry]).filter(([c]) => !FEATURED.some(f => f.client === c.client));
+const SHOWN = [...FEAT, ...REST];
 const wall = document.getElementById("wall");
 const pad = n => String(n).padStart(2, "0");
 const slug = s => s.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");   // same rule as scripts/gen-results.mjs
 
-wall.innerHTML = SHOWN.map(([c, i], k) => `
-  <a class="stone" href="/results/${slug(c.client)}" data-kind="${c.kind}" data-i="${i}" data-n="${k + 1}" style="--i:${k % 3}" aria-haspopup="dialog">
-    <div class="stone-top eyebrow"><span>No. ${pad(k + 1)}</span><span class="kind ${c.kind}">${c.label} · ${c.industry}</span></div>
+wall.innerHTML = SHOWN.map(([c, i, vertical], k) => `
+  <a class="stone${k >= FEAT.length ? " more" : ""}" href="/results/${slug(c.client)}" data-kind="${c.kind}" data-i="${i}" data-n="${k + 1}" data-vertical="${vertical}" style="--i:${k % 3}" aria-haspopup="dialog">
+    <div class="stone-top eyebrow"><span>No. ${pad(k + 1)}</span><span class="kind ${c.kind}">${c.label} · ${vertical}</span></div>
     ${c.kind === "deal"
       ? `<h3 class="deal-headline">${OPPORTUNITY_HEADLINES[c.client][0]}</h3><p class="deal-context">${OPPORTUNITY_HEADLINES[c.client][1]}</p>`
       : `<div class="figure">${c.figure}</div><p class="measure">${c.measure}</p><p class="who">${c.who}</p>`}
     <div class="stone-foot"><span class="client">${c.client}${c.where ? " · " + c.where : ""}</span><span class="read">Read</span></div>
   </a>`).join("") + `
   <a class="stone cta" data-kind="cta" href="mailto:andjay@acceler8zone.com?subject=What%20we%20sell" style="--i:2">
-    <div class="stone-top eyebrow"><span>No. ${pad(SHOWN.length + 1)}</span><span class="kind">Yours</span></div>
+    <div class="stone-top eyebrow"><span>No. ${pad(FEAT.length + 1)}</span><span class="kind">Yours</span></div>
     <div class="figure">Next entry.</div>
     <p class="measure">Tell us what you're looking for.</p>
     <p class="who">More customers, new contracts, a supplier, a distributor or a business partner. We reply with whether we see a relevant opportunity.</p>
@@ -983,12 +1078,23 @@ else {
   stones.forEach(s => io.observe(s));
 }
 
+// the featured studies first; "Show all results" opens the rest; the filters work on what is open
+let filter = "all", expanded = false;
+const ctaStone = wall.querySelector(".stone.cta");
+const layout = () => {
+  let n = 0;
+  stones.forEach(s => { if (s === ctaStone) return; const show = (expanded || !s.classList.contains("more")) && (filter === "all" || s.dataset.kind === filter); s.classList.toggle("hidden", !show); if (show) { s.style.setProperty("--i", n % 3); s.classList.add("in"); n++; s.querySelector(".stone-top span").textContent = "No. " + pad(n); s.dataset.n = n; } });
+  if (expanded) wall.appendChild(ctaStone); else wall.insertBefore(ctaStone, wall.querySelector(".stone.more"));
+  ctaStone.querySelector(".stone-top span").textContent = "No. " + pad(n + 1);
+  document.querySelector(".record h2 span").textContent = "· " + n;
+  const more = document.getElementById("record-more"); more.textContent = expanded ? "Show fewer results ↑" : "Show all results ↓"; more.setAttribute("aria-expanded", expanded);
+};
 document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
   document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", x === b));
-  const f = b.dataset.filter; let n = 0;
-  stones.forEach(s => { const cta = s.dataset.kind === "cta"; const show = cta || f === "all" || s.dataset.kind === f; s.classList.toggle("hidden", !show); if (show && !cta) { s.style.setProperty("--i", n % 3); s.classList.add("in"); n++; } });
-  document.querySelector(".record h2 span").textContent = "· " + n;
+  filter = b.dataset.filter; layout();
 }));
+document.getElementById("record-more").addEventListener("click", () => { expanded = !expanded; layout(); if (!expanded) document.getElementById("record").scrollIntoView({ block: "start" }); });
+layout();
 
 const dlg = document.getElementById("story"), inner = document.getElementById("story-in");
 let last = null;
@@ -999,7 +1105,7 @@ wall.addEventListener("click", e => {
   const c = CASES[+s.dataset.i]; last = s;
   inner.innerHTML = `
     <div class="story-head">
-      <div class="eyebrow">No. ${pad(+s.dataset.n)} · ${c.label} · ${c.industry}</div>
+      <div class="eyebrow">No. ${pad(+s.dataset.n)} · ${c.label} · ${s.dataset.vertical}</div>
       <button type="button" class="close" data-close>Close</button>
     </div>
     <h3 id="story-title">${c.client}${c.where ? "<span style='color:var(--mute)'> · " + c.where + "</span>" : ""}</h3>
@@ -1007,7 +1113,7 @@ wall.addEventListener("click", e => {
     <section><h4>What they needed</h4><p>${c.need}</p></section>
     <section><h4>What we brought</h4><p>${c.got}</p></section>
     <section><h4>What it was worth</h4><p>${c.worth}</p></section>
-    <p class="story-foot"><a class="u" href="${s.getAttribute("href")}">Open this case on its own page →</a></p>`;
+    <p class="story-foot">${c.url ? `<a class="u" href="${c.url}" target="_blank" rel="noreferrer noopener">Read the full case study →</a><span class="sep">·</span>` : ""}<a class="u" href="${s.getAttribute("href")}">Open this case on its own page →</a></p>`;
   dlg.showModal();
 });
 dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
@@ -1028,6 +1134,11 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     <label class="fp-upload">Upload font files (.ttf .otf .woff .woff2)<input type="file" id="fp-file" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" multiple></label>
     <p class="fp-note" id="fp-upload-note" style="margin-left:0" hidden></p>
     <ul class="fp-uploaded" id="fp-uploaded"></ul>
+  </fieldset>
+  <fieldset><legend>Visuals · on or off</legend>
+    <div class="row"><span>Logo</span><select id="fp-logo" aria-label="Logo in the top line"><option value="on">Logo.svg</option><option value="off">Text wordmark</option></select></div>
+    <div class="row"><span>Stars</span><select id="fp-stars" aria-label="Star field behind the hero"><option value="on">Star field on</option><option value="off">Star field off</option></select></div>
+    <p class="fp-note" style="margin-left:0">Also by address: add ?logo=off or ?stars=off to the page link.</p>
   </fieldset>
   <fieldset><legend>Hero left margin</legend>
     <div class="row"><span>Margin</span><span class="pair"><input type="range" id="fp-indent" min="0" max="80" step="1" aria-label="Hero left margin slider"><input type="number" id="fp-indent-n" min="0" max="200" step="1" aria-label="Hero left margin in pixels"><span class="unit">px</span></span></div>
@@ -1062,17 +1173,18 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   ];
   // every text role on the page; the first element of each list is the one whose size you type in
   const ROLES = [
-    { id: "statement", label: "Hero statement", sel: ".hero-statement" },
+    { id: "statement", label: "Headline · We introduce companies that", sel: ".hero-statement" },
+    { id: "statement2", label: "Headline · have a reason to talk.", sel: ".hero-statement i" },
     { id: "axis", label: "Supply / Demand", sel: ".axis-end" },
     { id: "top", label: "Top line · logo and e-mail", sel: ".wordmark, .mast-right" },
-    { id: "headings", label: "Section headings", sel: "h2.t, .record h2, .duo h3, .story h3, .stone .deal-headline, .contact a.mail" },
-    { id: "body", label: "Body text", sel: ".hero-row p, .lede, .duo p, .service li b, .service li small, .deal-context, .measure, .who, .people-head p, .person p:not(.role), .contact p, .story section p, .story .memo-body p, footer" },
+    { id: "headings", label: "Section headings", sel: "h2.t, .record h2, .duo h3, .story h3, .stone .deal-headline, .contact a.mail, .cx-person h3" },
+    { id: "body", label: "Body text", sel: ".hero-row p, .lede, .duo p, .service li b, .service li small, .deal-context, .measure, .who, .people-head p, .person p:not(.role), .cx-person .desc, .contact p, .story section p, .story .memo-body p, footer" },
     { id: "figures", label: "Figures", sel: ".strip b, .results b, .stone .figure, .story .figline" },
-    { id: "labels", label: "Small labels", sel: ".eyebrow, .stone-top, .person .role, .story h4, .stone-foot, .glass-text, .money-photo figcaption, .story .memo-meta" },
+    { id: "labels", label: "Small labels", sel: ".eyebrow, .stone-top, .person .role, .cx-person .role, .story h4, .stone-foot, .glass-text, .money-photo figcaption, .story .memo-meta" },
     { id: "links", label: "Links and buttons", sel: ".hero-links a, .duo a.cta, .teach-links a, .money-grid a, .story-foot, .filters button, .contact .alt" }
   ];
   const ACCENT = "#0c2850";
-  const blank = () => ({ accent: ACCENT, indent: 20, roles: Object.fromEntries(ROLES.map(R => [R.id, { font: "", weight: "", width: 100, scale: 1, color: "" }])) });
+  const blank = () => ({ accent: ACCENT, indent: 20, roles: Object.fromEntries(ROLES.map(R => [R.id, { font: "", weight: "", style: "", width: 100, scale: 1, color: "" }])) });
   const PRESETS = {
     "Page as built": {},
     "Noto condensed · News Cycle": { statement: { font: "Noto Serif Display", weight: 600, width: 66 }, axis: { font: "News Cycle", weight: 700 } },
@@ -1097,7 +1209,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   const measure = () => ROLES.forEach(R => { const list = els(R); list.forEach(e => e.style.removeProperty("font-size")); base[R.id] = list.map(e => parseFloat(getComputedStyle(e).fontSize)); });
   const sizeAll = () => { measure(); ROLES.forEach(R => { const k = state.roles[R.id].scale; if (k === 1) return; els(R).forEach((e, i) => e.style.setProperty("font-size", (base[R.id][i] * k).toFixed(2) + "px")); }); };
 
-  const ruleFor = (R, v) => { const d = []; if (v.font) d.push(`font-family: ${stack(v.font)} !important`); if (v.weight) d.push(`font-weight: ${v.weight} !important`); if (v.font && byName(v.font)?.width) d.push(`font-stretch: ${v.width}% !important`); if (v.color) d.push(`color: ${v.color} !important`); return d.length ? `${R.sel} { ${d.join("; ")}; }` : ""; };
+  const ruleFor = (R, v) => { const d = []; if (v.font) d.push(`font-family: ${stack(v.font)} !important`); if (v.weight) d.push(`font-weight: ${v.weight} !important`); if (v.style) d.push(`font-style: ${v.style} !important`); if (v.font && byName(v.font)?.width) d.push(`font-stretch: ${v.width}% !important`); if (v.color) d.push(`color: ${v.color} !important`); return d.length ? `${R.sel} { ${d.join("; ")}; }` : ""; };
   const accentCss = a => a.toLowerCase() === ACCENT ? "" : `:root { --ox: ${a}; --sky: ${a}; --ox-2: color-mix(in oklab, ${a} 78%, white); }`;
   const applyCss = () => { live.textContent = [accentCss(state.accent), ...ROLES.map(R => ruleFor(R, state.roles[R.id])), `.hero { --hero-indent: ${state.indent}px; }`].filter(Boolean).join("\n"); };
 
@@ -1107,6 +1219,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     <details data-role="${R.id}"><summary>${R.label}<small data-sum></small></summary>
       <div class="row"><span>Font</span><select data-k="font" aria-label="${R.label} font"></select></div>
       <div class="row"><span>Weight</span><select data-k="weight" aria-label="${R.label} weight"></select></div>
+      <div class="row"><span>Style</span><select data-k="style" aria-label="${R.label} style"><option value="">Page default</option><option value="normal">Upright</option><option value="italic">Italic</option></select></div>
       <div class="row" data-width-row><span>Width</span><span class="pair"><input type="range" data-k="width" min="62.5" max="100" step="0.5" aria-label="${R.label} width"><output></output><span class="unit">%</span></span></div>
       <div class="row"><span>Size</span><span class="pair"><input type="range" data-k="scale" min="50" max="250" step="1" aria-label="${R.label} size slider"><input type="number" data-k="px" min="6" max="400" step="1" aria-label="${R.label} size in pixels"><span class="unit">px</span></span></div>
       <div class="row"><span>Colour</span><span class="pair color"><input type="color" data-k="color" aria-label="${R.label} colour"><input type="text" data-k="hex" aria-label="${R.label} colour as hex" spellcheck="false"></span></div>
@@ -1121,6 +1234,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       fs.querySelector('[data-k="font"]').value = v.font;
       const weights = f ? f.w : range(100, 900);
       if (v.weight && !weights.includes(+v.weight)) v.weight = weights.reduce((a, b) => Math.abs(b - v.weight) < Math.abs(a - v.weight) ? b : a);
+      fs.querySelector('[data-k="style"]').value = v.style || "";
       fs.querySelector('[data-k="weight"]').innerHTML = `<option value="">Page default</option>` + weights.map(w => `<option${w == v.weight ? " selected" : ""}>${w}</option>`).join("");
       fs.querySelector("[data-width-row]").hidden = !(f && f.width);
       const wi = fs.querySelector('[data-k="width"]'); wi.value = v.width; wi.nextElementSibling.textContent = v.width;
@@ -1150,6 +1264,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     const v = state.roles[fs.dataset.role], val = e.target.value;
     if (k === "font") { v.font = val; v.weight = ""; }
     else if (k === "weight") v.weight = val ? +val : "";
+    else if (k === "style") v.style = val;
     else if (k === "width") v.width = +val;
     else if (k === "scale") v.scale = +val / 100;
     else if (k === "px") { const b0 = (base[fs.dataset.role] || [])[0]; if (b0 && +val > 0) v.scale = +val / b0; }
@@ -1206,6 +1321,14 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   toggle.addEventListener("click", () => show(panel.hidden));
   panel.querySelector("[data-fp-close]").addEventListener("click", () => { show(false); toggle.focus(); });
   panel.addEventListener("keydown", e => { if (e.key === "Escape") { show(false); toggle.focus(); } });
+
+  // visual switches: Logo.svg / text wordmark · star field on / off
+  const VKEY = "a8z-visuals", html = document.documentElement;
+  const vis = () => ({ logo: html.dataset.logo === "svg" ? "on" : "off", stars: html.dataset.stars === "on" ? "on" : "off" });
+  const setVis = (k, val) => { if (k === "logo") html.dataset.logo = val === "off" ? "text" : "svg"; else html.dataset.stars = val; try { localStorage.setItem(VKEY, JSON.stringify(vis())); } catch (e) {} sizeAll(); render(); };
+  const fl = document.getElementById("fp-logo"), fst = document.getElementById("fp-stars");
+  fl.value = vis().logo; fst.value = vis().stars;
+  fl.addEventListener("input", e => setVis("logo", e.target.value)); fst.addEventListener("input", e => setVis("stars", e.target.value));
 
   let t = 0; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { sizeAll(); render(); }, 150); });
   const story = document.getElementById("story-in"); if (story) new MutationObserver(() => sizeAll()).observe(story, { childList: true });
@@ -1318,6 +1441,34 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     const b = e.target.closest("[data-back]"); if (b) { e.preventDefault(); door(b.dataset.back); }
   });
   dlg.addEventListener("close", () => { if (trigger) { trigger.focus(); trigger = null; } });
+})();
+</script>
+
+<script>
+// carousel · Amelia and Andjay · 1.5 s diagonal wipe on click
+(() => {
+  const root = document.querySelector(".cx"); if (!root) return;
+  const imgs = [...root.querySelectorAll(".cx-img")], tabs = [...root.querySelectorAll('[role="tab"]')], caps = [...root.querySelectorAll(".cx-person")], sw = root.querySelector(".cx-switch");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let cur = 0, busy = false;
+  const go = k => {
+    if (k === cur || busy) return;
+    const from = imgs[cur], to = imgs[k];
+    tabs.forEach((t, i) => t.setAttribute("aria-selected", i === k));
+    caps.forEach((c, i) => { c.hidden = i !== k; c.classList.toggle("is-on", i === k); });
+    sw.dataset.k = k; imgs.forEach((im, i) => im.setAttribute("aria-hidden", i !== k));
+    const done = () => { from.classList.remove("is-on"); to.classList.remove("is-in"); to.classList.add("is-on"); busy = false; };
+    cur = k;
+    if (reduce) { done(); return; }
+    busy = true;
+    to.style.transition = "none"; to.classList.add("is-in"); to.style.clipPath = "polygon(0 0, 0 0, 0 0)";
+    void to.offsetWidth; to.style.transition = ""; to.style.clipPath = "";
+    to.addEventListener("transitionend", function end(e) { if (e.propertyName !== "clip-path") return; to.removeEventListener("transitionend", end); done(); });
+    setTimeout(() => { if (busy) done(); }, 1700);
+  };
+  tabs.forEach((t, i) => t.addEventListener("click", () => go(i)));
+  root.querySelector(".cx-frame").addEventListener("click", () => go((cur + 1) % imgs.length));
+  sw.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const k = (cur + (e.key === "ArrowRight" ? 1 : imgs.length - 1)) % imgs.length; go(k); tabs[k].focus(); } });
 })();
 </script>
 
