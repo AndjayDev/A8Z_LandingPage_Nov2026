@@ -36,6 +36,11 @@ Door legend: two-way = undone by one revert · one-way = changes the live site o
 | T10 | run every check of this repo against the built page: bake, frame and photos, pop-up, relay, stone line, hero baseline, doors, no overflow at 390 px | `tools/` | all PASS, before and after printed | read only |
 | T11 | push the branch; the BO opens Lovable's preview of the branch | G2 | the BO's look | two-way |
 | T12 | merge into `main` → Lovable publishes the live site | G2 | live address shows 5.7; video plays; Cal opens | one-way (live site), undone by a revert commit |
+| T13 | port the checks into the Lovable repo: the same check names run against the built page (`npm run build && npm run preview`, local address), one workflow file `.github/workflows/landing-checks.yml`; `tools/run-checks.sh` in this repo is the model | G1 | green run on the branch, before and after printed | two-way |
+| T14 | before T1 and again before T12: `git diff --stat 2a09f7f origin/main` lists no file beyond the six in `docs/lovable-remap-6-files.md`, or stop and re-map | — | the diff printed | read only |
+| T15 | after T12: both repositories set to private (BO ruling 17 Nov 2026) | BO | GitHub shows Private on both | two-way |
+
+Blockers before T12 (from `docs/risks-because-swot.md`): photo licence or clean original · the 13 case exports in `reference/case-studies/` · the running-cost list.
 
 ## OPEN, CARRIED (from Website_Boot ▸ SPEC_01_LandingPage.md ▸ 10 · OPEN ITEMS)
 Header figure · copy A or B · the 18 case studies: they are not needed to move revision 5.7 as it stands; they change content later.
