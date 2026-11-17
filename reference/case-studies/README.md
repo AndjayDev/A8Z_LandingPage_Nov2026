@@ -27,11 +27,11 @@ Named in the BO's list of 18 Nov 2026 but not in the Lovable repo folder yet (th
 | Angie Nola Maids | Connecting a Cleaning Company With a New Orleans Airbnb Owner.md |
 | DGR Systems | Connecting a Florida Technology Company With a School District.md |
 
-PARKED (BO ruling 18 Nov 2026: "i'll upload them manually"):
-| client on the page | file (verbatim name) | why it did not upload |
+Uploaded by the BO by hand, 18 Nov 2026:
+| client on the page | file (verbatim name) | status |
 |---|---|---|
-| Clean-Seas West Virginia | Brutal Route, Real Proof _ 6 Introductions for Clean-Seas West Virginia in 120 Days.md | warning only: line endings (LF → CRLF); harmless |
-| ForPlayers | Case Study_ ForPlayers (+70,000€) _ Accelerating Growth in Esports with Targeted Lead Generation.md | Windows: "Filename too long" |
-The builder already knows the ForPlayers name: once the file is in this folder, the page shows its full text on the next build.
+| ForPlayers | Case Study_ForPlayers (+70,000€) _Accelerating Growth in Esports with Targeted Lead Generation.md | full text on the page |
+| Lasting Blueprint Productions | Case Study_How We Routed 4 Qualified Introductions for Lasting Blueprint Productions in 78 Days.md | full text on the page |
+| Clean-Seas West Virginia | Brutal Route, Real Proof_6 Introductions for Clean-Seas West Virginia in 120 Days.md | EMPTY in the Lovable repo (1 byte); not copied; the page keeps "Brutal Route, Real Proof_ 6 Introductions for Clean-Seas West Virginia in 120.md" (3,556 bytes) |
 
-No file named for: Apex Agriculture · RESPILON · Lasting Blueprint Productions.
+No file named for: Apex Agriculture · RESPILON.

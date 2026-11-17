@@ -336,3 +336,5 @@ Checks: `tools/photo-check.mjs` before FAIL (Andjay_Office1.jpg 850 px, Ame_Offi
 Renders: `renders/r5-10-carousel-andjay.png`, `renders/r5-10-carousel-amelia.png`, `renders/r5-10-crawford-popup.png`.
 Open: Crawford card "+$100,000" vs the file's banner "$123,039 IN NEW REVENUE" · Elate 20 vs 22 · HelpCare 4 vs "3-4" · featured slot 9.
 Risk: two-way door. Blast radius: two photos, the record pop-up, the results pages.
+
+- 18 Nov 2026 · two hand-uploaded case files added (ForPlayers, Lasting Blueprint Productions): `tools/build-cases.py` before 9 full · 7 summary → after 11 full · 5 summary; cases, doors, sweep PASS. The hand-uploaded "Brutal Route, Real Proof_6 Introductions for Clean-Seas West Virginia in 120 Days.md" is empty (1 byte) in the Lovable repo; the earlier full copy stays in use.
