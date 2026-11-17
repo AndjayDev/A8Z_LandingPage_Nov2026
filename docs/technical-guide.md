@@ -152,3 +152,43 @@ Sources: `reference/iterations/landing-page-framework iteration 3 - 17 NOv 2026.
 - toolbox fieldset "Portraits · carousel" (`#fp-portraits`): per person a select (Original + uploads), focus x/y sliders (object-position), multi-file upload (jpeg, png, webp, avif) and remove; blobs in IndexedDB `a8z-portraits`, choice in localStorage `a8z-portrait-choice`
 - evidence (Chrome 131, one-file build opened alone): tabs "Andjay / Amelia"; first caption "Andjay · Co-Founder & CEO · Leads strategy…"; second "Amelia · Founder & CTO · Leads technology…"; upload → Andjay image becomes the 900 px upload and the option list shows it; focus ↕ 10 → object-position 46% 10%; reload keeps upload and focus; remove → back to Andjay_Office.jpg 1037 px; errors 0
 - revision 4 kept as `index-r4.html`
+
+---
+
+# REVISION 5.1 · 17 Nov 2026 · portrait upload: functions, bugs, fixes
+
+Order: "Analyze the upload portraits feature - it doesn't work … enumerate the functions, label them -> find bugs and write a fix for each of them. No skips, no jumps." Boot: ROSTER 60/60 · ingestion 59/59 · workplan 5 rows. Build: make_fixes.py applies fix 1..N; after each fix the one-file page was rebuilt and all nine checks re-run.
+
+## FUNCTIONS (labels)
+| label | function | what it does |
+|---|---|---|
+| C01 | `go(k)` | carousel: 1.5 s diagonal wipe to person k; ignores calls while a wipe runs |
+| C02 | tabs · frame click · arrow keys | carousel controls |
+| P01 | `PEOPLE` | one entry per carousel photo: person, original source, caption name |
+| P02 | `choice` · `save()` | which portrait and focus per person, in localStorage |
+| P03 | `db()` · `tx()` | IndexedDB store `a8z-portraits` for uploaded files |
+| P04 | `add(rec)` | makes a blob address for an uploaded file |
+| P05 | `apply()` | sets each photo's source and focus |
+| P06 | `render()` | builds the toolbox rows: portrait select, focus sliders, upload, remove |
+| P07 | input handler | portrait select and focus sliders |
+| P08 | change handler | file upload |
+| P09 | click handler | remove the chosen upload |
+| P10 | restore at load | reads saved uploads back from IndexedDB |
+| P11 (new) | `showPerson(key)` | brings the person whose portrait changed on screen (via C01) |
+| P12 (new) | `readable(blob)` | accepts a file only if this browser can draw it |
+| P13 (new) | `msg(text)` | the note line under the portrait rows |
+
+## CHECKS (Chrome 131 headless; T1–T6 page opened as a file, T7–T9 inside a sandboxed frame without storage, as in the chat preview)
+T1 upload for the person on screen changes that photo · T2 upload for the other person shows that portrait · T3 a picture file without a type is used or explained · T4 an unreadable file leaves the current portrait and says why · T5 the file picker lists every image type · T6 no errors (file) · T7 upload works in the preview · T8 no errors (preview) · T9 the preview says uploads cannot be kept
+
+## BUGS, IN ORDER, EACH FIXED AND RE-CHECKED BEFORE THE NEXT
+| bug | function | failure (before) | fix | check before → after | all checks after |
+|---|---|---|---|---|---|
+| 1 | P07, P08 with C01 | uploading for the person not on screen changed a hidden photo; the screen stayed the same | C01 exposed as `root.cxGo` / `root.cxNow`; P11 brings that person on screen after an upload or a pick | T2 FAIL → PASS | 5 of 9 |
+| 2 | P08 | a file with no type (no extension, unregistered type on Windows) was dropped without a word | an empty type is tried; P12 decides | T3 FAIL → PASS | 6 of 9 |
+| 3 | P08 | a file the browser cannot draw (HEIC, damaged) replaced the portrait with a broken image | P12 checks every file first; rejected files are named in P13's note; the current portrait stays | T4 FAIL → PASS | 7 of 9 |
+| 4 | P06 | the picker filter `image/jpeg,image/png,image/webp,image/avif` hid HEIC, GIF, JFIF, BMP | `accept="image/*"` | T5 FAIL → PASS | 8 of 9 |
+| 5 | P10 | where storage is blocked (chat preview), uploads vanished on reload without a word | P10's failure path sets a standing note: "Uploads work here, but this view cannot keep them after a reload. Open the file in Chrome or Edge to keep them." | T9 FAIL → PASS | 9 of 9 |
+
+Regression: upload → reload keeps the upload and focus (46% 10%) · remove → back to Andjay_Office.jpg · errors 0.
+Risk: two-way door · blast radius = the toolbox's portrait part and two lines of the carousel script in `variants/variant-A-clay-and-ink/index.html`.

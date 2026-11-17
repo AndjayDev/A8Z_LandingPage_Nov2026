@@ -1145,6 +1145,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   </fieldset>
   <fieldset><legend>Portraits · carousel</legend>
     <div id="fp-portraits"></div>
+    <p class="fp-note" id="fp-portrait-note" style="margin-left:0" hidden></p>
     <p class="fp-note" style="margin-left:0">Uploads stay in this browser. A portrait you keep goes into assets/people/ in the repository.</p>
   </fieldset>
   <fieldset><legend>Hero left margin</legend>
@@ -1473,6 +1474,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     to.addEventListener("transitionend", function end(e) { if (e.propertyName !== "clip-path") return; to.removeEventListener("transitionend", end); done(); });
     setTimeout(() => { if (busy) done(); }, 1700);
   };
+  root.cxGo = go; root.cxNow = () => cur;   // lets the portrait tool bring a person on screen
   tabs.forEach((t, i) => t.addEventListener("click", () => go(i)));
   root.querySelector(".cx-frame").addEventListener("click", () => go((cur + 1) % imgs.length));
   sw.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { const k = (cur + (e.key === "ArrowRight" ? 1 : imgs.length - 1)) % imgs.length; go(k); tabs[k].focus(); } });
@@ -1490,7 +1492,14 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   const files = {};   // id → { id, person, name, blob, url }
   const db = () => new Promise((res, rej) => { const r = indexedDB.open("a8z-portraits", 1); r.onupgradeneeded = () => r.result.createObjectStore("files", { keyPath: "id" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
   const tx = (mode, fn) => db().then(d => new Promise((res, rej) => { const q = fn(d.transaction("files", mode).objectStore("files")); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }));
+  const note = document.getElementById("fp-portrait-note");
+  let storeMsg = "";
+  const msg = t => { note.textContent = [t, storeMsg].filter(Boolean).join(" "); note.hidden = !note.textContent; };
+  // a file counts only if this browser can actually draw it
+  const readable = blob => new Promise(res => { const u = URL.createObjectURL(blob), im = new Image(); im.onload = () => { URL.revokeObjectURL(u); res(im.naturalWidth > 0); }; im.onerror = () => { URL.revokeObjectURL(u); res(false); }; im.src = u; });
   const add = rec => { rec.url = URL.createObjectURL(rec.blob); files[rec.id] = rec; };
+  // bring the person whose portrait just changed on screen, so the change is visible
+  const showPerson = key => { const P = PEOPLE.find(x => x.key === key); if (P && root.cxGo && root.cxNow() !== +P.img.dataset.k) root.cxGo(+P.img.dataset.k); };
 
   const apply = () => PEOPLE.forEach(P => {
     const c = choice[P.key] || {}, f = files[c.id];
@@ -1507,25 +1516,26 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
         <div class="row"><span>Portrait</span><select data-k="id" aria-label="${P.name} portrait"><option value="">Original · ${P.img.dataset.file}</option>${mine.map(f => `<option value="${f.id}"${f.id === c.id ? " selected" : ""}>${f.name}</option>`).join("")}</select></div>
         <div class="row"><span>Focus ↔</span><span class="pair"><input type="range" data-k="x" min="0" max="100" step="1" value="${c.x ?? def[0]}" aria-label="${P.name} portrait focus left to right"><output>${c.x ?? def[0]}</output><span class="unit">%</span></span></div>
         <div class="row"><span>Focus ↕</span><span class="pair"><input type="range" data-k="y" min="0" max="100" step="1" value="${c.y ?? def[1]}" aria-label="${P.name} portrait focus top to bottom"><output>${c.y ?? def[1]}</output><span class="unit">%</span></span></div>
-        <div class="row"><span></span><span class="fp-actions" style="margin:0"><label class="fp-upload">Upload portraits<input type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple data-upload></label>${c.id ? `<button type="button" data-remove>Remove this one</button>` : ""}</span></div>
+        <div class="row"><span></span><span class="fp-actions" style="margin:0"><label class="fp-upload">Upload portraits<input type="file" accept="image/*" multiple data-upload></label>${c.id ? `<button type="button" data-remove>Remove this one</button>` : ""}</span></div>
       </div>`; }).join("");
   };
   box.addEventListener("input", e => {
     const row = e.target.closest("[data-person]"), k = e.target.dataset.k; if (!row || !k) return;
     const c = choice[row.dataset.person] = choice[row.dataset.person] || {};
     if (k === "id") { c.id = e.target.value || undefined; render(); } else { c[k] = +e.target.value; e.target.nextElementSibling.textContent = e.target.value; }
-    save(); apply();
+    save(); apply(); showPerson(row.dataset.person);
   });
   box.addEventListener("change", async e => {
     if (!e.target.matches("[data-upload]")) return;
-    const person = e.target.closest("[data-person]").dataset.person; let last = null;
+    const person = e.target.closest("[data-person]").dataset.person; let last = null; const bad = [];
     for (const file of e.target.files) {
-      if (!file.type.startsWith("image/")) continue;
+      if ((file.type && !file.type.startsWith("image/")) || !(await readable(file))) { bad.push(file.name); continue; }
       const rec = { id: `${person}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, person, name: file.name, blob: file };
       add(rec); last = rec.id; try { await tx("readwrite", st => st.put({ id: rec.id, person, name: rec.name, blob: file })); } catch (x) {}
     }
     if (last) { choice[person] = { ...(choice[person] || {}), id: last }; save(); }
-    render(); apply();
+    msg(bad.length ? `Could not show ${bad.join(", ")}: this browser cannot read that picture. Save it as JPG or PNG and upload it again.` : "");
+    render(); apply(); if (last) showPerson(person);
   });
   box.addEventListener("click", async e => {
     if (!e.target.matches("[data-remove]")) return;
@@ -1534,7 +1544,8 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     choice[person].id = undefined; save(); render(); apply();
   });
   render(); apply();
-  tx("readonly", st => st.getAll()).then(recs => { (recs || []).forEach(add); render(); apply(); }).catch(() => {});
+  tx("readonly", st => st.getAll()).then(recs => { (recs || []).forEach(add); render(); apply(); })
+    .catch(() => { storeMsg = "Uploads work here, but this view cannot keep them after a reload. Open the file in Chrome or Edge to keep them."; msg(""); });
 })();
 </script>
 
