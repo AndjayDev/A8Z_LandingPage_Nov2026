@@ -21,4 +21,4 @@ This is why I call it **controlled commercial routing**. We did not spray the ma
 
 **Want yours?**
 
-If you want similar routed introductions for your market, hit up [Saad at Research Introductions.](https://www.myoprocess.com/)
+If you want similar routed introductions for your market, hit up [Andjay at Research Introductions.](https://www.acceler8zone.com/)
