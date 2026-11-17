@@ -247,6 +247,21 @@
   .video .play::after { content: ""; position: absolute; left: 12px; top: 9px; border-left: 9px solid var(--ox); border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
   .video .glass-text { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; }
   .video-cap { margin: 12px 0 0; font-size: 14px; color: var(--sub); }
+  .video .glass { padding: 6px; }
+  .video-fallback { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 24px 24px 22px 64px; color: #fff; font-family: var(--serif); font-size: 26px; line-height: 1.15; background: linear-gradient(160deg, #0c2850, #14120e); }
+  .video-fallback[hidden] { display: none; }
+  /* 5.3 · the pop-up frame for the video and the booking calendar: the visitor stays on this page */
+  dialog.media { border: 0; padding: 0; background: transparent; width: min(1280px, calc(100vw - 32px)); max-width: none; max-height: calc(100vh - 32px); margin: auto; overflow: visible; }
+  dialog.media::backdrop { background: rgba(12,10,8,.78); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .media-bar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .media-close { font: 500 13px/1 var(--sans); color: #fff; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+  .media-close:hover { background: rgba(255,255,255,.22); }
+  .media-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: calc(100vh - 90px); background: #000; border-radius: 6px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,.45); }
+  .media-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+  dialog.media.is-cal { width: min(1040px, calc(100vw - 32px)); }
+  dialog.media.is-cal .media-frame { aspect-ratio: auto; height: min(720px, calc(100vh - 90px)); background: var(--paper); }
+  .media-note { margin: 10px 2px 0; font-size: 14px; color: rgba(255,255,255,.82); }
+  .media-note a { color: #fff; }
 
   /* People */
   .people { border-top: 1px solid var(--rule); padding: 88px 0; }
@@ -668,14 +683,13 @@
       <div class="teach-grid reveal in">
         <div>
           <h2 class="t">Acceler8zone</h2>
-          <p class="lede">Andjay teaches people how to grow businesses by selling what people already want. Members of his community have documented $8 million in wins.</p>
-          <div class="teach-links">
-            <a class="u cta mag" href="https://www.youtube.com/@Acceler8zone" target="_blank" rel="noreferrer noopener">Watch on YouTube →</a>
-          </div>
+          <p class="lede">Andjay teaches people how to grow connector businesses by selling what partners already want. Members of his network have documented $8 million in wins.</p>
         </div>
-        <a class="video" href="https://www.youtube.com/watch?v=GgIXWb4kymU" target="_blank" rel="noreferrer noopener" aria-label="Watch: Signal Intelligence that Surfaces Sales-Ready Executive Meetings">
-          <img src="https://i.ytimg.com/vi/GgIXWb4kymU/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy">
-          <span class="glass" aria-hidden="true"><span class="play"></span><span class="glass-text">Watch on YouTube</span></span>
+        <!-- 5.3: the video plays in a pop-up on this page; no link to YouTube, no "Watch on YouTube" label -->
+        <a class="video" href="#video" data-video="GgIXWb4kymU" aria-haspopup="dialog" aria-label="Play the video: Signal Intelligence that Surfaces Sales-Ready Executive Meetings">
+          <img src="https://i.ytimg.com/vi/GgIXWb4kymU/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" data-thumbs="hqdefault,sddefault,mqdefault">
+          <span class="video-fallback" hidden>Signal Intelligence that Surfaces Sales-Ready Executive Meetings</span>
+          <span class="glass" aria-hidden="true"><span class="play"></span></span>
         </a>
       </div>
     </div>
@@ -714,7 +728,7 @@
       <div class="eyebrow reveal in">Let's talk business</div>
       <a class="mail reveal in" href="mailto:andjay@acceler8zone.com">andjay@acceler8zone.com</a>
       <p class="reveal in">Tell us about your business and what you want to achieve.</p>
-      <div class="alt reveal in">Prefer a call? <a class="u mag" href="https://cal.com/Andjayacceler8zone/private-consultation?overlayCalendar=true" target="_blank" rel="noreferrer noopener">Book one</a>.</div>
+      <div class="alt reveal in">Prefer a call? <a class="u mag" href="https://app.cal.com/andjay-acceler8zone/quickchat?overlayCalendar=true" data-cal="andjay-acceler8zone/quickchat" aria-haspopup="dialog">Book one</a>.</div>
     </div>
   </section>
 </main>
@@ -731,6 +745,11 @@
   </div>
 </footer>
 
+<dialog class="media" id="media" aria-label="Video">
+  <div class="media-bar"><button type="button" class="media-close" data-media-close>Close</button></div>
+  <div class="media-frame"></div>
+  <p class="media-note" hidden></p>
+</dialog>
 <dialog class="story" id="story" aria-labelledby="story-title">
   <div class="story-in" id="story-in"></div>
 </dialog>
@@ -1697,4 +1716,56 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
 </script>
 
 
+<script>
+// 5.3 · the video and the booking calendar open in a pop-up on this page; nobody is sent to YouTube or Cal.com
+(() => {
+  const dlg = document.getElementById("media"); if (!dlg) return;
+  const frame = dlg.querySelector(".media-frame"), note = dlg.querySelector(".media-note");
+  const open = (label, html, cal) => { dlg.setAttribute("aria-label", label); dlg.classList.toggle("is-cal", !!cal); frame.innerHTML = html; note.hidden = true; if (!dlg.open) dlg.showModal(); };
+  const close = () => { if (dlg.open) dlg.close(); };
+  dlg.addEventListener("close", () => { frame.innerHTML = ""; });   // empties the frame: the video stops
+  dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-media-close]")) close(); });
+
+  // the video: YouTube's privacy-enhanced player in a 1280 × 720 frame
+  const tile = document.querySelector(".video[data-video]");
+  if (tile) {
+    const id = tile.dataset.video, img = tile.querySelector("img"), fb = tile.querySelector(".video-fallback");
+    const thumbs = (img.dataset.thumbs || "").split(",").filter(Boolean);
+    const next = () => { const t = thumbs.shift(); if (t) img.src = `https://i.ytimg.com/vi/${id}/${t}.jpg`; else { img.hidden = true; fb.hidden = false; } };
+    // a missing or blocked thumbnail tries the smaller YouTube sizes, then shows a titled card
+    img.addEventListener("error", next); img.addEventListener("load", () => { if (img.naturalWidth <= 120) next(); });
+    if (img.complete && img.naturalWidth === 0 && img.getAttribute("loading") !== "lazy") next();
+    tile.addEventListener("click", e => {
+      e.preventDefault();
+      open("Video: Signal Intelligence that Surfaces Sales-Ready Executive Meetings",
+        `<iframe width="1280" height="720" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1" title="Signal Intelligence that Surfaces Sales-Ready Executive Meetings" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
+    });
+  }
+
+  // the booking calendar: Cal.com's own pop-up (embed script); if that script cannot load, the booking page in this frame
+  const book = document.querySelector("[data-cal]");
+  if (book) {
+    const link = book.dataset.cal, NS = "quickchat", config = { layout: "month_view", overlayCalendar: "true" };
+    let state = "idle";   // idle → loading → ready | failed
+    const fallback = () => { open("Book a call", `<iframe src="${book.href}&embed=true" title="Book a call with Andjay"></iframe>`, true);
+      note.innerHTML = 'Calendar not showing? Write to <a href="mailto:andjay@acceler8zone.com">andjay@acceler8zone.com</a> and we will send you a time.'; note.hidden = false; };
+    const load = () => {
+      if (state !== "idle") return; state = "loading";
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", NS, { origin: "https://app.cal.com" });
+      Cal.ns[NS]("ui", { layout: "month_view", hideEventTypeDetails: false });
+      const s = document.querySelector('script[src="https://app.cal.com/embed/embed.js"]');
+      if (s) { s.addEventListener("load", () => { state = "ready"; }); s.addEventListener("error", () => { state = "failed"; }); }
+    };
+    book.addEventListener("pointerenter", load, { once: true });   // warm up on hover, so the pop-up opens fast
+    book.addEventListener("click", e => {
+      e.preventDefault(); load();
+      if (state === "failed") { fallback(); return; }
+      Cal.ns[NS]("modal", { calLink: link, config });
+      // still not loaded after 4 s: the script is blocked here; show the booking page in our own frame
+      setTimeout(() => { if (state !== "ready") fallback(); }, 4000);
+    });
+  }
+})();
+</script>
 </body></html>

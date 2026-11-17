@@ -217,3 +217,20 @@ Order (Q2): "analyze the entire landing page structure, search for bugs in all s
 - impeccable detector: the same 10 findings as revision 3 (style, not bugs; carried to the style interview)
 
 Risk: two-way door. Blast radius: the portrait tool script, one line of the record script, one CSS rule of the hero motion, README line, new `one-file.html`.
+
+---
+
+# REVISION 5.3 · 17 Nov 2026 · booking and video open in pop-ups on the page
+
+Order (Q3): "The link to cal.com went broken … Ensure the Cal dialog UI spawns in the landing page. Do not let them leave our website." · "make the video play in a pop-up frame width=1280 height=720, do not make the visitor go to the YouTube channel. Remove the feature Watch on YouTube." Revision 5.2 kept as `index-r5-2.html`.
+
+| item | before | after | check before → after |
+|---|---|---|---|
+| Book one | old link `cal.com/Andjayacceler8zone/private-consultation`, new tab | `app.cal.com/andjay-acceler8zone/quickchat` (live: "Partner Alignment Call", 15 min, checked 17 Nov). Click opens Cal.com's own pop-up (official embed script, namespace `quickchat`, month view, overlayCalendar). If the script cannot load within 4 s, the booking page opens in the page's own pop-up frame with an e-mail line | C1 C2 FAIL → PASS |
+| video | link to youtube.com, new tab; "Watch on YouTube" label; channel link | `#video` tile opens a pop-up with the privacy-enhanced YouTube player, 1280 × 720 (scales down on small screens), autoplay; closing empties the frame and stops the video; label and channel link removed; the round play mark stays | V2 V4 V5 FAIL → PASS |
+| thumbnail | blocked thumbnail = empty black box | tries maxres → hq → sd → mq; all blocked → titled card | V3 FAIL → PASS |
+| subtext | "…grow businesses by selling what people already want. Members of his community…" | the BO's text, word for word | V1 FAIL → PASS |
+
+Checks: `tools/popup-check.mjs` before 1 of 8 · after 8 of 8. Regression on 5.3: portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 · doors, memos, filters, carousel 7/7.
+Not verifiable here (the sandbox cannot reach YouTube or Cal.com): the video actually playing and Cal's pop-up drawing. YouTube's player keeps its own small logo inside the frame; the page cannot remove it. A page opened as a local file may get YouTube's "video unavailable" message, because the player expects a web address; on the live site it plays.
+Risk: two-way door. Blast radius: the teach section, the contact line, one new dialog, one new script.
