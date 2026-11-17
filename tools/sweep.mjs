@@ -1,5 +1,5 @@
 import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-core';
-const [file] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
+const [file, shots = "."] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 for (const [vw, vh] of [[1440, 900], [390, 844]]) {
   const p = await b.newPage(); const errs = [], failed = [];
@@ -18,6 +18,6 @@ for (const [vw, vh] of [[1440, 900], [390, 844]]) {
     return { vw, scrollW, wide, deadAnchors: anchors, localFileLinks: files, brokenImgs: imgs, unnamedControls: noName.slice(0, 8) };
   });
   console.log(`== ${vw}px`, JSON.stringify(r, null, 1)); console.log('errors', errs); console.log('failed (not fonts):', failed.filter(f => !/fonts\.g|_vercel|ytimg|youtube/.test(f)));
-  await p.screenshot({ path: `/home/claude/work/S/full-${vw}.png`, fullPage: true }); await p.close();
+  await p.screenshot({ path: `${shots}/full-${vw}.png`, fullPage: true }); await p.close();
 }
 await b.close();

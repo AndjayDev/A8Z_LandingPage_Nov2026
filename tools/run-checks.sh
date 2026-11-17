@@ -38,7 +38,7 @@ run hero-baseline  node hero-baseline-check.mjs "$ONE"
 run frame-photos   node frame-and-photos-check.mjs "$ONE" /tmp/a8z-alone/index.html
 run photos         node photo-check.mjs "$ONE" "$OUT/S/photo"
 run doors          node interact.mjs "$ONE"
-run sweep          node sweep.mjs "$ONE"
+run sweep          node sweep.mjs "$ONE" "$OUT/S"
 
 echo "checks: $fails failed · details in tools/out/"
 [ $fails = 0 ]
