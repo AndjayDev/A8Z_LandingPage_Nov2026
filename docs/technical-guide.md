@@ -142,3 +142,13 @@ Sources: `reference/iterations/landing-page-framework iteration 3 - 17 NOv 2026.
 - script errors 0
 - detector: same finding kinds as revision 3 (overused-font on fonts the BO served, side-tab false positive on the play triangle, gradient-text hero word wipe, cursor ring, marquee)
 - risk: two-way door · blast radius = the variant folder, `assets/`, `renders/`, `docs/`, `reference/`; live `index.html` untouched
+
+---
+
+# REVISION 5 · 17 Nov 2026 · captions, order, portrait variants
+
+- carousel order Andjay → Amelia; captions and alt texts per the BO: Andjay · Co-Founder & CEO · strategy line; Amelia · Founder & CTO · technology line; `template#dormant-people` updated the same way
+- `img.cx-img` carries `data-person`, `data-file`, `data-default-pos`; no second copy of the image source
+- toolbox fieldset "Portraits · carousel" (`#fp-portraits`): per person a select (Original + uploads), focus x/y sliders (object-position), multi-file upload (jpeg, png, webp, avif) and remove; blobs in IndexedDB `a8z-portraits`, choice in localStorage `a8z-portrait-choice`
+- evidence (Chrome 131, one-file build opened alone): tabs "Andjay / Amelia"; first caption "Andjay · Co-Founder & CEO · Leads strategy…"; second "Amelia · Founder & CTO · Leads technology…"; upload → Andjay image becomes the 900 px upload and the option list shows it; focus ↕ 10 → object-position 46% 10%; reload keeps upload and focus; remove → back to Andjay_Office.jpg 1037 px; errors 0
+- revision 4 kept as `index-r4.html`
