@@ -16,6 +16,6 @@ The Acceler8zone landing page: the live version, the design variants, and the ca
 | `docs/` | The landing-page framework, the explainer, the missing-elements table, the GitHub guide and the technical guide |
 
 
-To view a page, download its `index.html` and open it in a browser.
+To view the current page, download `variants/variant-A-clay-and-ink/one-file.html` and open it in Chrome or Edge. It carries its photos, star field, favicon and font inside. The `index.html` beside it needs the `assets/` folder next to it; opened alone, its photos show a "photo not found" card.
 
 

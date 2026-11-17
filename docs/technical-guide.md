@@ -192,3 +192,28 @@ T1 upload for the person on screen changes that photo · T2 upload for the other
 
 Regression: upload → reload keeps the upload and focus (46% 10%) · remove → back to Andjay_Office.jpg · errors 0.
 Risk: two-way door · blast radius = the toolbox's portrait part and two lines of the carousel script in `variants/variant-A-clay-and-ink/index.html`.
+
+---
+
+# REVISION 5.2 · 17 Nov 2026 · portrait upload, stone line, hero baseline
+
+Order (Q2): "analyze the entire landing page structure, search for bugs in all sections, follow the [top value rule] implement fixes." BO reports: Andjay slot "doesn't retain the uploaded picture"; Amelia slot "shows the place holder instead"; "Ensure both parts of the hero statements align to the bottom line"; Bug A confirmed by the BO as the thin line on top of each stone. Revision 5.1 kept as `index-r5.html`.
+
+## BUGS, EACH WITH A FAILING CHECK FIRST
+| bug | where | failure (before) | fix | check before → after |
+|---|---|---|---|---|
+| P-6 | carousel photos, page opened alone | README told the BO to download `index.html` alone; `../../assets/people/*.jpg` then fail and the browser prints the alt text "Amelia, Founder & CTO of Acceler8zone" — the "placeholder" | a missing photo file shows a labelled card ("photo not found · open the one-file version, or upload a portrait"); README points to `one-file.html` | T10 FAIL → PASS |
+| P-7 | P04 `add`, P12 `readable` | uploads were shown through `blob:` addresses; a viewer that allows embedded pictures but refuses `blob:` ones (hosted previews may) never shows the upload | uploads become `data:` addresses (FileReader); photos over 1600 px are scaled down (canvas, JPEG 0.88) | T12 T13 T14 FAIL → PASS · E1 4000 px → 1600 px FAIL → PASS |
+| P-8 | P03 `db`/`tx`, P08 | the upload waited for IndexedDB before showing; a store that does not answer (blocked by a second open tab) held the upload for ever | the picture is shown first, stored after; IndexedDB gives up after 3 s and closes each connection; localStorage is the second store | T12 FAIL → PASS (second tab open) |
+| A | record ▸ `layout()` | `layout()` added `in` to every shown stone at load; 8 of 9 lines drawn while the wall sat 1977 px down | `layout()` no longer adds `in`; the IntersectionObserver draws each line when its stone scrolls in | A1 A2 FAIL → PASS |
+| 2 | `.motion .hero h1 .w` | `vertical-align: top` hung line-2 words from the top: 66/100 px → 29.7 px step; 48/120 → 61 px | `vertical-align: baseline` + `clip-path: inset(0)` (keeps the rise clipped without moving the baseline) | B66/100 B100/66 B48/120 FAIL → PASS · render `renders/hero-baseline-before-after-r5-2.png` |
+
+## CHECKS (Chrome 131 headless)
+- `tools/portrait-tests.mjs` T1–T9: 9 of 9 before and after (T1 T2 T3 T7 now test the 900 px picture the visitor sees, not the address kind)
+- `tools/portrait-tests-2.mjs` T10–T15: before 2 of 6 · after 6 of 6
+- `tools/stone-line-check.mjs` A1–A5: before 3 of 5 · after 5 of 5
+- `tools/hero-baseline-check.mjs`: before 1 of 4 size pairs · after 4 of 4; clip kept; errors 0
+- sweep 1440 px and 390 px: no horizontal overflow, no script errors, no unnamed controls; doors, memos, filters, "Show all" (17), carousel tabs all work
+- impeccable detector: the same 10 findings as revision 3 (style, not bugs; carried to the style interview)
+
+Risk: two-way door. Blast radius: the portrait tool script, one line of the record script, one CSS rule of the hero motion, README line, new `one-file.html`.

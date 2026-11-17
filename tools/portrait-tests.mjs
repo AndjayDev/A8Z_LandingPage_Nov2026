@@ -1,5 +1,6 @@
 // Portrait-upload checks for the carousel. Each check prints PASS or FAIL with what the browser showed.
 // Usage: node portrait-tests.mjs <page.html> <label>
+// 5.2: the checks test what the visitor sees (the 900 px test portrait), not the address kind; uploads are data: addresses since 5.2
 import chromium from '@sparticuz/chromium';
 import puppeteer from 'puppeteer-core';
 import fs from 'fs';
@@ -38,17 +39,17 @@ fs.writeFileSync(`${FX}/phone-photo.heic`, Buffer.from('000000186674797068656963
 // T1 · page opened as a file, Andjay shown, upload for Andjay
 let p = await page(); await p.goto('file://' + file, { waitUntil: 'load' }); await p.evaluate(() => { localStorage.clear(); indexedDB.deleteDatabase('a8z-portraits'); }); await p.reload({ waitUntil: 'load' }); await W(600); await openTool(p);
 await upload(p, 'andjay', real); let st = await state(p);
-check('T1', 'Upload for the person on screen changes the photo on screen', st.shown_person === 'andjay' && st.shown_src.startsWith('blob:') && st.shown_w === 900, st);
+check('T1', 'Upload for the person on screen changes the photo on screen', st.shown_person === 'andjay' && st.shown_w === 900, st);
 
 // T2 · Andjay on screen, upload for Amelia: the visitor must see the new portrait
 await p.evaluate(() => { indexedDB.deleteDatabase('a8z-portraits'); localStorage.clear(); }); await p.reload({ waitUntil: 'load' }); await W(600); await openTool(p);
 await upload(p, 'amelia', real); await W(1800); st = await state(p);   // the diagonal wipe takes 1.5 s
-check('T2', 'Upload for the other person shows that portrait', st.shown_person === 'amelia' && st.shown_src.startsWith('blob:') && st.shown_w === 900, st);
+check('T2', 'Upload for the other person shows that portrait', st.shown_person === 'amelia' && st.shown_w === 900, st);
 
 // T3 · a file without an extension (no type from the system): it must be accepted, or the BO must be told why not
 await p.evaluate(() => { indexedDB.deleteDatabase('a8z-portraits'); localStorage.clear(); }); await p.reload({ waitUntil: 'load' }); await W(600); await openTool(p);
 await upload(p, 'andjay', `${FX}/portrait-no-extension`); st = await state(p);
-check('T3', 'A picture file without a type is used, or a message says why not', (st.andjay_src.startsWith('blob:') && st.andjay_w > 0) || /not|cannot|could/i.test(st.note), st);
+check('T3', 'A picture file without a type is used, or a message says why not', st.andjay_w === 900 || /not|cannot|could/i.test(st.note), st);
 
 // T4 · a file the browser cannot draw (HEIC from a phone): no broken image, a message, the old portrait stays
 await p.evaluate(() => { indexedDB.deleteDatabase('a8z-portraits'); localStorage.clear(); }); await p.reload({ waitUntil: 'load' }); await W(600); await openTool(p);
@@ -69,7 +70,7 @@ const fr = p.frames().find(f => f !== p.mainFrame());
 await openTool(fr); await W(200);
 let ok = true; try { await upload(fr, 'andjay', real); } catch (e) { ok = false; }
 st = await state(fr);
-check('T7', 'In the chat preview, an upload still changes the photo', ok && st.andjay_src.startsWith('blob:') && st.andjay_w === 900, { ...st, errors: p.errors });
+check('T7', 'In the chat preview, an upload still changes the photo', ok && st.andjay_w === 900, { ...st, errors: p.errors });
 check('T8', 'No script errors in the chat preview', p.errors.length === 0, p.errors);
 check('T9', 'In the chat preview, a note says uploads cannot be kept there', /keep|saved|kept|browser/i.test(st.note), { note: st.note });
 await p.close(); await b.close();
