@@ -1,0 +1,28 @@
+# Runs every landing-page check on each push and pull request.
+# Green tick on GitHub = all checks pass. Red cross = open the run, read the FAIL line.
+name: landing-checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Python packages for the page builder
+        run: pip install markdown
+      - name: Run the checks
+        run: sh tools/run-checks.sh
+      - name: Keep the check output and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-output
+          path: tools/out/

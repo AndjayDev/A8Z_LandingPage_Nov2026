@@ -1,0 +1,10 @@
+{
+  "name": "a8z-landing-checks",
+  "private": true,
+  "type": "module",
+  "description": "Headless Chrome checks for the landing page. Run: sh tools/run-checks.sh",
+  "dependencies": {
+    "@sparticuz/chromium": "131.0.1",
+    "puppeteer-core": "23.11.1"
+  }
+}
