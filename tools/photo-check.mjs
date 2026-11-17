@@ -1,4 +1,4 @@
-// 5.8: the carousel shows the BO's photos of 18 Nov (Andjay_Office1.jpg 850 px, Ame_Office1.jpg 807 px), both reachable through the tabs
+// 5.10: the carousel shows the BO's watermark-free photos (Andjay @Office2.jpg 905 px, Ame @Office2.jpg 837 px), both reachable through the tabs
 import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-core';
 const [f, out] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
@@ -9,5 +9,5 @@ const a = await st(); await p.evaluate(() => document.querySelector('.cx').scrol
 await (await p.$('.cx')).screenshot({ path: out + '-andjay.png' });
 await p.evaluate(() => document.querySelectorAll('.cx [role="tab"]')[1].click()); await W(1900); await (await p.$('.cx')).screenshot({ path: out + '-amelia.png' });
 const b2 = await st();
-const ok = a.includes('Andjay_Office1.jpg 850px on') && b2.includes('Ame_Office1.jpg 807px on') && errs.length === 0;
+const ok = a.includes('Andjay @Office2.jpg 905px on') && b2.includes('Ame @Office2.jpg 837px on') && errs.length === 0;
 console.log(`${ok ? 'PASS' : 'FAIL'} the carousel shows the new photos · at load ${a.join(' | ')} · after tab 2 ${b2.join(' | ')} · errors ${errs.length}`); await b.close();

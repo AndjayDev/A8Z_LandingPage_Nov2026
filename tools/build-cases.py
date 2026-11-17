@@ -30,12 +30,29 @@ def listing(c):
     # matched by the study's own Drive address (CASES ▸ url); a name match picked the wrong row (Advanced → "Connect")
     return next((r for r in rows if c.get("url") and r["Business Study URL"].strip() == c["url"]), None)
 
+# each client's full text, by the BO's file name, verbatim (source: the Lovable repo ▸ reference/case-studies/)
+FILES = {
+    "Tetra Films": "Connecting a Commercial Production Studio With a Canadian Footwear Brand.md",
+    "Advanced Medical Sales": "Connecting a Pharmaceutical Wholesaler With a Healthcare Network.md",
+    "Connect Group": "Case Study_ Connect Group (+$105K) _ Scaling AI Talent Placements with Advanced Sales Systems.md",
+    "Crawford Thomas Recruiting": "Crawford Thomas Recruiting (+$100K)_ Transforming Skepticism into Success.md",
+    "Vention": "Case Study_ Vention (+$85K) _ Scaling Success with Precision.md",
+    "Elate Staffing": "Case Study_ Elate Staffing Solutions Ltd. – Elevating Recruitment Efficiency.md",
+    "HelpCare AI": "Case Study Acceler8zone x Help HelpCare AI’s —Securing 4 Key Healthcare D.md",
+    "Hippocratic AI": "Case Study_ Hippocratic AI (2 New Partners) _ In 60 Days W_Acceler8zone.md",
+    "Clean-Seas West Virginia": "Brutal Route, Real Proof_ 6 Introductions for Clean-Seas West Virginia in 120.md",
+    "Regent Peak Wealth Advisors": "Case Study - Regent Peak Wealth Advisors - Acceler8zone.md",
+    "FabuLingua": "Case Study_ FabuLingua (5 New Clients) _ In 48 Days W_Acceler8Zone.md",
+    "Angie Nola Maids": "Connecting a Cleaning Company With a New Orleans Airbnb Owner.md",
+    "DGR Systems": "Connecting a Florida Technology Company With a School District.md",
+}
+
 def render(md):
     return markdown.markdown(md, extensions=["extra", "sane_lists"])
 
 docs, report = {}, []
 for c in cases:
-    n = slug(c["client"]); f = R / "reference/case-studies" / f"{n}.md"; r = listing(c)
+    n = slug(c["client"]); f = R / "reference/case-studies" / FILES.get(c["client"], f"{n}.md"); r = listing(c)
     vertical = next((x["vertical"] for x in feat if x["client"] == c["client"]), c.get("industry", ""))
     short = f'{vertical}: {c["client"]}'
     if f.exists():

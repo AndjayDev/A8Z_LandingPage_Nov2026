@@ -28,4 +28,5 @@ Tetra Films received a qualified introduction to Baffin, connecting the studio d
 
 The opportunity involved an immediate need for commercial production services, with the brand prepared to discuss project requirements and budget.
 
-The proposed introduction fee was **$5,000**.
+The proposed introduction fee was **\$5,000**.
+

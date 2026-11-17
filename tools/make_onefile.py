@@ -8,8 +8,9 @@ def rep(old, new, count=1):
 b64 = lambda p: base64.b64encode(open(p, "rb").read()).decode()
 rep('href="../../assets/brand/favicon150x150.svg"', 'href="data:image/svg+xml;base64,' + b64(f"{R}/assets/brand/favicon150x150.svg") + '"')
 rep('url("../../assets/brand/Background-Star-Field.svg")', 'url("data:image/svg+xml;base64,' + b64(f"{R}/assets/brand/Background-Star-Field.svg") + '")')
-for f in ["Ame_Office1.jpg", "Andjay_Office1.jpg"]:   # 5.8: the BO's photos of 18 Nov 2026
-    rep(f'"../../assets/people/{f}"', '"data:image/jpeg;base64,' + b64(f"{R}/assets/people/{f}") + '"', count=s.count(f'"../../assets/people/{f}"'))
+for f in ["Ame @Office2.jpg", "Andjay @Office2.jpg"]:   # 5.10: the BO's watermark-free photos, 18 Nov 2026
+    u = f.replace(" ", "%20")   # the page asks for the file with its space written as %20
+    rep(f'"../../assets/people/{u}"', '"data:image/jpeg;base64,' + b64(f"{R}/assets/people/{f}") + '"', count=s.count(f'"../../assets/people/{u}"'))
 css = open(f"{R}/fonts/news-cycle/news-cycle.css", encoding="utf-8").read()
 rep('<link href="../../fonts/news-cycle/news-cycle.css" rel="stylesheet">', '<style>\n' + css + '</style>')
 rep('<!-- hero line 2 default: News Cycle, self-hosted from News_Cycle.zip -->',

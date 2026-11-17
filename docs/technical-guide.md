@@ -323,3 +323,16 @@ Checks: `tools/case-check.mjs` C1–C7: before FAIL C6 (regex), FAIL C7 (TypeErr
 Renders: `renders/r5-9-case-popup-full.png`, `renders/r5-9-case-own-page.png`.
 Open: featured slot 9 (Vention listed twice) · Elate 20 on the card vs 22 in the source doc and CSV · HelpCare 4 on the card vs "3-4" in the doc · 13 full texts to add to `reference/case-studies/`.
 Risk: two-way door. Blast radius: the record section, its pop-up, and the new results folder.
+
+---
+
+# REVISION 5.10 · 18 Nov 2026 · watermark-free photos, the BO's case files
+
+BO (Q11): "Both pictures free from water mark are uploaded … implement both in the landing page." · "The case studies are stored in https://github.com/AndjayDev/13jan2026-remix-combined-black-hero-bluesubhero/tree/main/reference/case-studies". Revision 5.9 kept as `index-r5-9.html`.
+- photos: `assets/people/Andjay @Office2.jpg` (905 × 811) and `assets/people/Ame @Office2.jpg` (837 × 865), copied byte for byte from the Lovable repo ▸ public/images/; the page asks for them with the space as %20; the one-file builder embeds them.
+- case files: the 9 files of the Lovable repo ▸ reference/case-studies/ copied with their names unchanged; my three renamed copies (tetra-films.md, advanced-medical-sales.md, crawford-thomas-recruiting.md) removed; `tools/build-cases.py ▸ FILES` links each client to its file by the verbatim name; `reference/case-studies/README.md` lists all names and the five not yet uploaded.
+- the Crawford file carries three pictures inside it (the revenue banner, two redacted replies); they now show in the pop-up and on the own page (`.case-body img` max width 100 %).
+Checks: `tools/photo-check.mjs` before FAIL (Andjay_Office1.jpg 850 px, Ame_Office1.jpg 807 px) → after PASS (Andjay @Office2.jpg 905 px, Ame @Office2.jpg 837 px; one-file page and repository page) · `tools/build-cases.py` before 3 full · 13 summary → after 9 full · 7 summary · `sh tools/run-checks.sh` 10 of 10.
+Renders: `renders/r5-10-carousel-andjay.png`, `renders/r5-10-carousel-amelia.png`, `renders/r5-10-crawford-popup.png`.
+Open: Crawford card "+$100,000" vs the file's banner "$123,039 IN NEW REVENUE" · Elate 20 vs 22 · HelpCare 4 vs "3-4" · featured slot 9.
+Risk: two-way door. Blast radius: two photos, the record pop-up, the results pages.

@@ -24,4 +24,4 @@ We also obtained the wholesaler's product information, including medication avai
 
 Advanced Medical Sales received a direct introduction to a healthcare network with an immediate, documented need for pharmaceutical supplies and the potential for repeat orders across its pharmacy operations.
 
-The introduction was positively received, giving the wholesaler direct access to an interested purchasing representative.
+The introduction was positively received, giving the wholesaler direct access to an interested purchasing representative. 
