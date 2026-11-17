@@ -253,3 +253,16 @@ Fix: `<meta name="referrer" content="strict-origin-when-cross-origin">` in the h
 Checks: youtube-referer-check 1/3 → 3/3 · popup-check 8/8 · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4.
 Not verifiable here: actual playback (the sandbox cannot reach YouTube). Also check once in YouTube Studio that "Allow embedding" is on for this video.
 Risk: two-way door. Blast radius: one meta line, the video click handler, three CSS rules.
+
+---
+
+# REVISION 5.5 · 17 Nov 2026 · the video plays through a relay page when the landing page has no web address
+
+BO (Chrome, page opened as a file): "The fix didn't work out. instead of the video I see your dummy message." Order: test the YouTube embed relay (Bart, stackoverflow.com/a/79810109, CC BY-SA 4.0). Revision 5.4 kept as `index-r5-4.html`.
+
+- `relay/youtube/index.html`: a static page that hosts the YouTube player; served from https it gives YouTube a web address. Video ID checked (11 characters), `noindex`, attribution in the file. `.nojekyll` added so GitHub Pages serves the folder as is.
+- landing page: live site (http/https, real origin) → player directly, as in 5.4. File or sandboxed preview → the pop-up loads `https://andjaydev.github.io/A8Z_LandingPage_Nov2026/relay/youtube/?v=GgIXWb4kymU&autoplay=1`. The 5.4 note is gone.
+- needs: GitHub Pages switched on for this repository (Settings ▸ Pages ▸ Deploy from a branch ▸ main ▸ / (root)). The session's proxy refuses the Pages API, so the BO switches it on.
+
+Checks: `tools/youtube-relay-check.mjs` (page opened as a file, a local web server stands in for GitHub Pages): before FAIL (note, no player request) → after PASS (relay requested; YouTube asked with Referer `http://127.0.0.1:8766/`). youtube-referer-check 3/3 · popup-check 8/8 · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 (the hero check now measures on the word box the animation does not move; it flaked under load before; the old bug still fails it).
+Risk: two-way door. Blast radius: the video click handler, one new public page (`relay/youtube/`), GitHub Pages on a public repository (switch off in Settings ▸ Pages).

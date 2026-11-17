@@ -1758,18 +1758,17 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
     // a missing or blocked thumbnail tries the smaller YouTube sizes, then shows a titled card
     img.addEventListener("error", next); img.addEventListener("load", () => { if (img.naturalWidth <= 120) next(); });
     if (img.complete && img.naturalWidth === 0 && img.getAttribute("loading") !== "lazy") next();
-    // 5.4 · YouTube plays an embedded video only when it can see the page's web address (else: Error 153).
-    // A page opened as a file, or inside a sandboxed preview, has no web address: no setting can supply one, so the
-    // pop-up says so in plain words instead of showing YouTube's error and its "Watch on YouTube" link.
+    // 5.5 · YouTube plays an embedded video only when it can see the page's web address (else: Error 153).
+    // On the live site the player loads directly. Opened as a file or in a preview, the page has no web address, so the
+    // player loads through the relay page on GitHub Pages (relay/youtube/index.html), which has one.
+    const RELAY = "https://andjaydev.github.io/A8Z_LandingPage_Nov2026/relay/youtube/";
     const web = /^https?:$/.test(location.protocol) && self.origin && self.origin !== "null";   // self.origin is "null" inside a sandboxed preview
     tile.addEventListener("click", e => {
       e.preventDefault();
       const title = "Signal Intelligence that Surfaces Sales-Ready Executive Meetings";
-      if (!web) {
-        open("Video: " + title, `<div class="media-local"><p class="media-local-title">${title}</p><p>The video plays here on the live website. This copy is opened from a file or a preview, which YouTube does not allow to play videos.</p></div>`);
-        return;
-      }
-      const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`;
+      const src = web
+        ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`
+        : `${RELAY}?v=${id}&autoplay=1`;
       open("Video: " + title, `<iframe width="1280" height="720" src="${src}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
     });
   }

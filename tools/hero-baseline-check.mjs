@@ -12,7 +12,8 @@ const clipped = await p.evaluate(() => { const w = document.querySelector('.hero
 const measure = (l1, l2) => p.evaluate((l1, l2) => {
   const h = document.querySelector('.hero-statement'); h.style.fontSize = l1 + 'px'; h.querySelector('i').style.fontSize = l2 + 'px';
   const base = word => { const s = [...h.querySelectorAll('.w > span, .w')].find(x => x.firstChild && x.firstChild.nodeType === 3 && x.textContent === word) || [...h.querySelectorAll('span')].find(x => x.textContent === word);
-    const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; s.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return Math.round(y * 10) / 10; };
+    const host = s.parentElement && s.parentElement.classList.contains('w') ? s.parentElement : s;   // the .w box: not moved by the rise animation
+    const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; host.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return Math.round(y * 10) / 10; };
   return { that: base('that'), have: base('have'), talk: base('talk.') };
 }, l1, l2);
 let all = true;
