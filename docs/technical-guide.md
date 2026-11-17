@@ -297,3 +297,12 @@ Checks: `tools/bake-check.mjs` (5.6 + the BO's toolbox state vs 5.7, 11 elements
 Renders: `renders/r5-7-top-1440.png`, `r5-7-video-frame-1440.png`, `r5-7-top-390.png` (the sandbox has no Google Fonts, so Noto Serif Display shows as Georgia there).
 Transfer to Lovable: planned in `docs/transfer-plan-lovable.md`, not started.
 Risk: two-way door. Blast radius: the variant page only.
+
+---
+
+# REVISION 5.8 · 18 Nov 2026 · the BO's photos in the carousel
+
+BO: "Replace the pictures as those currently embedded aren't the right ones." Served: Andjay_Office1.jpg (850 × 811) and Ame_Office1.jpg (807 × 811), stored as `assets/people/Andjay_Office1.jpg` and `assets/people/Ame_Office1.jpg`; the old files stay in the folder, unused. Revision 5.7 kept as `index-r5-7.html`.
+Check `tools/photo-check.mjs`: before FAIL (Andjay_Office.jpg 1037 px, Ame_Office.jpg 754 px) → after PASS (Andjay_Office1.jpg 850 px, Ame_Office1.jpg 807 px, both reachable by the tabs, errors 0). Renders: `renders/r5-8-carousel-andjay.png`, `r5-8-carousel-amelia.png`.
+Finding: both new photos carry a faint diagonal stock-photo watermark in the grey background (visible at 2× zoom, lower right of Andjay's photo, upper right of Amelia's). The same kind of finding stood for the old photos (open decision 5, "Adobe Stock"). A licence or a clean original is needed before the live site.
+Risk: two-way door. Blast radius: two image addresses and the one-file builder's photo list.
