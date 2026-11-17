@@ -24,9 +24,10 @@ const teach = await p.evaluate(() => ({ lede: document.querySelector('#teach .le
 check('V1', 'the subtext is the BO text, word for word', teach.lede === BO_LEDE, teach.lede);
 check('V2', 'no "Watch on YouTube" label and no link out to YouTube', !teach.label && teach.ytLinks === 0, teach);
 await p.evaluate(() => document.querySelector('#teach').scrollIntoView({ behavior: 'instant' })); await W(1500);
-const thumb = await p.evaluate(() => { const i = document.querySelector('#teach .video img'), fb = document.querySelector('#teach .video .video-fallback'); return { img: i.hidden ? 'hidden' : i.naturalWidth, card: fb && !fb.hidden ? fb.textContent : '' }; });
-check('V3', 'thumbnail blocked (as here): a titled card shows, not an empty black box', thumb.img > 0 || !!thumb.card, thumb);
-await p.click('#teach .video'); await W(800); let d = await dlg(p);
+const thumb = await p.evaluate(() => { const i = document.querySelector('#teach .video img'), fb = document.querySelector('#teach .video .video-fallback'), g = document.querySelector('#teach .gvf-title');
+  return { img: i ? (i.hidden ? 'hidden' : i.naturalWidth) : 'none', card: fb && !fb.hidden ? fb.textContent : (g ? g.textContent : '') }; });
+check('V3', 'the video tile never shows an empty black box (thumbnail, titled card, or the 5.6 glass frame title)', thumb.img > 0 || !!thumb.card, thumb);
+await p.click('#teach [data-video]'); await W(800); let d = await dlg(p);
 const local = await p.evaluate(() => !!document.querySelector('#media .media-local'));
 check('V4', 'video tile opens the pop-up on this page: the 1280 × 720 player on a web address, through the relay page when opened as a file (5.5; youtube-relay-check.mjs)', d.open && ((/youtube-nocookie\.com\/embed\/GgIXWb4kymU|\/relay\/youtube\/\?v=GgIXWb4kymU/.test(d.src) && d.w === '1280' && d.h === '720') || local) && p.popups === 0 && d.url.endsWith('.html'), { ...d, local, popups: p.popups });
 await p.evaluate(() => document.querySelector('[data-media-close]')?.click()); await W(400); const empty = await p.evaluate(() => ({ open: document.getElementById('media')?.open, iframes: document.querySelectorAll('#media iframe').length }));

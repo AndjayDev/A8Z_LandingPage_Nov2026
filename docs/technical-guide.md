@@ -266,3 +266,17 @@ BO (Chrome, page opened as a file): "The fix didn't work out. instead of the vid
 
 Checks: `tools/youtube-relay-check.mjs` (page opened as a file, a local web server stands in for GitHub Pages): before FAIL (note, no player request) → after PASS (relay requested; YouTube asked with Referer `http://127.0.0.1:8766/`). youtube-referer-check 3/3 · popup-check 8/8 · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 (the hero check now measures on the word box the animation does not move; it flaked under load before; the old bug still fails it).
 Risk: two-way door. Blast radius: the video click handler, one new public page (`relay/youtube/`), GitHub Pages on a public repository (switch off in Settings ▸ Pages).
+
+---
+
+# REVISION 5.6 · 17 Nov 2026 · the Lovable glass video frame, ported
+
+BO: "The same video was embedded on the previous version of our landing page in the lovable framework … See how can you deploy this code in the current version." Source: his `GlassVideoFrame` React component (served as an attachment). The repository he linked, `AndjayDev/BackUp_13jan2026-remix-combined-black-hero-bluesubhero`, is empty (no branches). Revision 5.5 kept as `index-r5-5.html`.
+
+- ported to plain HTML/CSS/JS in the teach section: glass container (0.1 dark, 5 px blur), 8 px gradient border at 0.1, wandering conic stripe (30 s, `@property --stripe-angle`), top highlight line, star field and sky haze, copy "3X Sales Accelerator · Sales-Ready Executive Meetings for B2B Leaders · Your UVP → Right Timing → Right Executive · 🎬 See How It Works", scroll tilt (starts at 80 % of the viewport, over 400 px: y −20 → 0, rotateX −30° → 0, scale .95 → 1, opacity .3 → 1). Glow strength 0 in the source → kept off (it only widened the phone page by 14 px).
+- kept from 5.3–5.5: the button opens the page's pop-up (BO ruling: the visitor stays on the page), 1280 × 720, direct player on a web address, relay when opened as a file.
+- why the Lovable page played: it was served from an https address, so YouTube received a Referer. Its component used plain `youtube.com/embed` with no extra settings. Opened as a local file, the same component would also show Error 153.
+- reduced motion: no stripe, no tilt.
+
+Checks: popup 8/8 · referer 3/3 · relay PASS · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 · sweep 1440 and 390 px: no overflow, no errors. Renders: `renders/glass-video-frame-r5-6.png`, `…-phone.png`.
+Risk: two-way door. Blast radius: the teach tile, one CSS block, one scroll handler.

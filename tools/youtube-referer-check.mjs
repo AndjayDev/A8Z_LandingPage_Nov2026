@@ -12,7 +12,7 @@ for (const [name, url, inFrame] of [['opened as a file', 'file://' + file, false
     (u.startsWith('file:') || u.startsWith('data:') || u.startsWith('http://localhost')) ? r.continue() : r.abort(); });
   await p.setViewport({ width: 1440, height: 900 }); await p.goto(url, { waitUntil: 'load' }); await W(1200);
   const f = inFrame ? p.frames().find(x => x !== p.mainFrame()) : p.mainFrame();
-  await f.evaluate(() => document.querySelector('#teach .video').click()); await W(1200);
+  await f.evaluate(() => document.querySelector('#teach [data-video]').click()); await W(1200);
   shown = await f.evaluate(() => { const d = document.getElementById('media'); return d && d.open ? (d.querySelector('iframe') ? 'player frame' : 'note: ' + (d.querySelector('.media-frame')?.innerText || '').slice(0, 90)) : 'closed'; });
   const ok = seen ? (/^https?:\/\//.test(seen.referer) || seen.referer.startsWith('via relay')) : false;
   console.log(`${ok ? 'PASS' : 'FAIL'} R · ${name}: ${seen ? `player asked with Referer ${seen.referer}` : 'no player request'} · pop-up shows ${shown}${seen ? ' · ' + seen.url : ''}`);

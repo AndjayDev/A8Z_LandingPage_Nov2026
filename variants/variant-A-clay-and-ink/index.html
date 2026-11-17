@@ -251,6 +251,46 @@
   .video .glass { padding: 6px; }
   .video-fallback { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 24px 24px 22px 64px; color: #fff; font-family: var(--serif); font-size: 26px; line-height: 1.15; background: linear-gradient(160deg, #0c2850, #14120e); }
   .video-fallback[hidden] { display: none; }
+  /* 5.6 · glass video frame (port of the Lovable GlassVideoFrame: border 8 px at 0.1, glass 0.1 + 5 px blur, stripe 30 s, glow off) */
+  @property --stripe-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes wanderStripe { to { --stripe-angle: 360deg; } }
+  .gvf { position: relative; width: 100%; perspective: 1000px; }
+  .gvf-tilt { transform-style: preserve-3d; will-change: transform, opacity; transform: translateY(var(--gvf-y, 0px)) rotateX(var(--gvf-rx, 0deg)) scale(var(--gvf-s, 1)); opacity: var(--gvf-o, 1); }
+  .gvf-shell { position: relative; border-radius: 24px; }
+  .gvf-glow, .gvf-stripe, .gvf-border { position: absolute; pointer-events: none; }
+  .gvf-glow { display: none; }   /* glow strength 0 in the source component: kept off, it only widened the phone page by 14 px */
+  .gvf-glow.on { display: block; inset: -30px; border-radius: 54px; filter: blur(30px); opacity: 0; animation: wanderStripe 30s linear infinite;
+    background: conic-gradient(from var(--stripe-angle), transparent 0deg, rgba(34,211,238,.7) 0deg, rgba(56,189,248,1) 5deg, rgba(139,92,246,.7) 10deg, transparent 20deg, transparent 170deg, rgba(217,70,239,.7) 175deg, rgba(56,189,248,1) 180deg, rgba(34,211,238,.7) 185deg, transparent 200deg, transparent 360deg); }
+  .gvf-stripe, .gvf-border { inset: 0; border-radius: 24px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .gvf-stripe { padding: 2px; animation: wanderStripe 30s linear infinite;
+    background: conic-gradient(from var(--stripe-angle), transparent 0deg, rgba(34,211,238,.9) 2deg, rgba(56,189,248,1) 5deg, rgba(139,92,246,.9) 8deg, transparent 12deg, transparent 176deg, rgba(217,70,239,.9) 178deg, rgba(56,189,248,1) 181deg, rgba(34,211,238,.9) 184deg, transparent 188deg, transparent 360deg); }
+  .gvf-border { padding: 8px; background: linear-gradient(135deg, rgba(156,163,175,.1) 0%, rgba(20,184,166,.12) 25%, rgba(56,189,248,.13) 50%, rgba(20,184,166,.12) 75%, rgba(156,163,175,.1) 100%); }
+  .gvf-glass { position: relative; overflow: hidden; border-radius: 24px; background: rgba(30,41,59,.1); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); border: .5px solid rgba(255,255,255,.15); box-shadow: 0 10px 40px rgba(0,0,0,.1), 0 2px 10px rgba(0,0,0,.05); }
+  .gvf-hl { position: absolute; top: 0; left: 32px; right: 32px; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); }
+  .gvf-pad { padding: 12px; }
+  @media (min-width: 640px) { .gvf-pad { padding: 16px; } }
+  @media (min-width: 768px) { .gvf-pad { padding: 20px; } }
+  .gvf-screen { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px; background: linear-gradient(135deg, #0f172a, #1e293b 50%, #0f172a); box-shadow: inset 0 2px 20px rgba(0,0,0,.3); }
+  .gvf-stars { position: absolute; inset: 0; opacity: .5; background-image: radial-gradient(1px 1px at 5% 15%, rgba(255,255,255,.9), transparent), radial-gradient(1.5px 1.5px at 15% 45%, rgba(255,255,255,.7), transparent), radial-gradient(1px 1px at 25% 80%, rgba(255,255,255,.8), transparent), radial-gradient(2px 2px at 35% 25%, rgba(255,255,255,.6), transparent), radial-gradient(1px 1px at 45% 60%, rgba(255,255,255,.9), transparent), radial-gradient(1.5px 1.5px at 55% 10%, rgba(255,255,255,.7), transparent), radial-gradient(1px 1px at 65% 75%, rgba(255,255,255,.8), transparent), radial-gradient(1px 1px at 75% 35%, rgba(255,255,255,.9), transparent), radial-gradient(2px 2px at 85% 55%, rgba(255,255,255,.5), transparent), radial-gradient(1px 1px at 95% 85%, rgba(255,255,255,.8), transparent); }
+  .gvf-haze { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,165,233,.2), transparent 50%, rgba(12,74,110,.1)); }
+  .gvf-haze::after { content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 66%; height: 50%; background: rgba(14,165,233,.15); filter: blur(64px); }
+  .gvf-copy { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 16px; }
+  @media (min-width: 640px) { .gvf-copy { padding: 0 32px; } }
+  .gvf-kicker { margin: 0 0 8px; color: #38bdf8; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+  .gvf-title { margin: 0 0 8px; color: #fff; font-family: var(--tight); font-weight: 700; font-size: clamp(18px, 2.6vw, 40px); line-height: 1.12; letter-spacing: -.01em; }
+  .gvf-title span { color: #38bdf8; }
+  .gvf-sub { margin: 0 0 16px; color: #d1d5db; font-family: var(--sans); font-size: 12px; font-weight: 300; letter-spacing: .02em; }
+  @media (min-width: 640px) { .gvf-kicker { font-size: 12px; margin-bottom: 12px; } .gvf-sub { font-size: 14px; margin-bottom: 24px; } }
+  @media (min-width: 1024px) { .gvf-sub { font-size: 16px; margin-bottom: 28px; } }
+  .gvf-play { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px 10px 10px; background: rgba(30,41,59,.9); border: 1px solid rgba(14,165,233,.4); border-radius: 999px; color: #fff; font: 500 14px/1 var(--sans); cursor: pointer; transition: all .3s; }
+  .gvf-play:hover { background: #334155; border-color: rgba(56,189,248,.7); box-shadow: 0 0 40px rgba(14,165,233,.3); transform: scale(1.05); }
+  .gvf-play:focus-visible { outline: 2px solid #38bdf8; outline-offset: 3px; }
+  .gvf-dot { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(14,165,233,.2); color: #38bdf8; transition: background .3s; }
+  .gvf-play:hover .gvf-dot { background: rgba(14,165,233,.4); }
+  .gvf-dot svg { width: 16px; height: 16px; margin-left: 2px; }
+  .gvf-arrow { width: 16px; height: 16px; color: #6b7280; transition: all .3s; }
+  .gvf-play:hover .gvf-arrow { color: #38bdf8; transform: translateX(4px); }
+  @media (prefers-reduced-motion: reduce) { .gvf-glow, .gvf-stripe { animation: none; } .gvf-tilt { transform: none; opacity: 1; } }
   /* 5.3 · the pop-up frame for the video and the booking calendar: the visitor stays on this page */
   dialog.media { border: 0; padding: 0; background: transparent; width: min(1280px, calc(100vw - 32px)); max-width: none; max-height: calc(100vh - 32px); margin: auto; overflow: visible; }
   dialog.media::backdrop { background: rgba(12,10,8,.78); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
@@ -689,12 +729,36 @@
           <h2 class="t">Acceler8zone</h2>
           <p class="lede">Andjay teaches people how to grow connector businesses by selling what partners already want. Members of his network have documented $8 million in wins.</p>
         </div>
-        <!-- 5.3: the video plays in a pop-up on this page; no link to YouTube, no "Watch on YouTube" label -->
-        <a class="video" href="#video" data-video="GgIXWb4kymU" aria-haspopup="dialog" aria-label="Play the video: Signal Intelligence that Surfaces Sales-Ready Executive Meetings">
-          <img src="https://i.ytimg.com/vi/GgIXWb4kymU/maxresdefault.jpg" alt="" width="1280" height="720" loading="lazy" data-thumbs="hqdefault,sddefault,mqdefault">
-          <span class="video-fallback" hidden>Signal Intelligence that Surfaces Sales-Ready Executive Meetings</span>
-          <span class="glass" aria-hidden="true"><span class="play"></span></span>
-        </a>
+        <!-- 5.6: the glass video frame of the earlier Lovable page (GlassVideoFrame), ported to plain HTML/CSS/JS;
+             the button opens the video in the page's pop-up (5.3 ruling: the visitor stays on the page) -->
+        <div class="gvf" data-gvf>
+          <div class="gvf-tilt">
+            <div class="gvf-shell">
+              <span class="gvf-glow" aria-hidden="true"></span>
+              <span class="gvf-stripe" aria-hidden="true"></span>
+              <span class="gvf-border" aria-hidden="true"></span>
+              <div class="gvf-glass">
+                <span class="gvf-hl" aria-hidden="true"></span>
+                <div class="gvf-pad">
+                  <div class="gvf-screen">
+                    <span class="gvf-stars" aria-hidden="true"></span>
+                    <span class="gvf-haze" aria-hidden="true"></span>
+                    <div class="gvf-copy">
+                      <p class="gvf-kicker">3X Sales Accelerator</p>
+                      <p class="gvf-title"><span>Sales-Ready</span> Executive Meetings<br> for B2B Leaders</p>
+                      <p class="gvf-sub">Your UVP → Right Timing → Right Executive</p>
+                      <button type="button" class="gvf-play" data-video="GgIXWb4kymU" aria-haspopup="dialog" aria-label="Play video: See How It Works">
+                        <span class="gvf-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+                        <span class="gvf-label">🎬 See How It Works</span>
+                        <svg class="gvf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1731,14 +1795,15 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-media-close]")) close(); });
 
   // the video: YouTube's privacy-enhanced player in a 1280 × 720 frame
-  const tile = document.querySelector(".video[data-video]");
+  const tile = document.querySelector("[data-video]");
   if (tile) {
     const id = tile.dataset.video, img = tile.querySelector("img"), fb = tile.querySelector(".video-fallback");
-    const thumbs = (img.dataset.thumbs || "").split(",").filter(Boolean);
-    const next = () => { const t = thumbs.shift(); if (t) img.src = `https://i.ytimg.com/vi/${id}/${t}.jpg`; else { img.hidden = true; fb.hidden = false; } };
-    // a missing or blocked thumbnail tries the smaller YouTube sizes, then shows a titled card
-    img.addEventListener("error", next); img.addEventListener("load", () => { if (img.naturalWidth <= 120) next(); });
-    if (img.complete && img.naturalWidth === 0 && img.getAttribute("loading") !== "lazy") next();
+    if (img) {   // a thumbnail tile (5.3–5.5); the glass frame of 5.6 has none
+      const thumbs = (img.dataset.thumbs || "").split(",").filter(Boolean);
+      const next = () => { const t = thumbs.shift(); if (t) img.src = `https://i.ytimg.com/vi/${id}/${t}.jpg`; else { img.hidden = true; fb.hidden = false; } };
+      img.addEventListener("error", next); img.addEventListener("load", () => { if (img.naturalWidth <= 120) next(); });
+      if (img.complete && img.naturalWidth === 0 && img.getAttribute("loading") !== "lazy") next();
+    }
     // 5.5 · YouTube plays an embedded video only when it can see the page's web address (else: Error 153).
     // On the live site the player loads directly. Opened as a file or in a preview, the page has no web address, so the
     // player loads through the relay page on GitHub Pages (relay/youtube/index.html), which has one.
@@ -1752,6 +1817,17 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
         : `${RELAY}?v=${id}&autoplay=1`;
       open("Video: " + title, `<iframe width="1280" height="720" src="${src}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
     });
+  }
+
+  // 5.6 · the glass frame tilts up into place as it scrolls in (port of the Lovable component's scroll effect)
+  const gvf = document.querySelector("[data-gvf]");
+  if (gvf && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const t = gvf.querySelector(".gvf-tilt"); let tick = false;
+    const lerp = (a, b, p) => a + (b - a) * p;
+    const upd = () => { tick = false; const p = Math.max(0, Math.min(1, (innerHeight * .8 - gvf.getBoundingClientRect().top) / 400));
+      t.style.setProperty("--gvf-y", lerp(-20, 0, p) + "px"); t.style.setProperty("--gvf-rx", lerp(-30, 0, p) + "deg");
+      t.style.setProperty("--gvf-s", lerp(.95, 1, p)); t.style.setProperty("--gvf-o", lerp(.3, 1, p)); };
+    addEventListener("scroll", () => { if (!tick) { tick = true; requestAnimationFrame(upd); } }, { passive: true }); upd();
   }
 
   // the booking calendar: Cal.com's own pop-up (embed script); if that script cannot load, the booking page in this frame
