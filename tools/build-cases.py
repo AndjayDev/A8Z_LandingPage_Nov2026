@@ -45,6 +45,7 @@ FILES = {
     "FabuLingua": "Case Study_ FabuLingua (5 New Clients) _ In 48 Days W_Acceler8Zone.md",
     "Angie Nola Maids": "Connecting a Cleaning Company With a New Orleans Airbnb Owner.md",
     "DGR Systems": "Connecting a Florida Technology Company With a School District.md",
+    "ForPlayers": "Case Study_ ForPlayers (+70,000€) _ Accelerating Growth in Esports with Targeted Lead Generation.md",   # parked 18 Nov 2026, BO uploads by hand
 }
 
 def render(md):

@@ -27,4 +27,11 @@ Named in the BO's list of 18 Nov 2026 but not in the Lovable repo folder yet (th
 | Angie Nola Maids | Connecting a Cleaning Company With a New Orleans Airbnb Owner.md |
 | DGR Systems | Connecting a Florida Technology Company With a School District.md |
 
-No file named for: Apex Agriculture · RESPILON · Lasting Blueprint Productions · ForPlayers.
+PARKED (BO ruling 18 Nov 2026: "i'll upload them manually"):
+| client on the page | file (verbatim name) | why it did not upload |
+|---|---|---|
+| Clean-Seas West Virginia | Brutal Route, Real Proof _ 6 Introductions for Clean-Seas West Virginia in 120 Days.md | warning only: line endings (LF → CRLF); harmless |
+| ForPlayers | Case Study_ ForPlayers (+70,000€) _ Accelerating Growth in Esports with Targeted Lead Generation.md | Windows: "Filename too long" |
+The builder already knows the ForPlayers name: once the file is in this folder, the page shows its full text on the next build.
+
+No file named for: Apex Agriculture · RESPILON · Lasting Blueprint Productions.
