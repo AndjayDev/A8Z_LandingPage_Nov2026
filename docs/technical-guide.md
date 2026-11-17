@@ -338,3 +338,4 @@ Open: Crawford card "+$100,000" vs the file's banner "$123,039 IN NEW REVENUE" �
 Risk: two-way door. Blast radius: two photos, the record pop-up, the results pages.
 
 - 18 Nov 2026 · two hand-uploaded case files added (ForPlayers, Lasting Blueprint Productions): `tools/build-cases.py` before 9 full · 7 summary → after 11 full · 5 summary; cases, doors, sweep PASS. The hand-uploaded "Brutal Route, Real Proof_6 Introductions for Clean-Seas West Virginia in 120 Days.md" is empty (1 byte) in the Lovable repo; the earlier full copy stays in use.
+- 18 Nov 2026 · four hand-uploaded case files added (Regent Peak, FabuLingua, Angie Nola Maids, DGR Systems): before 11 full · 5 summary → after 15 full; cases, doors, sweep PASS.

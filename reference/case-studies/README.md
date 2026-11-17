@@ -35,5 +35,7 @@ Uploaded by the BO by hand, 18 Nov 2026:
 
 Clean-Seas West Virginia is routed to "Brutal Route, Real Proof_ 6 Introductions for Clean-Seas West Virginia in 120.md" (BO ruling 18 Nov 2026; the empty "… in 120 Days.md" was deleted by the BO).
 
-Cards with NO file in the Lovable repo (BO, 18 Nov 2026: "NO SUCH FILES IN MY REPO"). Their text on the page comes from the listing `reference/data/Business_Case_Studies_-_Business_Studies_Listing.csv` (three-line summary), or nothing:
-Regent Peak Wealth Advisors · FabuLingua · Angie Nola Maids · DGR Systems · RESPILON (summary) · Apex Agriculture (nothing).
+Uploaded by the BO by hand, 18 Nov 2026 (second batch), now full text on the page:
+Case Study - Regent Peak Wealth Advisors - Acceler8zone.md · Case Study_ FabuLingua (5 New Clients) _ In 48 Days W_Acceler8Zone.md · Connecting a Cleaning Company With a New Orleans Airbnb Owner.md · Connecting a Florida Technology Company With a School District.md
+
+Cards with no file: RESPILON (listing summary) · Apex Agriculture (no text; BO, 18 Nov 2026: "IS NOT GOING TO BE UPLOADED").
