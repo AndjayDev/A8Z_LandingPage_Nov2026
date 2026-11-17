@@ -32,6 +32,8 @@ Uploaded by the BO by hand, 18 Nov 2026:
 |---|---|---|
 | ForPlayers | Case Study_ForPlayers (+70,000€) _Accelerating Growth in Esports with Targeted Lead Generation.md | full text on the page |
 | Lasting Blueprint Productions | Case Study_How We Routed 4 Qualified Introductions for Lasting Blueprint Productions in 78 Days.md | full text on the page |
-| Clean-Seas West Virginia | Brutal Route, Real Proof_6 Introductions for Clean-Seas West Virginia in 120 Days.md | EMPTY in the Lovable repo (1 byte); not copied; the page keeps "Brutal Route, Real Proof_ 6 Introductions for Clean-Seas West Virginia in 120.md" (3,556 bytes) |
 
-No file named for: Apex Agriculture · RESPILON.
+Clean-Seas West Virginia is routed to "Brutal Route, Real Proof_ 6 Introductions for Clean-Seas West Virginia in 120.md" (BO ruling 18 Nov 2026; the empty "… in 120 Days.md" was deleted by the BO).
+
+Cards with NO file in the Lovable repo (BO, 18 Nov 2026: "NO SUCH FILES IN MY REPO"). Their text on the page comes from the listing `reference/data/Business_Case_Studies_-_Business_Studies_Listing.csv` (three-line summary), or nothing:
+Regent Peak Wealth Advisors · FabuLingua · Angie Nola Maids · DGR Systems · RESPILON (summary) · Apex Agriculture (nothing).

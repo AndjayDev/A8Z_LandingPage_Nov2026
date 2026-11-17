@@ -50,6 +50,8 @@ FILES = {
 }
 
 def render(md):
+    # a file whose title is a bold line, not a heading (the Clean-Seas file), gets its title shown as the heading
+    md = re.sub(r"\A\s*\*\*([^*\n]+)\*\*[ \t]*\n", lambda m: "# **" + m.group(1) + "**\n", md, count=1)
     return markdown.markdown(md, extensions=["extra", "sane_lists"])
 
 docs, report = {}, []
