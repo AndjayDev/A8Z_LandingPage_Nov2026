@@ -15,5 +15,5 @@ rep('<link href="../../fonts/news-cycle/news-cycle.css" rel="stylesheet">', '<st
 rep('<!-- hero line 2 default: News Cycle, self-hosted from News_Cycle.zip -->',
     '<!-- one-file version: News Cycle, the star field, the photos and the favicon are embedded; the repository copy loads them from assets/ and fonts/ -->\n<!-- hero line 2 default: News Cycle, self-hosted from News_Cycle.zip -->')
 left = [s[i-30:i+30] for i in range(len(s)) if s.startswith("../../", i)]
-assert len(left) == 1 and "fonts/uploaded" in left[0], left
+assert all("fonts/uploaded" in x for x in left) and len(left) <= 1, left   # 5.7: the font-upload toolbox is gone, so 0 or 1 leftover
 open(OUT, "w", encoding="utf-8", newline="").write(s); print("one-file bytes", len(s.encode()))

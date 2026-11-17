@@ -280,3 +280,20 @@ BO: "The same video was embedded on the previous version of our landing page in 
 
 Checks: popup 8/8 · referer 3/3 · relay PASS · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 · sweep 1440 and 390 px: no overflow, no errors. Renders: `renders/glass-video-frame-r5-6.png`, `…-phone.png`.
 Risk: two-way door. Blast radius: the teach tile, one CSS block, one scroll handler.
+
+---
+
+# REVISION 5.7 · 17 Nov 2026 · toolbox removed, the BO's choices baked in, 5 px video frame
+
+BO order (Q7): "Make it 5 pixl thin. Keep all other parameters as they are." · "Remove the tweaker element; implement the CSS parameters … Retain the parameters" (accent #6b1818, statement #001657 Instrument Serif × 1.910, line 2 Noto Serif Display italic 62.5 % × 1.818, Supply / Demand #17191f, top line Lato italic × 0.853, section headings × 1.110, hero indent 0). Revision 5.6 kept as `index-r5-6.html`.
+
+- toolbox gone: its button, panel, CSS and script; the portrait upload (inside it) gone; the font-picker families reduced to Lato; Logo.svg and star field fixed on.
+- the choices baked as CSS at the end of the main stylesheet: each size keeps its responsive base and multiplies it by the BO's factor, as the toolbox did.
+- one exception, not yet ruled: the contact e-mail at × 1.110 ran 20 px past a 390 px screen; it is capped at 9vw below 1040 px.
+- video frame: border 8 → 5 px; inner padding 12 / 16 / 20 → 4 px + the glass hairline = 5 px on every screen.
+- kept: the missing-photo card; the Supply–Demand pause.
+
+Checks: `tools/bake-check.mjs` (5.6 + the BO's toolbox state vs 5.7, 11 elements × 3 widths): identical apart from the exception · `tools/frame-and-photos-check.mjs`: frame 21 / 21 / 13 px → 5 / 5 / 5 px, photos show, toolbox elements 3 → 0, missing-photo cards · pop-up 8/8 · referer 3/3 · relay PASS · stone line 5/5 · hero 4/4 · doors 7/7 · no overflow at 1440 / 390 px. Portrait upload checks retired to `tools/retired/` (the tool is gone).
+Renders: `renders/r5-7-top-1440.png`, `r5-7-video-frame-1440.png`, `r5-7-top-390.png` (the sandbox has no Google Fonts, so Noto Serif Display shows as Georgia there).
+Transfer to Lovable: planned in `docs/transfer-plan-lovable.md`, not started.
+Risk: two-way door. Blast radius: the variant page only.
