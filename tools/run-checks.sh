@@ -38,6 +38,8 @@ run hero-baseline  node hero-baseline-check.mjs "$ONE"
 run frame-photos   node frame-and-photos-check.mjs "$ONE" /tmp/a8z-alone/index.html
 run photos         node photo-check.mjs "$ONE" "$OUT/S/photo"
 run doors          node interact.mjs "$ONE"
+run hero-bg        node hero-background-check.mjs "$ONE"
+run founders       node founders-check.mjs "$ONE" "$OUT/S"
 run sweep          node sweep.mjs "$ONE" "$OUT/S"
 
 echo "checks: $fails failed · details in tools/out/"

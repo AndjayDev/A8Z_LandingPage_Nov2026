@@ -56,7 +56,8 @@ def render(md):
     return markdown.markdown(md, extensions=["extra", "sane_lists"])
 
 docs, report = {}, []
-for c in cases:
+live = {f["client"] for f in feat}   # BO 18 Nov 2026: only the featured cases are on the page; the others wait for their month
+for c in [c for c in cases if c["client"] in live]:
     n = slug(c["client"]); f = R / "reference/case-studies" / FILES.get(c["client"], f"{n}.md"); r = listing(c)
     vertical = next((x["vertical"] for x in feat if x["client"] == c["client"]), c.get("industry", ""))
     short = f'{vertical}: {c["client"]}'
@@ -83,6 +84,8 @@ head = re.sub(r"<title>.*?</title>", "<title>{title}</title>", head, flags=re.S)
 head = head.replace("../../", "../../../")
 mast = s[s.index('<header class="mast'): s.index("</header>") + len("</header>")].replace('href="#', 'href="../index.html#').replace("../../", "../../../")
 OUT.mkdir(exist_ok=True)
+for old in OUT.glob("*.html"):
+    if old.stem not in docs: old.unlink()   # a case taken off the page loses its own page too
 for n, d in docs.items():
     page = (head.replace("{title}", html.escape(f'{d["short"]} · Acceler8zone')) + """</head>
 <body class="case-page">

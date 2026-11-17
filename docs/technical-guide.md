@@ -340,3 +340,16 @@ Risk: two-way door. Blast radius: two photos, the record pop-up, the results pag
 - 18 Nov 2026 · two hand-uploaded case files added (ForPlayers, Lasting Blueprint Productions): `tools/build-cases.py` before 9 full · 7 summary → after 11 full · 5 summary; cases, doors, sweep PASS. The hand-uploaded "Brutal Route, Real Proof_6 Introductions for Clean-Seas West Virginia in 120 Days.md" is empty (1 byte) in the Lovable repo; the earlier full copy stays in use.
 - 18 Nov 2026 · four hand-uploaded case files added (Regent Peak, FabuLingua, Angie Nola Maids, DGR Systems): before 11 full · 5 summary → after 15 full; cases, doors, sweep PASS.
 - 18 Nov 2026 · RESPILON file added; Lasting Blueprint file updated by the BO ("Want yours?" → Andjay, acceler8zone.com); Apex Agriculture removed from CASES, OPPORTUNITY_HEADLINES, the client strip (2 spans) and results/ (BO: "remove this case study from the ledger"). build-cases before 15 full · 1 summary · 17 pages → after 16 full · 0 summary · 16 pages; run-checks 10 of 10.
+
+---
+
+# REVISION 5.11 · 18 Nov 2026 · hero without particles, founders section steady, 8 cases + Next entry
+
+BO (Q15): "remove from the hero section the particle background" · "The entire text block on the left panel … is 'jumping' … responsive to 3 screen sizes" · "keep the 9+1 Next entry active, not more" · "LEAVE IT AT 8 CASE STUDIES" · Elate "22 AGREED" · Crawford "LEAVE IT AS IT IS". Revision 5.10 kept as `index-r5-10.html`.
+- hero: star-field layer (`Background-Star-Field.svg`) removed; `data-stars` gone; the one-file builder no longer embeds it. `tools/hero-background-check.mjs`: before FAIL (layer = the SVG) → after PASS (none).
+- founders section: both captions share one grid cell (height of the longer one); the text block takes the photo's square and is centred on the photo; one column below 720 px. `tools/founders-check.mjs` (1440 · 1280 · 1024 · 768 · 390 · 360): before 4 of 6 (tablet 1024: text moved 11 px, section 22 px; tablet 768: text 33 px, section 67 px) → after 6 of 6 (0 px everywhere, no overflow).
+- record: the wall shows the 8 featured cases + "Next entry."; "Show all results" removed; `tools/build-cases.py` builds CASE_DOCS and results pages for the featured cases only and deletes the others' pages (17 → 8). The other studies stay in `reference/case-studies/` for their month.
+- Elate Staffing: 20 → 22 (card figure, "who", "worth").
+Checks: `sh tools/run-checks.sh` 12 of 12 (stone-line A4 now asserts 9 cards and no "Show all").
+Renders: `renders/r5-11-founders-1440.png`, `renders/r5-11-founders-768.png`, `renders/r5-11-founders-390.png`.
+Risk: two-way door. Blast radius: hero background, founders section layout, record section.

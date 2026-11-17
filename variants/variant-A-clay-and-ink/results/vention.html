@@ -1,4 +1,4 @@
-<html data-logo="svg" data-stars="on" lang="en" class="motion"><head>
+<html data-logo="svg" lang="en" class="motion"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="strict-origin-when-cross-origin">   <!-- 5.4: YouTube needs the page address (Error 153 without it) -->
@@ -64,12 +64,12 @@
   .mast-right { text-align: right; font-size: 28px; font-weight: 500; }
   html { scroll-padding-top: 104px; }
 
-  /* Visual switches: Logo.svg in the mast, Background-Star-Field.svg in the hero */
+  /* Visual switch: Logo.svg in the mast */
   .wm-logo { display: none; height: 40px; width: auto; color: var(--ink); }
   html[data-logo="svg"] .wm-logo { display: block; }
   html[data-logo="svg"] .wm-text { display: none; }
   .hero { position: relative; isolation: isolate; }
-  html[data-stars="on"] .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url("../../../assets/brand/Background-Star-Field.svg") center / cover no-repeat; }
+  /* 5.11 · the star-field (particle) background is removed from the hero (BO, 18 Nov 2026) */
 
   /* Hero */
   .hero { padding: 96px 0 64px; border-bottom: 1px solid var(--rule); }
@@ -104,7 +104,9 @@
 
   /* Money */
   .money { border-bottom: 1px solid var(--rule); padding: 88px 0 0; }
-  .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; padding-bottom: 64px; }
+  .money-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; padding-bottom: 64px; }
+  /* 5.11 · the text block takes the photo's square: it is centred on the photo, not on photo + caption */
+  .money-grid > div:first-child { aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: center; }
   .money-photo { margin: 0; }
   .money-photo img { width: 100%; height: auto; aspect-ratio: 4 / 5; -o-object-fit: cover; object-fit: cover; -o-object-position: 50% 20%; object-position: 50% 20%; display: block; border: 1px solid var(--rule); background: var(--paper-2); }
   .money-photo figcaption { margin-top: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
@@ -125,6 +127,10 @@
   .cx-person .role { margin: 0 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
   .cx-person .desc { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; max-width: 40ch; }
   .cx-person.is-on { animation: capIn .6s ease both; }
+  /* 5.11 · both captions share one grid cell: the caption keeps the height of the longer one, so nothing beside or below it moves when the person is switched */
+  .cx-cap { display: grid; }
+  .cx-person { grid-area: 1 / 1; }
+  .cx-person[hidden] { display: block; visibility: hidden; }
   @keyframes capIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
   .nophoto::before { content: "Photo"; display: grid; place-items: center; aspect-ratio: 4 / 5; border: 1px dashed var(--rule); color: var(--mute); font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
   .results { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); border-top: 1px solid var(--rule); }
@@ -389,6 +395,7 @@
     .strip b { font-size: 28px; white-space: nowrap; }
     .money { padding-top: 52px; }
     .money-grid { grid-template-columns: 1fr; gap: 28px; padding-bottom: 44px; }
+    .money-grid > div:first-child { aspect-ratio: auto; }
     .money-photo { order: -1; max-width: 320px; }
     .cx-bar { grid-template-columns: 1fr; gap: 14px; }
     .results { grid-template-columns: 1fr 1fr; }

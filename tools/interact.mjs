@@ -13,7 +13,7 @@ const memoLink = await p.$('[data-memo]'); if (memoLink) { await p.evaluate(() =
 // filters and show all
 const counts = []; for (const f of await p.$$eval('.filters button', bs => bs.map(b => b.dataset.filter))) { await p.evaluate(f => document.querySelector(`.filters button[data-filter="${f}"]`).click(), f); await W(200); counts.push(f + ':' + await p.$$eval('#record .stone:not(.hidden):not(.cta)', s => s.length)); }
 out.push('filters ' + counts.join(' · '));
-await p.evaluate(() => document.querySelector('.filters button[data-filter="all"]').click()); await p.evaluate(() => document.getElementById('record-more').click()); await W(200);
+await p.evaluate(() => document.querySelector('.filters button[data-filter="all"]').click()); await p.evaluate(() => document.getElementById('record-more')?.click()); await W(200);
 out.push('show all → ' + await p.$$eval('#record .stone:not(.hidden):not(.cta)', s => s.length) + ' stones · header count ' + await p.$eval('.record h2 span', s => s.textContent));
 // carousel tabs
 await p.evaluate(() => document.querySelectorAll('.cx [role="tab"]')[1].click()); await W(1900); out.push('carousel tab 2 → ' + await p.$eval('.cx-img.is-on', i => i.dataset.person));
