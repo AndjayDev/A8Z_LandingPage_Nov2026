@@ -306,3 +306,20 @@ BO: "Replace the pictures as those currently embedded aren't the right ones." Se
 Check `tools/photo-check.mjs`: before FAIL (Andjay_Office.jpg 1037 px, Ame_Office.jpg 754 px) → after PASS (Andjay_Office1.jpg 850 px, Ame_Office1.jpg 807 px, both reachable by the tabs, errors 0). Renders: `renders/r5-8-carousel-andjay.png`, `r5-8-carousel-amelia.png`.
 Finding: both new photos carry a faint diagonal stock-photo watermark in the grey background (visible at 2× zoom, lower right of Andjay's photo, upper right of Amelia's). The same kind of finding stood for the old photos (open decision 5, "Adobe Stock"). A licence or a clean original is needed before the live site.
 Risk: two-way door. Blast radius: two image addresses and the one-file builder's photo list.
+
+---
+
+# REVISION 5.9 · 17 Nov 2026 · case studies: header, full study pop-up, own pages
+
+BO order (Q10): "Read the full case study → … a popup with the case study in similar design like the current pop up cards" · "Open this case on its own page → … a sub-page with the case study, in a similar design" · "Ensure the header carry the short title and the values." Revision 5.8 kept as `index-r5-8.html`.
+
+- stone header: `<vertical>: <client>` on the left, the value on the right (the "No." text gone; the number stays as data).
+- pop-up: eyebrow `<vertical>: <client> · <value>`; foot links "Read the full case study →" (opens the full text inside the same pop-up, no Drive, no new tab) and "Open this case on its own page →"; "← Back to the summary" returns. Attribute `data-case-back`, not `data-back`: the doors script listens on the same dialog for `data-back`.
+- full texts: `CASE_DOCS` block between `<!-- CASE_DOCS:START -->` and `<!-- CASE_DOCS:END -->`, written by `tools/build-cases.py` from `reference/case-studies/<slug>.md` (3 verbatim: tetra-films, advanced-medical-sales, crawford-thomas-recruiting); the other 13 show the listing summary plus "The full case study follows." until their .md is in the folder.
+- own pages: `results/<slug>.html`, 17 files, page head and mast of the landing page, back link `../index.html#record`, mailto close.
+- headings inside the case text: the source docs wrap them in `** **` and `.story h3` (summary title, 42 px) overrode them. Fixed: `.story .case-body h3` 22 px, `strong` inside headings inherits weight. Before H3 42.18 px bold → after 22 px 400.
+
+Checks: `tools/case-check.mjs` C1–C7: before FAIL C6 (regex), FAIL C7 (TypeError reading 'label', the data-back collision) → after 7 of 7 · pop-up 8/8 (V5 "closing stops the video" fails 1 run in 3 on 5.8 and 5.9 alike: a timing flake of the check, not of 5.9) · referer 3/3 · relay PASS · stone line PASS · hero baseline 4/4 · frame and photos 7/7 · photo PASS · doors 7/7 · sweep: no broken image, no unnamed control, no errors.
+Renders: `renders/r5-9-case-popup-full.png`, `renders/r5-9-case-own-page.png`.
+Open: featured slot 9 (Vention listed twice) · Elate 20 on the card vs 22 in the source doc and CSV · HelpCare 4 on the card vs "3-4" in the doc · 13 full texts to add to `reference/case-studies/`.
+Risk: two-way door. Blast radius: the record section, its pop-up, and the new results folder.

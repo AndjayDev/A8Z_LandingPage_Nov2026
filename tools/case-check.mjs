@@ -1,0 +1,31 @@
+// 5.9 case-study checks: header = short title + value · the full study opens in the pop-up · back works ·
+// every stone's own page exists and shows its header and text. Usage: node case-check.mjs <page.html> <results-folder> <shots-prefix>
+import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-core'; import fs from 'fs'; import path from 'path';
+const [page, results, shots] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms)); const out = [];
+const ok = (id, name, pass, seen) => out.push(`${pass ? 'PASS' : 'FAIL'} ${id} ${name}${seen ? ' · ' + seen : ''}`);
+const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
+const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e).slice(0, 140)));
+await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + page, { waitUntil: 'load' }); await W(1000);
+const heads = await p.$$eval('#record .stone:not(.cta):not(.hidden) .stone-top', ts => ts.map(t => t.innerText.replace(/\s+/g, ' ').trim()));
+ok('C1', 'the first 8 headers read "<short title> … <value>" in your order', heads.length === 8 && /Commercial Production: Tetra Films/i.test(heads[0]) && /Recruitment: Connect Group/i.test(heads[1]) && /Healthcare: Hippocratic AI/i.test(heads[7]), heads.slice(0, 3).join(' | '));
+await p.evaluate(() => document.querySelector('#record').scrollIntoView({ behavior: 'instant' })); await W(400);
+await p.evaluate(() => document.querySelector('#record .stone').click()); await W(500);
+const sum = await p.evaluate(() => ({ eyebrow: document.querySelector('#story .eyebrow')?.innerText, full: !!document.querySelector('#story [data-full]'), own: document.querySelector('#story .story-foot a:last-child')?.getAttribute('href') }));
+ok('C2', 'the pop-up header carries short title and value; both links present', /Tetra Films/i.test(sum.eyebrow || '') && sum.full && sum.own === 'results/tetra-films.html', `${sum.eyebrow} · own page ${sum.own}`);
+await p.evaluate(() => document.querySelector('#story [data-full]').click()); await W(400);
+const full = await p.evaluate(() => ({ open: document.getElementById('story').open, text: document.querySelector('#story .case-body')?.innerText || '', url: location.href }));
+ok('C3', '"Read the full case study" shows the full text inside the pop-up (no Drive, no new tab)', full.open && /Baffin/.test(full.text) && /\$5,000/.test(full.text) && full.url.endsWith('.html'), `${full.text.length} characters`);
+if (shots) await (await p.$('#story')).screenshot({ path: shots + '-popup-full.png' });
+await p.evaluate(() => document.querySelector('#story [data-case-back]').click()); await W(300);
+ok('C4', '"Back to the summary" returns to the summary view', await p.evaluate(() => !!document.querySelector('#story [data-full]')));
+const hrefs = await p.$$eval('#record .stone:not(.cta)', ss => ss.map(s => s.getAttribute('href')));
+const missing = hrefs.filter(h => !fs.existsSync(path.join(results, path.basename(h))));
+ok('C5', 'every stone has its own page file', missing.length === 0, `${hrefs.length} stones · missing ${missing.length}`);
+const q = await b.newPage(); await q.setRequestInterception(true); q.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+await q.setViewport({ width: 1440, height: 900 }); await q.goto('file://' + path.join(results, 'tetra-films.html'), { waitUntil: 'load' }); await W(800);
+const sp = await q.evaluate(() => ({ short: document.querySelector('.case-short')?.innerText, value: document.querySelector('.case-value')?.innerText, body: document.querySelector('.case-body')?.innerText.length, back: document.querySelector('.case-back a')?.getAttribute('href'), font: getComputedStyle(document.querySelector('.case-title')).fontFamily.split(',')[0] }));
+ok('C6', 'the own page shows short title, value, the full text and a way back, in the page design', /Tetra Films/i.test(sp.short || '') && /2 events/.test(sp.value || '') && sp.body > 800 && sp.back === '../index.html#record', JSON.stringify(sp));
+if (shots) await q.screenshot({ path: shots + '-own-page.png' });
+ok('C7', 'no script errors', errs.length === 0, errs.join(' | '));
+console.log(out.join('\n')); console.log(`cases: ${out.filter(x => x.startsWith('PASS')).length} of ${out.length} pass`); await b.close();
