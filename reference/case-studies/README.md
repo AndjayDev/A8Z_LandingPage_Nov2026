@@ -38,4 +38,6 @@ Clean-Seas West Virginia is routed to "Brutal Route, Real Proof_ 6 Introductions
 Uploaded by the BO by hand, 18 Nov 2026 (second batch), now full text on the page:
 Case Study - Regent Peak Wealth Advisors - Acceler8zone.md · Case Study_ FabuLingua (5 New Clients) _ In 48 Days W_Acceler8Zone.md · Connecting a Cleaning Company With a New Orleans Airbnb Owner.md · Connecting a Florida Technology Company With a School District.md
 
-Cards with no file: RESPILON (listing summary) · Apex Agriculture (no text; BO, 18 Nov 2026: "IS NOT GOING TO BE UPLOADED").
+Uploaded by the BO by hand, 18 Nov 2026 (third batch): Case Study_ 3 Routed Commercial Introductions for RESPILON in ~43 Days.md · the updated Case Study_How We Routed 4 Qualified Introductions for Lasting Blueprint Productions in 78 Days.md ("Want yours?" now points to Andjay and acceler8zone.com).
+
+Every card has its full text (16 of 16). Apex Agriculture removed from the page (BO, 18 Nov 2026: "remove this case study from the ledger").

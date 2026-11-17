@@ -74,6 +74,6 @@ That is how we went from broad video production positioning to 4 direct routed i
 
 **Want yours?**
 
-If you want similar routed introductions for your market, hit up [Saad at Research Introductions.](https://www.myoprocess.com/)
+If you want similar routed introductions for your market, hit up [Andjay at Research Introductions.](https://www.acceler8zone.com/)
 
 

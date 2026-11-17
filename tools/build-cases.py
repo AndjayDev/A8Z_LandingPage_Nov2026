@@ -46,6 +46,7 @@ FILES = {
     "Angie Nola Maids": "Connecting a Cleaning Company With a New Orleans Airbnb Owner.md",
     "DGR Systems": "Connecting a Florida Technology Company With a School District.md",
     "ForPlayers": "Case Study_ForPlayers (+70,000€) _Accelerating Growth in Esports with Targeted Lead Generation.md",
+    "RESPILON": "Case Study_ 3 Routed Commercial Introductions for RESPILON in ~43 Days.md",
     "Lasting Blueprint Productions": "Case Study_How We Routed 4 Qualified Introductions for Lasting Blueprint Productions in 78 Days.md",
 }
 
