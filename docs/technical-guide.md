@@ -234,3 +234,22 @@ Order (Q3): "The link to cal.com went broken … Ensure the Cal dialog UI spawns
 Checks: `tools/popup-check.mjs` before 1 of 8 · after 8 of 8. Regression on 5.3: portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4 · doors, memos, filters, carousel 7/7.
 Not verifiable here (the sandbox cannot reach YouTube or Cal.com): the video actually playing and Cal's pop-up drawing. YouTube's player keeps its own small logo inside the frame; the page cannot remove it. A page opened as a local file may get YouTube's "video unavailable" message, because the player expects a web address; on the live site it plays.
 Risk: two-way door. Blast radius: the teach section, the contact line, one new dialog, one new script.
+
+---
+
+# REVISION 5.4 · 17 Nov 2026 · YouTube Error 153 in the video pop-up
+
+BO report: the pop-up shows "Video player configuration error · Error 153 · Watch video on YouTube". BO: "ensure the video is played in the pop-up on our landing page, not in the YouTube UI." Cal.com pop-up confirmed working by the BO. Revision 5.3 kept as `index-r5-3.html`.
+
+Diagnosis (`tools/youtube-referer-check.mjs`, the Referer header the player request carries, per way of opening the page):
+| opened as | before (5.3) | after (5.4) |
+|---|---|---|
+| a file (double-click, file://) | player asked with no Referer → YouTube shows Error 153 · FAIL | no player request; the pop-up says the video plays on the live website · PASS |
+| a web address (the live-site case) | Referer `http://localhost:8765/` · PASS | same, plus `origin` and `widget_referrer` in the address · PASS |
+| a sandboxed preview frame (chat preview) | no Referer → Error 153 · FAIL | plain note in the pop-up · PASS |
+
+Cause: YouTube plays an embedded video only when it receives the page's web address. A file or a sandboxed preview has none; no setting in the page can create one. The embed address was already the correct one (`youtube-nocookie.com/embed/GgIXWb4kymU`) with `referrerpolicy="strict-origin-when-cross-origin"`.
+Fix: `<meta name="referrer" content="strict-origin-when-cross-origin">` in the head (guards against a host that strips it); `enablejsapi=1&origin=…&widget_referrer=…` on a web address; on a file or preview the pop-up shows a titled note instead of YouTube's error and its outbound link.
+Checks: youtube-referer-check 1/3 → 3/3 · popup-check 8/8 · portrait 9/9 + 6/6 · stone line 5/5 · hero 4/4.
+Not verifiable here: actual playback (the sandbox cannot reach YouTube). Also check once in YouTube Studio that "Allow embedding" is on for this video.
+Risk: two-way door. Blast radius: one meta line, the video click handler, three CSS rules.

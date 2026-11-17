@@ -27,7 +27,8 @@ await p.evaluate(() => document.querySelector('#teach').scrollIntoView({ behavio
 const thumb = await p.evaluate(() => { const i = document.querySelector('#teach .video img'), fb = document.querySelector('#teach .video .video-fallback'); return { img: i.hidden ? 'hidden' : i.naturalWidth, card: fb && !fb.hidden ? fb.textContent : '' }; });
 check('V3', 'thumbnail blocked (as here): a titled card shows, not an empty black box', thumb.img > 0 || !!thumb.card, thumb);
 await p.click('#teach .video'); await W(800); let d = await dlg(p);
-check('V4', 'video tile opens the pop-up on this page with the YouTube player, 1280 × 720', d.open && /youtube-nocookie\.com\/embed\/GgIXWb4kymU/.test(d.src) && d.w === '1280' && d.h === '720' && p.popups === 0 && d.url.endsWith('.html'), { ...d, popups: p.popups });
+const local = await p.evaluate(() => !!document.querySelector('#media .media-local'));
+check('V4', 'video tile opens the pop-up on this page: the 1280 × 720 player on a web address, a plain note when opened as a file (5.4; the player itself: youtube-referer-check.mjs)', d.open && ((/youtube-nocookie\.com\/embed\/GgIXWb4kymU/.test(d.src) && d.w === '1280' && d.h === '720') || local) && p.popups === 0 && d.url.endsWith('.html'), { ...d, local, popups: p.popups });
 await p.evaluate(() => document.querySelector('[data-media-close]')?.click()); await W(400); const empty = await p.evaluate(() => ({ open: document.getElementById('media')?.open, iframes: document.querySelectorAll('#media iframe').length }));
 check('V5', 'closing the pop-up stops the video (frame emptied)', empty.open === false && empty.iframes === 0, empty);
 
