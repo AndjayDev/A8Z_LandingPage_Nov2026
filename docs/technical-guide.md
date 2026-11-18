@@ -374,3 +374,13 @@ BO: "transfer the data · start replacing the old landing page there, directly o
 - `tools/run-checks-lovable.sh <lovable>`: build, serve at 127.0.0.1:4173, 9 checks: all PASS. The checks now accept a web address as well as a file.
 - Fixed on the way: "\$5,000" showed its backslash in the Tetra Films case (the source file escapes $ ~ &); `tools/build-cases.py ▸ render` unescapes. Before 2 visible backslashes → after 0.
 - Not checked here: Supabase calls from the old SettingsProvider fail in this sandbox (no network); they are not part of the new page.
+
+---
+
+# REVISION 5.13 · 18 Nov 2026 · photos still missing live (not published), headline 80 %, player without control bar
+
+BO (Q11): "none of both pictures are showing up" · "size it down to 80%" · "remove the YouTube button from the video lower right corner".
+- Diagnosis on the live site (browser, 18 Nov): the page still carries data-file "Andjay @Office2.jpg", og:image is the old Lovable picture, /images/andjay-office2.jpg and /images/og-header.png answer 404 → the live build predates steps 3–4 (commits 2c0bb6d, 9530392). Lovable must Publish ▸ Update again.
+- Headline × 0.8 (`.hero h1.hero-statement`, `.hero-statement i`): 1440 px 126.1 / 120.0 px → 100.8 / 96.0 px; 768 px 67.5 / 64.2 → 54.0 / 51.4; 390 px 64.9 / 61.8 → 52.0 / 49.4. Page width unchanged.
+- Player: `controls=0` on the youtube-nocookie address; the control bar (with the YouTube button) is not drawn. Lovable commit 396303e. The teach section itself has no YouTube button; the order's two lines point at the same button.
+Checks: `tools/run-checks-lovable.sh` 9 of 9.
