@@ -10,7 +10,7 @@ await p.setRequestInterception(true);
 p.on('request', r => { const u = r.url();
   if (u.startsWith('http://127.0.0.1:8766/')) { relayReq = u; return r.continue(); }
   if (/youtube-nocookie\.com\/embed/.test(u)) { ytReq = { u: u.slice(0, 150), referer: r.headers()['referer'] || '(none)' }; return r.abort(); }
-  (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+  (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
 await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + local, { waitUntil: 'load' }); await W(1000);
 await p.evaluate(() => document.querySelector('#teach [data-video]').click()); await W(2500);
 const note = await p.evaluate(() => !!document.querySelector('#media .media-local'));

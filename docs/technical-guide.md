@@ -363,3 +363,14 @@ BO (Q17): "shorten the study case file name and ensure no file name exceeds this
 - video frame: `.gvf-stars` CSS and element removed. `tools/hero-background-check.mjs`: 5.11 FAIL (star layers 1) → 5.12 PASS (0).
 - relay 404: the GitHub Pages switch cannot be set from this session (the proxy refuses the Pages API). BO step: https://github.com/AndjayDev/A8Z_LandingPage_Nov2026/settings/pages ▸ Source "Deploy from a branch" ▸ Branch main, folder / (root) ▸ Save.
 Checks: `sh tools/run-checks.sh` 13 of 13.
+
+---
+
+# TRANSFER · 18 Nov 2026 · the page moves into the Lovable repo (main)
+
+BO: "transfer the data · start replacing the old landing page there, directly on `main`, with each step committed and checked." Old site kept by the BO in his backup repo.
+- `tools/port-to-lovable.py <drafts> <lovable>` writes `src/landing/page.html` (asset paths → /images/, /landing/fonts/; Vercel analytics removed), `public/landing/fonts/news-cycle/`, `public/results/<slug>.html`.
+- Lovable repo: `src/pages/Landing.tsx` on "/" (styles to <head>, markup, scripts once; reload when coming back from another route); old `src/pages/Index.tsx` kept, not routed. Commits 9c068e2 (step 1) and 6ab8819 (step 2: title and description).
+- `tools/run-checks-lovable.sh <lovable>`: build, serve at 127.0.0.1:4173, 9 checks: all PASS. The checks now accept a web address as well as a file.
+- Fixed on the way: "\$5,000" showed its backslash in the Tetra Films case (the source file escapes $ ~ &); `tools/build-cases.py ▸ render` unescapes. Before 2 visible backslashes → after 0.
+- Not checked here: Supabase calls from the old SettingsProvider fail in this sandbox (no network); they are not part of the new page.

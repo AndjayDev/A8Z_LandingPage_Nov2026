@@ -5,8 +5,8 @@ import puppeteer from 'puppeteer-core';
 const [file, label] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e).slice(0, 160)));
-await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:') || u.startsWith('blob:')) ? r.continue() : r.abort(); });
-await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + file, { waitUntil: 'load' }); await W(800);
+await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:') || u.startsWith('blob:')) ? r.continue() : r.abort(); });
+await p.setViewport({ width: 1440, height: 900 }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(800);
 // scale of each shown stone's top line: 0 = not drawn, 1 = fully drawn
 const lines = () => p.evaluate(() => [...document.querySelectorAll('#record .stone:not(.hidden)')].map(s => { const m = getComputedStyle(s, '::before').transform; const sx = m === 'none' ? 1 : +m.match(/matrix\(([^,]+)/)[1]; return { inView: s.getBoundingClientRect().top < innerHeight, in: s.classList.contains('in'), scale: Math.round(sx * 100) / 100 }; }));
 const atLoad = await lines(); const wallTop = await p.evaluate(() => Math.round(document.querySelector('#record .stone').getBoundingClientRect().top));

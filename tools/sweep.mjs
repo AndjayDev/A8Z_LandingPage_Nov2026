@@ -4,7 +4,7 @@ const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access
 for (const [vw, vh] of [[1440, 900], [390, 844]]) {
   const p = await b.newPage(); const errs = [], failed = [];
   p.on('pageerror', e => errs.push(String(e).slice(0, 200))); p.on('requestfailed', r => failed.push(r.url().slice(0, 90) + ' ' + r.failure()?.errorText));
-  await p.setViewport({ width: vw, height: vh }); await p.goto('file://' + file, { waitUntil: 'load' }); await W(1500);
+  await p.setViewport({ width: vw, height: vh }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(1500);
   // scroll through the whole page so lazy and scroll-driven parts run
   const H = await p.evaluate(() => document.documentElement.scrollHeight); for (let y = 0; y < H; y += vh * .8) { await p.evaluate(y => window.scrollTo({ top: y, behavior: 'instant' }), y); await W(150); }
   const r = await p.evaluate(() => {

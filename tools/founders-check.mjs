@@ -7,9 +7,9 @@ const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access
 let fails = 0;
 for (const [vw, vh, label] of [[1440, 900, 'desktop 1440'], [1280, 800, 'desktop 1280'], [1024, 1366, 'tablet 1024'], [768, 1024, 'tablet 768'], [390, 844, 'phone 390'], [360, 740, 'phone 360']]) {
   const p = await b.newPage(); await p.setViewport({ width: vw, height: vh });
-  await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+  await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
   await p.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-  await p.goto('file://' + file, { waitUntil: 'load' }); await W(700);
+  await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(700);
   await p.evaluate(() => document.querySelector('.money').scrollIntoView({ block: 'start', behavior: 'instant' })); await W(300);
   const m = () => p.evaluate(() => { const r = e => document.querySelector(e).getBoundingClientRect();
     return { text: Math.round(r('.money-grid > div').top), sec: Math.round(r('.money').height), photo: Math.round(r('.cx-frame').top), photoH: Math.round(r('.cx-frame').height), next: Math.round(r('.money .results').top), over: [...document.querySelectorAll('.money *')].some(e => e.getBoundingClientRect().right > innerWidth + 1) }; });

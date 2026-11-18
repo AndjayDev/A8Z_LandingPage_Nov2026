@@ -4,7 +4,7 @@ import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-cor
 const [one, alone] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 const open = async (f, w) => { const p = await b.newPage(); p.errors = []; p.on('pageerror', e => p.errors.push(String(e).slice(0, 120))); await p.setRequestInterception(true);
-  p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); }); await p.setViewport({ width: w, height: 900 }); await p.goto('file://' + f, { waitUntil: 'load' }); await W(1200); return p; };
+  p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); }); await p.setViewport({ width: w, height: 900 }); await p.goto((/^https?:/.test(f) ? f : 'file://' + f), { waitUntil: 'load' }); await W(1200); return p; };
 for (const w of [1440, 768, 390]) {
   const p = await open(one, w);
   const r = await p.evaluate(() => { const t = document.querySelector('.gvf-tilt'); t.style.transform = 'none';   /* measure flat: the scroll tilt scales the frame */

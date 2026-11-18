@@ -12,9 +12,9 @@ const STATE = { accent: '#6b1818', indent: 0, roles: {
 const SEL = ['.hero-statement', '.hero-statement i', '.axis-end', '.wordmark', '.mast-right', 'h2.t', '.record h2', '.stone .deal-headline', '.contact a.mail', '.cx-person h3', '.duo h3'];
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 const read = async (file, w, state) => {
-  const p = await b.newPage(); await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+  const p = await b.newPage(); await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
   await p.evaluateOnNewDocument(st => { try { localStorage.clear(); if (st) localStorage.setItem('a8z-type-colour', JSON.stringify(st)); } catch (e) {} }, state);
-  await p.setViewport({ width: w, height: 900 }); await p.goto('file://' + file, { waitUntil: 'load' });
+  await p.setViewport({ width: w, height: 900 }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' });
   await W(1500);
   const out = await p.evaluate(SEL => SEL.map(s => { const e = document.querySelector(s); if (!e) return [s, 'missing']; const c = getComputedStyle(e);
     return [s, `${Math.round(parseFloat(c.fontSize) * 10) / 10}px · ${c.fontFamily.split(',')[0].replace(/"/g, '')} · ${c.fontStyle} · ${c.fontStretch} · ${c.color}`]; }), SEL);

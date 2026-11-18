@@ -2,8 +2,8 @@ import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-cor
 const W = ms => new Promise(r => setTimeout(r, ms)); const file = process.argv[2];
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e).slice(0, 200)));
-await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
-await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + file, { waitUntil: 'load' }); await W(1200);
+await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+await p.setViewport({ width: 1440, height: 900 }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(1200);
 const openDlg = () => p.evaluate(() => { const d = [...document.querySelectorAll('dialog')].find(d => d.open); return d ? (d.querySelector('h2,h3')?.textContent || d.textContent).trim().slice(0, 60) : ''; });
 const out = [];
 for (const k of ['win', 'open']) { await p.evaluate(k => document.querySelector(`[data-door="${k}"]`).click(), k); await W(500); const t = await openDlg(); out.push(`${t ? 'PASS' : 'FAIL'} door ${k} opens: "${t}"`);

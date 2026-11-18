@@ -51,6 +51,8 @@ FILES = {
 }
 
 def render(md):
+    # the source files escape $ ~ & for another editor; Markdown here does not, so "\\$5,000" showed its backslash
+    md = re.sub(r"\\([$~&])", r"\1", md)
     # a file whose title is a bold line, not a heading (the Clean-Seas file), gets its title shown as the heading
     md = re.sub(r"\A\s*\*\*([^*\n]+)\*\*[ \t]*\n", lambda m: "# **" + m.group(1) + "**\n", md, count=1)
     return markdown.markdown(md, extensions=["extra", "sane_lists"])

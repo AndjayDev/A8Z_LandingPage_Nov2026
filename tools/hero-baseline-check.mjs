@@ -5,8 +5,8 @@ import puppeteer from 'puppeteer-core';
 const [file, label, shots] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
 const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e).slice(0, 160)));
-await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:') || u.startsWith('blob:')) ? r.continue() : r.abort(); });
-await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + file, { waitUntil: 'load' }); await W(2500);
+await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:') || u.startsWith('blob:')) ? r.continue() : r.abort(); });
+await p.setViewport({ width: 1440, height: 900 }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(2500);
 const clipped = await p.evaluate(() => { const w = document.querySelector('.hero-statement .w'); if (!w) return 'no word spans'; const cs = getComputedStyle(w); return cs.overflow === 'hidden' || cs.clipPath !== 'none' ? 'yes' : 'no'; });
 // baseline of a word = the top of a zero-height inline-block placed on its baseline
 const measure = (l1, l2) => p.evaluate((l1, l2) => {

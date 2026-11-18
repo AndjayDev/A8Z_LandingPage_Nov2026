@@ -2,8 +2,8 @@
 import chromium from '@sparticuz/chromium'; import puppeteer from 'puppeteer-core';
 const [f, out] = process.argv.slice(2); const W = ms => new Promise(r => setTimeout(r, ms));
 const b = await puppeteer.launch({ args: [...chromium.args, '--allow-file-access-from-files'], executablePath: await chromium.executablePath(), headless: true });
-const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e))); await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('data:')) ? r.continue() : r.abort(); });
-await p.setViewport({ width: 1440, height: 900 }); await p.goto('file://' + f, { waitUntil: 'load' }); await W(1000);
+const p = await b.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e))); await p.setRequestInterception(true); p.on('request', r => { const u = r.url(); (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
+await p.setViewport({ width: 1440, height: 900 }); await p.goto((/^https?:/.test(f) ? f : 'file://' + f), { waitUntil: 'load' }); await W(1000);
 const st = () => p.evaluate(() => [...document.querySelectorAll('.cx-img')].map(i => `${i.dataset.file} ${i.naturalWidth}px${i.classList.contains('is-on') ? ' on' : ''}`));
 const a = await st(); await p.evaluate(() => document.querySelector('.cx').scrollIntoView({ block: 'center', behavior: 'instant' })); await W(600);
 await (await p.$('.cx')).screenshot({ path: out + '-andjay.png' });
