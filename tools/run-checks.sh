@@ -29,6 +29,7 @@ run () {   # name, then the command
   echo "FAIL $name  ->  tools/out/$name.txt"; grep -E "FAIL|Error" "$OUT/$name.txt" | head -3 | sed 's/^/     /'
   fails=$((fails+1))
 }
+run paths          sh "$ROOT/tools/path-length-check.sh" "$ROOT"
 run cases          node case-check.mjs "$ONE" "$V/results" "$OUT/S/case"
 run booking-popup  node popup-check.mjs "$ONE"
 run video-referer  node youtube-referer-check.mjs "$ONE"

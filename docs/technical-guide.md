@@ -353,3 +353,13 @@ BO (Q15): "remove from the hero section the particle background" · "The entire 
 Checks: `sh tools/run-checks.sh` 12 of 12 (stone-line A4 now asserts 9 cards and no "Show all").
 Renders: `renders/r5-11-founders-1440.png`, `renders/r5-11-founders-768.png`, `renders/r5-11-founders-390.png`.
 Risk: two-way door. Blast radius: hero background, founders section layout, record section.
+
+---
+
+# REVISION 5.12 · 18 Nov 2026 · short case-study names, no stars on the video frame
+
+BO (Q17): "shorten the study case file name and ensure no file name exceeds this Windows systemic restriction … The operations shall therefore be ran by Claude" (access granted to https://github.com/AndjayDev/13jan2026-remix-combined-black-hero-bluesubhero) · "Remove the star pattern on the video frame's dark screen." · interview parked for a next session.
+- 16 case files renamed `<Client> - <result>.md` in the Lovable repo (commit 9a19c09, content unchanged, 16 renames, 0 lines changed) and in this repo; `tools/build-cases.py ▸ FILES` and `reference/case-studies/README.md` follow. `tools/path-length-check.sh`: Lovable repo before 16 paths of 80+ characters (longest 121) → after PASS (longest 75, a Supabase migration file; case files 74).
+- video frame: `.gvf-stars` CSS and element removed. `tools/hero-background-check.mjs`: 5.11 FAIL (star layers 1) → 5.12 PASS (0).
+- relay 404: the GitHub Pages switch cannot be set from this session (the proxy refuses the Pages API). BO step: https://github.com/AndjayDev/A8Z_LandingPage_Nov2026/settings/pages ▸ Source "Deploy from a branch" ▸ Branch main, folder / (root) ▸ Save.
+Checks: `sh tools/run-checks.sh` 13 of 13.
