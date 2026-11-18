@@ -7,6 +7,7 @@
 // P5 the playlist of 4-second pieces is served and lists the whole video (jumping works even when the host sends files only whole)
 // P8 jumping: a click at 60 % of the position bar lands at 60 % and keeps playing (5.15: before, it started from the beginning)
 // P9 speed: + and − change it in 10 % steps, from 0.5× up to 2×
+// P11 one player for any place: a new element <button data-video="a8z-intro" data-video-title="…"> anywhere on the page plays it, with its own title; the poster comes from hls/<name>/poster.jpg
 // P10 volume: the slider sets it in 10 % steps; the speaker button mutes and unmutes
 // P6 when this browser can decode H.264 the video plays and the play button turns to pause; otherwise it says so
 // P7 closing the pop-up removes the player (the video stops)
@@ -24,7 +25,7 @@ const read = () => p.evaluate(() => { const d = document.getElementById('media')
     yt: /youtube/i.test(d?.innerHTML || ''), links: d?.querySelectorAll('.vp a').length,
     can: v ? v.canPlayType('video/mp4; codecs="avc1.64001F, mp4a.40.2"') : '' }; });
 await p.click('#teach [data-video]'); await p.waitForFunction(() => document.querySelector('#media video')?.src, { timeout: 8000 }).catch(() => {}); await W(400); let s = await read();
-ok('P1', '"See How It Works" opens the page\'s own player', s.open && /(\/video\/a8z-intro\.mp4|\/video\/hls\/a8z-intro\.m3u8)$|^blob:/.test(s.src) && s.iframes === 0 && !s.nativeControls, s);
+ok('P1', '"See How It Works" opens the page\'s own player', s.open && /(\/video\/a8z-intro\.mp4|\/video\/hls\/a8z-intro\/index\.m3u8)$|^blob:/.test(s.src) && s.iframes === 0 && !s.nativeControls, s);
 await p.screenshot({ path: `${shots}/video-player-1440.png` });
 ok('P3', 'own controls present (5 of 5), no YouTube text or link in the player', s.parts === 5 && !s.yt && s.links === 0, { parts: s.parts, youtube: s.yt, links: s.links });
 if (s.can) { await W(2500); const st = await p.evaluate(() => { const v = document.querySelector('#media video'); return { t: v.currentTime, paused: v.paused, label: document.querySelector('#media .vp-play').getAttribute('aria-label') }; });
@@ -51,8 +52,12 @@ ok('P7', 'closing the pop-up removes the player', !gone.open && gone.players ===
 await p.evaluate(() => document.querySelector('#teach .gvf-copy .gvf-kicker').click()); await p.waitForFunction(() => document.querySelector('#media video')?.src, { timeout: 8000 }).catch(() => {}); s = await read();
 ok('P2', 'a click on the video screen (not the button) opens it too', s.open && /(a8z-intro\.mp4|a8z-intro\.m3u8)$|^blob:/.test(s.src), { open: s.open });
 await p.evaluate(() => document.querySelector('#media [data-media-close]')?.click()); await W(300);
-const net = await p.evaluate(async () => { const a = await fetch('/video/hls/a8z-intro.m3u8'); const t = await a.text(); const secs = [...t.matchAll(/#EXTINF:([\d.]+)/g)].reduce((x, m) => x + +m[1], 0); return { status: a.status, pieces: (t.match(/\.ts/g) || []).length, seconds: Math.round(secs) }; });
+const net = await p.evaluate(async () => { const a = await fetch('/video/hls/a8z-intro/index.m3u8'); const t = await a.text(); const secs = [...t.matchAll(/#EXTINF:([\d.]+)/g)].reduce((x, m) => x + +m[1], 0); return { status: a.status, pieces: (t.match(/\.ts/g) || []).length, seconds: Math.round(secs) }; });
 ok('P5', 'the playlist of pieces is served and covers the whole video', net.status === 200 && net.pieces > 50 && Math.abs(net.seconds - 420) < 3, net);
+const gen = await p.evaluate(async () => { const b = document.createElement('button'); b.dataset.video = 'a8z-intro'; b.dataset.videoTitle = 'Any place test'; b.textContent = 'x'; document.querySelector('footer, body').appendChild(b); b.click();
+  await new Promise(r => setTimeout(r, 1500)); const d = document.getElementById('media'), v = d.querySelector('video'); const out = { open: d.open, label: d.getAttribute('aria-label'), poster: v?.getAttribute('poster'), src: !!v?.src };
+  d.querySelector('[data-media-close]').click(); b.remove(); return out; });
+ok('P11', 'any element naming a video plays it in the same player, with its own title and poster', gen.open && gen.label === 'Video: Any place test' && gen.poster === '/video/hls/a8z-intro/poster.jpg' && gen.src, gen);
 ok('P4', 'nothing asked from YouTube or Google video hosts', yt.length === 0, yt.slice(0, 2));
 ok('P0', 'no script errors', errs.length === 0, errs.slice(0, 2));
 console.log(`video player: ${fails === 0 ? 'all pass' : fails + ' failed'}`); await b.close(); process.exit(fails ? 1 : 0);

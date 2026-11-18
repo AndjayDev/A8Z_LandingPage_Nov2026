@@ -794,7 +794,7 @@
                       <p class="gvf-kicker">3X Sales Accelerator</p>
                       <p class="gvf-title"><span>Sales-Ready</span> Executive Meetings<br> for B2B Leaders</p>
                       <p class="gvf-sub">Your UVP → Right Timing → Right Executive</p>
-                      <button type="button" class="gvf-play" data-video="GgIXWb4kymU" aria-haspopup="dialog" aria-label="Play video: See How It Works">
+                      <button type="button" class="gvf-play" data-video="a8z-intro" data-video-title="Signal Intelligence that Surfaces Sales-Ready Executive Meetings" aria-haspopup="dialog" aria-label="Play video: See How It Works">
                         <span class="gvf-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
                         <span class="gvf-label">🎬 See How It Works</span>
                         <svg class="gvf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -1536,14 +1536,17 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   const frame = dlg.querySelector(".media-frame"), note = dlg.querySelector(".media-note");
   const open = (label, html, cal) => { dlg.setAttribute("aria-label", label); dlg.classList.toggle("is-cal", !!cal); frame.innerHTML = html; note.hidden = true; if (!dlg.open) dlg.showModal(); };
   const close = () => { if (dlg.open) dlg.close(); frame.__cleanup && frame.__cleanup(); frame.__cleanup = null; frame.innerHTML = ""; };   // 5.14: emptied at once, not only on the later "close" event
-  dlg.addEventListener("close", () => { frame.__cleanup && frame.__cleanup(); frame.__cleanup = null; frame.innerHTML = ""; });   // empties the frame: the video stops
+  dlg.addEventListener("close", () => { if (dlg.open) return; frame.__cleanup && frame.__cleanup(); frame.__cleanup = null; frame.innerHTML = ""; });   // 5.16: the late "close" event must not empty a pop-up reopened at once   // empties the frame: the video stops
   dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-media-close]")) close(); });
 
-  // 5.14 · the video plays in the page's own player: the file /video/a8z-intro.mp4 (Lovable repo ▸ public/video/).
-  // No YouTube: no logo, no link, no channel name, no way out to another site (BO, 18 Nov 2026).
-  const tile = document.querySelector("[data-video]");
-  if (tile) {
-    const SRC = "/video/a8z-intro.mp4", HLS = "/video/hls/a8z-intro.m3u8", HLSJS = "/video/hls/hls.light.min.js", POSTER = "/video/a8z-intro-poster.jpg";
+  // 5.14 · videos play in the page's own player. No YouTube: no logo, no link, no channel name, no way out to another site.
+  // 5.16 · ONE player for any number of videos and places (BO, 18 Nov 2026). Any element with data-video="<name>" plays
+  //   public/video/<name>.mp4, cut into pieces by the GitHub job .github/workflows/video-pieces.yml (scripts/video-pieces.sh):
+  //   public/video/hls/<name>/index.m3u8 · s000.ts … · poster.jpg.  The pop-up title: data-video-title, else the element's label.
+  //   An element inside a .gvf-screen makes that whole screen clickable.
+  if (document.querySelector("[data-video]")) {
+    const HLSJS = "/video/player/hls.light.min.js";
+    const paths = name => ({ SRC: `/video/${name}.mp4`, HLS: `/video/hls/${name}/index.m3u8`, POSTER: `/video/hls/${name}/poster.jpg` });
     // 5.15 · the live host sends the MP4 only whole (no byte ranges), so a browser cannot jump in it.
     // The video is therefore also cut into 4-second pieces with a playlist (public/video/hls/): any position loads its piece.
     // Safari plays the playlist itself; other browsers through hls.js (public/video/hls/, Apache-2.0); the MP4 stays as last resort.
@@ -1557,9 +1560,10 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>'
     };
     const t = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
-    tile.addEventListener("click", e => {
-      e.preventDefault();
-      const title = "Signal Intelligence that Surfaces Sales-Ready Executive Meetings";
+    const play = tile => {
+      const name = tile.dataset.video; if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(name)) return;
+      const { SRC, HLS, POSTER } = paths(name);
+      const title = tile.dataset.videoTitle || (tile.getAttribute("aria-label") || "Video").replace(/^Play video:\s*/, "");
       open("Video: " + title, `
         <div class="vp" data-vp>
           <video class="vp-video" poster="${POSTER}" preload="auto" playsinline disablepictureinpicture
@@ -1641,10 +1645,14 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       });
       state(); paint(); showVol();   // play starts once the source is attached (the opening click allows sound)
       big.focus({ preventScroll: true });
+    };
+    // one listener for the whole page: any [data-video] element, or the screen of a glass frame that holds one
+    document.addEventListener("click", e => {
+      const el = e.target.closest("[data-video]") || e.target.closest(".gvf-screen")?.querySelector("[data-video]");
+      if (!el || el.closest("#media")) return;
+      e.preventDefault(); play(el);
     });
-    // the whole video screen of the glass frame starts the video too, not only the button (BO, 18 Nov 2026)
-    const screen = tile.closest(".gvf-screen");
-    if (screen) { screen.style.cursor = "pointer"; screen.addEventListener("click", e => { if (!e.target.closest("[data-video]")) tile.click(); }); }
+    document.querySelectorAll(".gvf-screen").forEach(sc => { if (sc.querySelector("[data-video]")) sc.style.cursor = "pointer"; });
   }
   // 5.6 · the glass frame tilts up into place as it scrolls in (port of the Lovable component's scroll effect)
   const gvf = document.querySelector("[data-gvf]");
