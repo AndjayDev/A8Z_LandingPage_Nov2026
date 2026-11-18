@@ -555,9 +555,9 @@
   .hero { --hero-indent: 0px; }
   /* Headline · We introduce companies that — 60 px → 114 px at the BO's screen, × 1.910 */
   .hero-statement { font-family: "Instrument Serif", Georgia, serif !important; color: #001657 !important; }
-  .hero h1.hero-statement { font-size: calc(clamp(34px, 4.6vw, 66px) * 1.910); }
+  .hero h1.hero-statement { font-size: calc(clamp(34px, 4.6vw, 66px) * 1.910 * .8); }   /* 5.13 · BO 18 Nov 2026: headline at 80 % */
   /* Headline · have a reason to talk. — 60 px → 108 px, × 1.818 */
-  .hero-statement i { font-family: "Noto Serif Display", Georgia, serif !important; font-style: italic !important; font-stretch: 62.5% !important; font-size: calc(clamp(34px, 4.6vw, 66px) * 1.818); }
+  .hero-statement i { font-family: "Noto Serif Display", Georgia, serif !important; font-style: italic !important; font-stretch: 62.5% !important; font-size: calc(clamp(34px, 4.6vw, 66px) * 1.818 * .8); }
   /* Supply / Demand */
   .axis-end { color: #17191f !important; }
   /* Top line · logo and e-mail — 34 px → 29 px, × 0.853 */
@@ -1540,7 +1540,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       e.preventDefault();
       const title = "Signal Intelligence that Surfaces Sales-Ready Executive Meetings";
       const src = web
-        ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`
+        ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&controls=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`
         : `${RELAY}?v=${id}&autoplay=1`;
       open("Video: " + title, `<iframe width="1280" height="720" src="${src}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
     });
