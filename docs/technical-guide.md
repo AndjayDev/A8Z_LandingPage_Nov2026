@@ -385,3 +385,5 @@ BO (Q11): "none of both pictures are showing up" · "size it down to 80%" · "re
 - Player: `controls=0` on the youtube-nocookie address; the control bar (with the YouTube button) is not drawn. Lovable commit 396303e. The teach section itself has no YouTube button; the order's two lines point at the same button.
 Checks: `tools/run-checks-lovable.sh` 9 of 9.
 - 18 Nov 2026 · controls=0 reverted (BO: it removed the play bar, the YouTube button stayed). No YouTube parameter removes the logo (modestbranding deprecated Aug 2023); the clean route is the video file played by the page itself. Lovable commit: see Step 6.
+
+- 18 Nov 2026 · REVISION 5.14 · own video player: /video/a8z-intro.mp4 (BO upload, faststart remux, poster at 0:06); YouTube embed and relay code removed from the page; close() empties the pop-up at once. tools/video-player-check.mjs P0–P7 all pass; popup-check V4/V5 updated. Render: renders/r5-14-video-player.png.

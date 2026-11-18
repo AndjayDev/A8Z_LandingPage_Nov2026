@@ -17,7 +17,7 @@ const page = async calStub => {
     (u.startsWith('file:') || u.startsWith('http://127.0.0.1') || u.startsWith('data:')) ? r.continue() : r.abort(); });
   await p.setViewport({ width: 1440, height: 900 }); await p.goto((/^https?:/.test(file) ? file : 'file://' + file), { waitUntil: 'load' }); await W(900); return p; };
 const dlg = p => p.evaluate(() => { const d = [...document.querySelectorAll('dialog')].find(x => x.open); const f = d && d.querySelector('iframe');
-  return { open: !!d, id: d?.id, src: f?.src || '', w: f?.getAttribute('width'), h: f?.getAttribute('height'), frameW: Math.round(d?.querySelector('.media-frame')?.getBoundingClientRect().width || 0), note: d?.querySelector('.media-note:not([hidden])')?.textContent || '', url: location.href.slice(-30) }; });
+  return { open: !!d, id: d?.id, src: f?.src || '', w: f?.getAttribute('width'), h: f?.getAttribute('height'), video: d?.querySelector('video')?.getAttribute('src') || '', frameW: Math.round(d?.querySelector('.media-frame')?.getBoundingClientRect().width || 0), note: d?.querySelector('.media-note:not([hidden])')?.textContent || '', url: location.href.slice(-30) }; });
 
 let p = await page(false);
 const teach = await p.evaluate(() => ({ lede: document.querySelector('#teach .lede')?.textContent.trim(), ytLinks: [...document.querySelectorAll('a[href*="youtube.com"]')].length, label: /Watch on YouTube/i.test(document.querySelector('#teach').innerText) }));
@@ -29,8 +29,8 @@ const thumb = await p.evaluate(() => { const i = document.querySelector('#teach 
 check('V3', 'the video tile never shows an empty black box (thumbnail, titled card, or the 5.6 glass frame title)', thumb.img > 0 || !!thumb.card, thumb);
 await p.click('#teach [data-video]'); await W(800); let d = await dlg(p);
 const local = await p.evaluate(() => !!document.querySelector('#media .media-local'));
-check('V4', 'video tile opens the pop-up on this page: the 1280 × 720 player on a web address, through the relay page when opened as a file (5.5; youtube-relay-check.mjs)', d.open && ((/youtube-nocookie\.com\/embed\/GgIXWb4kymU|\/relay\/youtube\/\?v=GgIXWb4kymU/.test(d.src) && d.w === '1280' && d.h === '720') || local) && p.popups === 0 && (d.url.endsWith('.html') || /^https?:\/\/[^/]+\/(#.*)?$/.test(d.url)), { ...d, local, popups: p.popups });
-await p.evaluate(() => document.querySelector('[data-media-close]')?.click()); await W(400); const empty = await p.evaluate(() => ({ open: document.getElementById('media')?.open, iframes: document.querySelectorAll('#media iframe').length }));
+check('V4', 'video tile opens the pop-up on this page with the page\'s own player (5.14: /video/a8z-intro.mp4, no YouTube frame)', d.open && /\/video\/a8z-intro\.mp4$/.test(d.video) && !d.src && p.popups === 0 && (d.url.endsWith('.html') || /^https?:\/\/[^/]+\/(#.*)?$/.test(d.url)), { ...d, local, popups: p.popups });
+await p.evaluate(() => document.querySelector('[data-media-close]')?.click()); await W(400); const empty = await p.evaluate(() => ({ open: document.getElementById('media')?.open, iframes: document.querySelectorAll('#media iframe, #media video').length }));
 check('V5', 'closing the pop-up stops the video (frame emptied)', empty.open === false && empty.iframes === 0, empty);
 
 await p.evaluate(() => document.querySelector('#contact').scrollIntoView({ behavior: 'instant' })); await W(300);

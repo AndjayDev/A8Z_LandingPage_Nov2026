@@ -16,6 +16,7 @@ run () { name=$1; shift
 run paths         sh "$T/path-length-check.sh" "$LR"
 run cases         node case-check.mjs "$U" "$LR/public/results" "$OUT/S/case"
 run booking-video node popup-check.mjs "$U"
+run video-player  node video-player-check.mjs "$U" "$OUT/S"
 run stone-lines   node stone-line-check.mjs "$U"
 run hero-baseline node hero-baseline-check.mjs "$U"
 run photos        node photo-check.mjs "$U" "$OUT/S/photo"
