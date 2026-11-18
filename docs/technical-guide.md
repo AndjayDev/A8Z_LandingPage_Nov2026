@@ -387,3 +387,5 @@ Checks: `tools/run-checks-lovable.sh` 9 of 9.
 - 18 Nov 2026 · controls=0 reverted (BO: it removed the play bar, the YouTube button stayed). No YouTube parameter removes the logo (modestbranding deprecated Aug 2023); the clean route is the video file played by the page itself. Lovable commit: see Step 6.
 
 - 18 Nov 2026 · REVISION 5.14 · own video player: /video/a8z-intro.mp4 (BO upload, faststart remux, poster at 0:06); YouTube embed and relay code removed from the page; close() empties the pop-up at once. tools/video-player-check.mjs P0–P7 all pass; popup-check V4/V5 updated. Render: renders/r5-14-video-player.png.
+
+- 18 Nov 2026 · REVISION 5.15 · player: jump (HLS pieces via hls.js, because the live host answers a byte-range request with the whole file: Range bytes=1000-1999 → 200, 47,917,292 bytes), speed 0.5–2× in 0.1 steps (− / + and < >), volume slider 0–100 % in 10 % steps (↑ ↓, m). video-player-check P8–P10 added; run-checks-lovable also serves dist without byte ranges (python http.server, port 4174). Before P8: 0:02 of 7:00 → after 4:14, playing.

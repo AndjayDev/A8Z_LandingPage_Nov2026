@@ -337,6 +337,20 @@
   .vp-track:hover .vp-knob, .vp-track:focus-visible .vp-knob { transform: scale(1); }
   .vp-time { font: 500 12.5px/1 var(--mono); letter-spacing: .04em; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .vp:fullscreen .vp-video { object-fit: contain; }
+  .vp-speed { display: flex; align-items: center; gap: 2px; flex: none; }
+  .vp-speed .vp-btn { width: 26px; height: 30px; padding: 0; font: 500 18px/1 var(--sans); }
+  .vp-rate { font: 500 12.5px/1 var(--mono); min-width: 3.4em; text-align: center; font-variant-numeric: tabular-nums; }
+  .vp-vol { display: flex; align-items: center; flex: none; }
+  .vp-volume { -webkit-appearance: none; appearance: none; width: 0; opacity: 0; height: 18px; margin: 0; background: transparent; transition: width .2s, opacity .2s; cursor: pointer; --v: 100%; }
+  .vp-vol:hover .vp-volume, .vp-volume:focus-visible { width: 78px; opacity: 1; margin-left: 4px; }
+  .vp-volume::-webkit-slider-runnable-track { height: 3px; border-radius: 2px; background: linear-gradient(90deg, #fff var(--v), rgba(255,255,255,.25) var(--v)); }
+  .vp-volume::-moz-range-track { height: 3px; border-radius: 2px; background: rgba(255,255,255,.25); }
+  .vp-volume::-moz-range-progress { height: 3px; background: #fff; }
+  .vp-volume::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -4.5px; border-radius: 50%; background: #fff; }
+  .vp-volume::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: #fff; }
+  @media (hover: none) { .vp-volume { width: 64px; opacity: 1; margin-left: 4px; } }
+  @media (max-width: 560px) { .vp-speed .vp-btn { width: 22px; } .vp-rate { font-size: 11px; } .vp-volume, .vp-vol:hover .vp-volume { width: 0; opacity: 0; margin: 0; } }
+
   @media (max-width: 560px) { .vp-bar { gap: 8px; padding: 22px 10px 8px; } .vp-time { font-size: 11px; } .vp-btn { width: 30px; height: 30px; } }
   .media-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
   dialog.media.is-cal { width: min(1040px, calc(100vw - 32px)); }
@@ -1521,15 +1535,20 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
   const dlg = document.getElementById("media"); if (!dlg) return;
   const frame = dlg.querySelector(".media-frame"), note = dlg.querySelector(".media-note");
   const open = (label, html, cal) => { dlg.setAttribute("aria-label", label); dlg.classList.toggle("is-cal", !!cal); frame.innerHTML = html; note.hidden = true; if (!dlg.open) dlg.showModal(); };
-  const close = () => { if (dlg.open) dlg.close(); frame.innerHTML = ""; };   // 5.14: emptied at once, not only on the later "close" event
-  dlg.addEventListener("close", () => { frame.innerHTML = ""; });   // empties the frame: the video stops
+  const close = () => { if (dlg.open) dlg.close(); frame.__cleanup && frame.__cleanup(); frame.__cleanup = null; frame.innerHTML = ""; };   // 5.14: emptied at once, not only on the later "close" event
+  dlg.addEventListener("close", () => { frame.__cleanup && frame.__cleanup(); frame.__cleanup = null; frame.innerHTML = ""; });   // empties the frame: the video stops
   dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-media-close]")) close(); });
 
   // 5.14 · the video plays in the page's own player: the file /video/a8z-intro.mp4 (Lovable repo ▸ public/video/).
   // No YouTube: no logo, no link, no channel name, no way out to another site (BO, 18 Nov 2026).
   const tile = document.querySelector("[data-video]");
   if (tile) {
-    const SRC = "/video/a8z-intro.mp4", POSTER = "/video/a8z-intro-poster.jpg";
+    const SRC = "/video/a8z-intro.mp4", HLS = "/video/hls/a8z-intro.m3u8", HLSJS = "/video/hls/hls.light.min.js", POSTER = "/video/a8z-intro-poster.jpg";
+    // 5.15 · the live host sends the MP4 only whole (no byte ranges), so a browser cannot jump in it.
+    // The video is therefore also cut into 4-second pieces with a playlist (public/video/hls/): any position loads its piece.
+    // Safari plays the playlist itself; other browsers through hls.js (public/video/hls/, Apache-2.0); the MP4 stays as last resort.
+    let hlsLib = null;
+    const loadHls = () => hlsLib || (hlsLib = new Promise((ok, no) => { if (window.Hls) return ok(window.Hls); const sc = document.createElement("script"); sc.src = HLSJS; sc.onload = () => ok(window.Hls); sc.onerror = no; document.head.appendChild(sc); }));
     const I = {
       play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
       pause: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
@@ -1543,7 +1562,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       const title = "Signal Intelligence that Surfaces Sales-Ready Executive Meetings";
       open("Video: " + title, `
         <div class="vp" data-vp>
-          <video class="vp-video" src="${SRC}" poster="${POSTER}" preload="auto" playsinline disablepictureinpicture
+          <video class="vp-video" poster="${POSTER}" preload="auto" playsinline disablepictureinpicture
                  controlslist="nodownload noplaybackrate noremoteplayback" aria-label="${title}"></video>
           <button type="button" class="vp-big" aria-label="Play">${I.play}</button>
           <div class="vp-bar">
@@ -1552,7 +1571,15 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
               <div class="vp-buf"></div><div class="vp-fill"></div><div class="vp-knob"></div>
             </div>
             <span class="vp-time">0:00 / 0:00</span>
-            <button type="button" class="vp-btn vp-mute" aria-label="Mute">${I.sound}</button>
+            <div class="vp-speed" role="group" aria-label="Playback speed">
+              <button type="button" class="vp-btn vp-slower" aria-label="Slower">−</button>
+              <span class="vp-rate" aria-live="polite">1.0×</span>
+              <button type="button" class="vp-btn vp-faster" aria-label="Faster">+</button>
+            </div>
+            <div class="vp-vol">
+              <button type="button" class="vp-btn vp-mute" aria-label="Mute">${I.sound}</button>
+              <input class="vp-volume" type="range" min="0" max="1" step="0.1" value="1" aria-label="Volume">
+            </div>
             <button type="button" class="vp-btn vp-full" aria-label="Full screen">${I.full}</button>
           </div>
         </div>`);
@@ -1560,6 +1587,26 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       const big = root.querySelector(".vp-big"), pb = root.querySelector(".vp-play"), mb = root.querySelector(".vp-mute"), fb = root.querySelector(".vp-full");
       const track = root.querySelector(".vp-track"), fill = root.querySelector(".vp-fill"), buf = root.querySelector(".vp-buf"), knob = root.querySelector(".vp-knob"), time = root.querySelector(".vp-time");
       const toggle = () => (v.paused || v.ended) ? v.play().catch(() => {}) : v.pause();
+      // the source: playlist of pieces (jumping works on any host), else the whole MP4
+      let hls = null;
+      const start = () => v.play().catch(() => {});
+      if (v.canPlayType("application/vnd.apple.mpegurl")) { v.src = HLS; start(); }
+      else loadHls().then(Hls => {
+        if (!root.isConnected) return;
+        if (Hls && Hls.isSupported()) { hls = new Hls({ maxBufferLength: 30 }); hls.loadSource(HLS); hls.attachMedia(v); hls.on(Hls.Events.MANIFEST_PARSED, start); }
+        else { v.src = SRC; start(); }
+      }).catch(() => { v.src = SRC; start(); });
+      frame.__cleanup = () => { try { v.pause(); hls && hls.destroy(); } catch (e) {} };
+      // speed: 10 % steps from 0.5× to 2×
+      const rateEl = root.querySelector(".vp-rate");
+      const setRate = r => { r = Math.round(Math.min(2, Math.max(.5, r)) * 10) / 10; v.playbackRate = r; v.defaultPlaybackRate = r; rateEl.textContent = r.toFixed(1) + "×"; };
+      root.querySelector(".vp-slower").addEventListener("click", () => setRate(v.playbackRate - .1));
+      root.querySelector(".vp-faster").addEventListener("click", () => setRate(v.playbackRate + .1));
+      // volume: slider 0–100 % in 10 % steps; the speaker button mutes and unmutes
+      const vol = root.querySelector(".vp-volume");
+      const showVol = () => { mb.innerHTML = (v.muted || v.volume === 0) ? I.muted : I.sound; mb.setAttribute("aria-label", v.muted ? "Sound on" : "Mute"); vol.value = v.muted ? 0 : v.volume; vol.style.setProperty("--v", (v.muted ? 0 : v.volume) * 100 + "%"); };
+      vol.addEventListener("input", () => { v.volume = +vol.value; v.muted = +vol.value === 0; showVol(); });
+      v.addEventListener("volumechange", showVol);
       const paint = () => {
         const d = v.duration || 0, p = d ? v.currentTime / d : 0;
         fill.style.width = (p * 100) + "%"; knob.style.left = (p * 100) + "%";
@@ -1574,12 +1621,12 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       };
       let idle;
       const wake = () => { root.classList.remove("is-idle"); clearTimeout(idle); idle = setTimeout(() => { if (!v.paused) root.classList.add("is-idle"); }, 2500); };
-      const seekTo = x => { const r = track.getBoundingClientRect(); v.currentTime = Math.min(1, Math.max(0, (x - r.left) / r.width)) * (v.duration || 0); paint(); };
+      const seekTo = x => { if (!v.duration) return; const r = track.getBoundingClientRect(); v.currentTime = Math.min(1, Math.max(0, (x - r.left) / r.width)) * v.duration; paint(); };
       v.addEventListener("click", toggle); big.addEventListener("click", toggle); pb.addEventListener("click", toggle);
       v.addEventListener("contextmenu", e => e.preventDefault());   // no "Save video as…"
       ["play", "pause", "ended"].forEach(n => v.addEventListener(n, () => { state(); wake(); }));
       ["timeupdate", "loadedmetadata", "progress", "durationchange"].forEach(n => v.addEventListener(n, paint));
-      mb.addEventListener("click", () => { v.muted = !v.muted; mb.innerHTML = v.muted ? I.muted : I.sound; mb.setAttribute("aria-label", v.muted ? "Sound on" : "Mute"); });
+      mb.addEventListener("click", () => { if (v.muted || v.volume === 0) { v.muted = false; if (v.volume === 0) v.volume = .5; } else v.muted = true; showVol(); });
       fb.addEventListener("click", () => document.fullscreenElement ? document.exitFullscreen() : (root.requestFullscreen ? root.requestFullscreen() : v.webkitEnterFullscreen && v.webkitEnterFullscreen()));
       track.addEventListener("pointerdown", e => { track.setPointerCapture(e.pointerId); seekTo(e.clientX); const mv = ev => seekTo(ev.clientX); track.addEventListener("pointermove", mv); track.addEventListener("pointerup", () => track.removeEventListener("pointermove", mv), { once: true }); });
       root.addEventListener("pointermove", wake);
@@ -1587,9 +1634,12 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
         if (e.key === " " || e.key === "k") { e.preventDefault(); toggle(); }
         else if (e.key === "ArrowRight") { v.currentTime += 5; } else if (e.key === "ArrowLeft") { v.currentTime -= 5; }
         else if (e.key === "m") { mb.click(); } else if (e.key === "f") { fb.click(); }
+        else if (e.key === "ArrowUp") { e.preventDefault(); v.muted = false; v.volume = Math.min(1, Math.round((v.volume + .1) * 10) / 10); }
+        else if (e.key === "ArrowDown") { e.preventDefault(); v.volume = Math.max(0, Math.round((v.volume - .1) * 10) / 10); }
+        else if (e.key === ">") { setRate(v.playbackRate + .1); } else if (e.key === "<") { setRate(v.playbackRate - .1); }
         wake();
       });
-      state(); paint(); v.play().catch(() => {});   // the click that opened the pop-up allows sound
+      state(); paint(); showVol();   // play starts once the source is attached (the opening click allows sound)
       big.focus({ preventScroll: true });
     });
     // the whole video screen of the glass frame starts the video too, not only the button (BO, 18 Nov 2026)
