@@ -1521,7 +1521,7 @@ dlg.addEventListener("close", () => { if (last) last.focus(); });
       e.preventDefault();
       const title = "Signal Intelligence that Surfaces Sales-Ready Executive Meetings";
       const src = web
-        ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&controls=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`
+        ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}&widget_referrer=${encodeURIComponent(location.href)}`
         : `${RELAY}?v=${id}&autoplay=1`;
       open("Video: " + title, `<iframe width="1280" height="720" src="${src}" title="${title}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`);
     });

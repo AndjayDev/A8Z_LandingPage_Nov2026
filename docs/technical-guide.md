@@ -384,3 +384,4 @@ BO (Q11): "none of both pictures are showing up" · "size it down to 80%" · "re
 - Headline × 0.8 (`.hero h1.hero-statement`, `.hero-statement i`): 1440 px 126.1 / 120.0 px → 100.8 / 96.0 px; 768 px 67.5 / 64.2 → 54.0 / 51.4; 390 px 64.9 / 61.8 → 52.0 / 49.4. Page width unchanged.
 - Player: `controls=0` on the youtube-nocookie address; the control bar (with the YouTube button) is not drawn. Lovable commit 396303e. The teach section itself has no YouTube button; the order's two lines point at the same button.
 Checks: `tools/run-checks-lovable.sh` 9 of 9.
+- 18 Nov 2026 · controls=0 reverted (BO: it removed the play bar, the YouTube button stayed). No YouTube parameter removes the logo (modestbranding deprecated Aug 2023); the clean route is the video file played by the page itself. Lovable commit: see Step 6.
