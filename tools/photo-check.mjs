@@ -9,5 +9,5 @@ const a = await st(); await p.evaluate(() => document.querySelector('.cx').scrol
 await (await p.$('.cx')).screenshot({ path: out + '-andjay.png' });
 await p.evaluate(() => document.querySelectorAll('.cx [role="tab"]')[1].click()); await W(1900); await (await p.$('.cx')).screenshot({ path: out + '-amelia.png' });
 const b2 = await st();
-const ok = a.includes('Andjay @Office2.jpg 905px on') && b2.includes('Ame @Office2.jpg 837px on') && errs.length === 0;
+const ok = a.includes('andjay-office2.jpg 905px on') && b2.includes('ame-office2.jpg 837px on') && errs.length === 0;
 console.log(`${ok ? 'PASS' : 'FAIL'} the carousel shows the new photos · at load ${a.join(' | ')} · after tab 2 ${b2.join(' | ')} · errors ${errs.length}`); await b.close();

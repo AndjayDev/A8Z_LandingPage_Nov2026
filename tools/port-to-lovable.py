@@ -29,6 +29,14 @@ def fix(s, up):
 page = fix((V / "index.html").read_text(encoding="utf-8"), "../../")
 assert "../../" not in page.split("<body>")[0] + page.split("<body>")[1].split("<script>")[0], "a relative asset path is left in the page"
 assert "_vercel" not in page
+# every picture the page asks for must exist in the Lovable public/ folder under a web-safe name
+# (the live host answers 404 for names with a space or @, 18 Nov 2026)
+for name in sorted(set(re.findall(r'(?:src|href)="/images/([^"]+)"', page))):
+    assert re.fullmatch(r"[A-Za-z0-9._-]+", name), f"not a web-safe file name: {name}"
+    src = D / "assets/people" / name
+    if src.exists():
+        shutil.copy2(src, L / "public/images" / name)
+    assert (L / "public/images" / name).exists(), f"missing in public/images: {name}"
 (L / "src/landing").mkdir(parents=True, exist_ok=True)
 (L / "src/landing/page.html").write_text(page, encoding="utf-8")
 
